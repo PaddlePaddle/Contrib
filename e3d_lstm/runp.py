@@ -27,16 +27,11 @@ from src.data_provider import datasets_factory
 from src.models.model_factoryp import Model
 import src.trainer as trainer
 from src.utils import preprocess
-# import tensorflow as tf
 import paddle.fluid as fluid
 
 import argparse
 
 parser = argparse.ArgumentParser()
-
-
-# -----------------------------------------------------------------------------
-# FLAGS = tf.app.flags.FLAGS
 
 
 def DEFINE_string(param, param1, param2):
@@ -60,7 +55,6 @@ DEFINE_string('valid_data_paths', '', 'validation data paths.')
 DEFINE_string('save_dir', '', 'dir to store trained net.')
 DEFINE_string('gen_frm_dir', '', 'dir to store result.')
 
-# DEFINE_boolean('is_training', True, 'training or testing')
 DEFINE_string('is_training', 'train', 'training or testing')
 DEFINE_string('dataset_name', 'mnist', 'The name of dataset.')
 
@@ -103,19 +97,12 @@ FLAGS = parser.parse_args()
 
 def main():
     """Main function."""
-    # print(FLAGS.reverse_input)
-    # if tf.gfile.Exists(FLAGS.save_dir):
-    #     tf.gfile.DeleteRecursively(FLAGS.save_dir)
-    # tf.gfile.MakeDirs(FLAGS.save_dir)
     if os.path.exists(FLAGS.save_dir):
         os.removedirs(FLAGS.save_dir)
     try:
         os.makedirs(FLAGS.save_dir, exist_ok=True)
     except:
         pass
-    # if tf.gfile.Exists(FLAGS.gen_frm_dir):
-    #     tf.gfile.DeleteRecursively(FLAGS.gen_frm_dir)
-    # tf.gfile.MakeDirs(FLAGS.gen_frm_dir)
     # no need to delete
     # if os.path.exists(FLAGS.gen_frm_dir):
     #     shutil.rmtree(FLAGS.gen_frm_dir)
@@ -229,5 +216,4 @@ def test_wrapper(model):
 
 
 if __name__ == '__main__':
-    # tf.app.run()
     main()

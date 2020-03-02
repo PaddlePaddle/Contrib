@@ -19,7 +19,6 @@ from __future__ import division
 from __future__ import print_function
 
 from src.layers.rnn_cellp import Eidetic3DLSTMCell as eidetic_lstm
-# import tensorflow as tf
 import paddle.fluid as fluid
 
 def rnn(images, real_input_flag, num_layers, num_hidden, configs):
@@ -59,7 +58,6 @@ def rnn(images, real_input_flag, num_layers, num_hidden, configs):
     memory = zero_state
 
     generator_scope = fluid.Scope()
-    # with tf.variable_scope('generator'):
     with fluid.scope_guard(generator_scope):
         input_list = []
         reuse = False
@@ -70,7 +68,6 @@ def rnn(images, real_input_flag, num_layers, num_hidden, configs):
         # outer layer
         for time_step in range(total_length - 1):
             e3dlstm_scope = fluid.Scope()
-            # with tf.variable_scope('e3d-lstm', reuse=reuse):
             with fluid.scope_guard(e3dlstm_scope):
                 # all batches at time_step
                 if time_step < input_length:
@@ -133,10 +130,6 @@ def rnn(images, real_input_flag, num_layers, num_hidden, configs):
     gen_images = fluid.layers.stack(gen_images)
     # (timesteps, batches, w, h, c) -> (batches, timesteps, w, h, c)
     gen_images = fluid.layers.transpose(gen_images, [1, 0, 2, 3, 4])
-    # loss = tf.nn.l2_loss(gen_images - images[:, 1:])
-    # loss += tf.reduce_sum(tf.abs(gen_images - images[:, 1:]))
-    # TODO: the original loss seems to use sum of l2 loss and l1 loss, my loss is not exactly same
-    # loss = fluid.layers.mse_loss(gen_images, images[:, 1:])
     # use the loss from original code
     loss = fluid.layers.reduce_sum(fluid.layers.square_error_cost(gen_images, images[:, 1:])) / 2
     loss += fluid.layers.reduce_sum(fluid.layers.abs(gen_images - images[:, 1:]))

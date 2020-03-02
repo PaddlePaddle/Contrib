@@ -18,8 +18,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-# import tensorflow as tf
-# import tensorflow.contrib.layers as layers
 import paddle.fluid as fluid
 
 
@@ -75,11 +73,6 @@ class EideticLSTMCell(object):
         self._forget_bias = forget_bias
         self._layer_name = name
 
-        # self._state_size = tf.TensorShape(self._input_shape[:-1] +
-        #                                   [self._output_channels])
-        # self._output_size = tf.TensorShape(self._input_shape[:-1] +
-        #                                    [self._output_channels])
-
     @property
     def output_size(self):
         return self._output_size
@@ -90,12 +83,6 @@ class EideticLSTMCell(object):
 
     def _norm(self, inp, scope, dtype=None):
         # shape = inp.get_shape()[-1:]
-        # gamma_init = tf.constant_initializer(self._norm_gain)
-        # beta_init = tf.constant_initializer(self._norm_shift)
-        # with tf.variable_scope(scope):
-        #     # Initialize beta and gamma for use by layer_norm.
-        #     tf.get_variable("gamma", shape=shape, initializer=gamma_init, dtype=dtype)
-        #     tf.get_variable("beta", shape=shape, initializer=beta_init, dtype=dtype)
         normalized = fluid.layers.layer_norm(inp)
         return normalized
 
@@ -172,7 +159,6 @@ class EideticLSTMCell(object):
     # cell is similar as traditional LSTM, is transported to next layer
     # without much modification compared to hidden state
     def __call__(self, inputs, hidden, cell, global_memory, eidetic_cell):
-        # with tf.variable_scope(self._layer_name):
         new_scope = fluid.Scope()
         with fluid.scope_guard(new_scope):
             # fluid.layers.Print(hidden, message='hidden value: ')
