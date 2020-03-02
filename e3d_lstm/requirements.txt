@@ -1,4 +1,4 @@
-tensorflow>=1.0
+paddlepaddle>=1.6
 opencv3
 scikit-image
 numpy

@@ -39,9 +39,13 @@
 ## 数据集
 
 * [Moving MNIST](https://www.dropbox.com/s/fpe24s1t94m87rn/moving-mnist-example.tar.gz?dl=0)是一个运动数字的数据集 (64x64)
-* [KTH Actions](https://www.dropbox.com/s/ppmob712dzgogly/kth_action.tar.gz?dl=0) 是一个人体动作视频数据集. 这个数据集是原始视频的帧格式. 
+* [KTH Actions](https://www.dropbox.com/s/ppmob712dzgogly/kth_action.tar.gz?dl=0) 是一个人体动作视频数据集. 这个数据集是原始视频的帧格式. 该数据集解压之后为1.43 GB, 包括boxing, handclapping, handwaving, jogging, running, walking这几个不同类型的动作. 每个动作分类下有25个人该类动作的不同片段
+
+比如boxing/person01_boxing_d1_uncomp.avi为person01的boxing动作的d1片段
 
 本代码中使用KTH Actions数据集进行训练和评测
+
+在本代码中，数据集下载后放在AIStudio的/home/aistudio/work/kth_action目录下, 之后可使用后面的训练脚本和测试脚本使用该数据集进行训练和测试。（如果数据集放在不同的位置，可修改--train_data_paths参数指定数据集位置）
 
 
 ## 训练和测试
@@ -65,6 +69,9 @@ python runp.py --num_save_samples 10 --train_data_paths /home/aistudio/work/kth_
 
 ```
 
+注意: 需要根据数据集存放的位置修改训练集参数--train_data_paths和验证集参数--valid_data_paths. 如果要加载预训练模型, 则需要设置--pretrained_model参数. 如果不加载预训练模型, 则不需要设置--pretrained_model参数.
+
+
 测试命令样例
 
 ```
@@ -78,7 +85,7 @@ python runp.py --num_save_samples 10 --train_data_paths /home/aistudio/work/kth_
 ```
 
 测试模型时，需要设置参数 `--is_training False`.
-
+另外必须设置--pretrained_model参数来指定要测试的模型. 还需设置--valid_data_paths参数指定测试集. 
 
 
 ## 参数说明
@@ -168,3 +175,8 @@ python runp.py --num_save_samples 10 --train_data_paths /home/aistudio/work/kth_
 
 1e-7 40000轮 
 
+##GPU信息
+
+GPU型号: NVIDIA Tesla V100
+
+训练时使用的GPU卡数: 1 (单卡)
