@@ -4,7 +4,7 @@ use_gpu: true
 pretrain_weights: https://paddle-imagenet-models-name.bj.bcebos.com/ResNet50_cos_pretrained.tar
 weights: output/yolactplus_r50_fpn/1020000
 log_smooth_window: 10
-snapshot_iter: 10000
+snapshot_iter: 4000
 metric: COCO
 save_dir: output
 num_classes: 81

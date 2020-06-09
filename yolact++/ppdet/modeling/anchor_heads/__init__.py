@@ -14,12 +14,6 @@
 
 from __future__ import absolute_import
 
-from . import rpn_head
-from . import yolo_head
-from . import retina_head
 from . import yolact_head
 
-from .rpn_head import *
-from .yolo_head import *
-from .retina_head import *
 from .yolact_head import *

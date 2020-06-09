@@ -33,24 +33,6 @@ def create_tmp_var(name, dtype, shape, lod_level=0):
     return fluid.default_main_program().current_block().create_var(
         name=name, dtype=dtype, shape=shape, lod_level=lod_level)
                 
-def debug_func(x1,x2,x3,x4,x5,x6):
-    # print(name)
-    print(np.array(x1).shape)
-    print(np.array(x2).shape)
-    print(np.array(x3).shape)
-    print(np.array(x4).shape)
-    print(np.array(x5).shape)
-    print(np.array(x6).shape)
-    
-def debug_gt(x1):
-    # print(name)
-    x = np.array(x1)
-    print('debug',x.shape)
-    print(np.sum(x))
-    print(x)
-    # for i in range(50):
-    #     if x[0,i] == [0,0,0,0]:
-    #         print(i)
 
 from itertools import product
 from math import sqrt
@@ -87,21 +69,7 @@ def np_triu(x):
 
 @register
 class YolactHead(object):
-    """
-    Retina Head
 
-    Args:
-        anchor_generator (object): `AnchorGenerator` instance
-        target_assign (object): `RetinaTargetAssign` instance
-        output_decoder (object): `RetinaOutputDecoder` instance
-        num_convs_per_octave (int): Number of convolution layers in each octave
-        num_chan (int): Number of octave output channels
-        max_level (int): Highest level of FPN output
-        min_level (int): Lowest level of FPN output
-        prior_prob (float): Used to set the bias init for the class prediction layer
-        base_scale (int): Anchors are generated based on this scale
-        num_classes (int): Number of classes
-    """
     __inject__ = ['anchor_generator']
     __shared__ = ['num_classes']
  
@@ -220,7 +188,6 @@ class YolactHead(object):
                         name=conv_share_name + '_b',
                         learning_rate=2.,
                         regularizer=L2Decay(0.)))
-            # bias_init = float(-np.log((1 - self.prior_prob) / self.prior_prob))
             #bbox_layer
             bbox_name = 'protonet_bbox_pred_fpn{}'.format(lvl)
             bbox_share_name = 'protonet_bbox_pred_fpn'
@@ -238,7 +205,6 @@ class YolactHead(object):
                         loc=0., scale=0.01)),
                 bias_attr=ParamAttr(
                     name=bbox_share_name + '_b',
-                    # initializer=Constant(value=bias_init),
                     learning_rate=2.,
                     regularizer=L2Decay(0.)))
                     
@@ -269,15 +235,13 @@ class YolactHead(object):
                         loc=0., scale=0.01)),
                 bias_attr=ParamAttr(
                     name=conf_share_name + '_b',
-                    # initializer=Constant(value=bias_init),
                     learning_rate=2.,
                     regularizer=L2Decay(0.)))
             out_conf_transpose = fluid.layers.transpose(
                 out_conf, perm=[0, 2, 3, 1])
             out_conf_reshape = fluid.layers.reshape(
                 out_conf_transpose, shape=(0, -1, 81))  
-             
-            # fluid.layers.py_func(func=debug_gt, x=out_conf_reshape ,out=None)   
+              
             conf_list.append(out_conf_reshape)
             
             #mask_layer
@@ -297,7 +261,6 @@ class YolactHead(object):
                         loc=0., scale=0.01)),
                 bias_attr=ParamAttr(
                     name=mask_share_name + '_b',
-                    # initializer=Constant(value=bias_init),
                     learning_rate=2.,
                     regularizer=L2Decay(0.)))
             out_mask_transpose = fluid.layers.transpose(
@@ -310,22 +273,6 @@ class YolactHead(object):
         return bbox_list, conf_list, mask_list
         
     def _get_output(self, body_feats, spatial_scale):
-        """
-        Get class, bounding box predictions and anchor boxes of all level FPN level.
-
-        Args:
-            fpn_dict(dict): A dictionary represents the output of FPN with
-                their name.
-            spatial_scale(list): A list of multiplicative spatial scale factor.
-
-        Returns:
-            cls_pred_input(list): Class prediction of all input fpn levels.
-            bbox_pred_input(list): Bounding box prediction of all input fpn
-                levels.
-            anchor_input(list): Anchors of all input fpn levels with shape of.
-            anchor_var_input(list): Anchor variance of all input fpn levels with
-                shape.
-        """
         assert len(body_feats) == self.max_level - self.min_level + 1
         #proto_net
         proto_pred_list = self._proto_net(body_feats)
@@ -340,7 +287,6 @@ class YolactHead(object):
             
         norm_anchor = create_tmp_var('norm_anchor', 'float32', [self.num_priors, 4])
         fluid.layers.py_func(func=create_anchor, x=norm_anchor ,out=norm_anchor)
-        # fluid.layers.py_func(func=debug_gt, x=norm_anchor ,out=None)
         
         output = {}
         output['loc'] = bbox_pred_reshape_list
@@ -358,8 +304,6 @@ class YolactHead(object):
         boxes = fluid.layers.concat([
             priors[:, :2] + loc[:, :2] * variances[0] * priors[:, 2:],
             priors[:, 2:] * fluid.layers.exp(loc[:, 2:] * variances[1])], 1)
-        # boxes[:, :2] -= boxes[:, 2:] / 2
-        # boxes[:, 2:] += boxes[:, :2]
 
         x1y1 = boxes[:, :2] - boxes[:, 2:] / 2
         x2y2 = boxes[:, 2:] + x1y1
@@ -370,7 +314,6 @@ class YolactHead(object):
 
     def fast_nms(self, boxes, masks, scores, iou_threshold:float=0.5, top_k:int=200, second_threshold:bool=False):
         
-        # fluid.layers.py_func(func=debug_shape, x=scores ,out=None)
         scores, idx = fluid.layers.argsort(scores, axis=1, descending=True)
         
         idx = idx[:, :top_k]
@@ -425,13 +368,9 @@ class YolactHead(object):
             keep = (conf_scores > conf_thresh)
             
             out = fluid.layers.where(keep)
-            # fluid.layers.py_func(func=debug_gt, x=out ,out=None) 
-            
             one = fluid.layers.fill_constant(shape=[1], dtype='int32', value=1)
             pred = fluid.layers.less_than(fluid.layers.shape(out)[0], one) 
             out1 = fluid.layers.reshape(fluid.layers.range(0, fluid.layers.shape(decoded_boxes)[0], 1, 'int32'), (-1,1))
-            # fluid.layers.py_func(func=debug_shape, x=out1 ,out=None) 
-            #静态图判断不太会，只能这么代替了
             out_res = fluid.layers.cond(pred, lambda: out1, lambda: out)
             
             
@@ -442,7 +381,6 @@ class YolactHead(object):
             masks = fluid.layers.gather(mask_data[batch_idx], out_res)
             nms_top_k = 200
             boxes, masks, classes, scores = self.fast_nms(boxes, masks, scores, nms_thresh, nms_top_k)
-            # fluid.layers.py_func(func=debug_gt, x=boxes ,out=None)
             return boxes, masks, classes, scores
         else:
             boxes = decoded_boxes
@@ -462,26 +400,7 @@ class YolactHead(object):
             return out, index, masks, decoded_boxes
         
         
-        # if scores.size(1) == 0:
-        #     return None     
-    
     def get_prediction(self, body_feats, spatial_scale, im_info):
-        """
-        Get prediction bounding box in test stage.
-
-        Args:
-            fpn_dict(dict): A dictionary represents the output of FPN with
-                their name.
-            spatial_scale(list): A list of multiplicative spatial scale factor.
-            im_info (Variable): A 2-D LoDTensor with shape [B, 3]. B is the
-                number of input images, each element consists of im_height,
-                im_width, im_scale.
-
-        Returns:
-            pred_result(Variable): Prediction result with shape [N, 6]. Each
-                row has 6 values: [label, confidence, xmin, ymin, xmax, ymax].
-                N is the total number of prediction.
-        """
         output = self._get_output(body_feats, spatial_scale)
         bbox_pred_reshape_list = output['loc']
         conf_pred_reshape_list = output['conf']
@@ -497,12 +416,6 @@ class YolactHead(object):
         prior_data = anchor_reshape_list
         prior_data = fluid.layers.cast(prior_data, 'float32')
 
-        # fluid.layers.py_func(func=debug_sum, x=loc_data ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=conf_data ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=mask_data ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=proto_data ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=segm_pred_reshape_list ,out=None)
-        
         batch_size = fluid.layers.shape(loc_data)[0]
         num_priors = fluid.layers.shape(prior_data)[0]
         
@@ -558,9 +471,6 @@ class YolactHead(object):
             idx_s = fluid.layers.reshape(idx_s, (-1,1))
             classes = fluid.layers.reshape(classes, (-1,1))
 
-            # fluid.layers.py_func(func=debug_shape, x=idx_s ,out=None)
-            # fluid.layers.py_func(func=debug_shape, x=classes ,out=None)
-
             transform_idx_t = fluid.layers.concat([idx_s, fluid.layers.cast(classes, 'int32')], -1)
             maskiou_p = fluid.layers.gather_nd(maskiou_p, transform_idx_t) 
             maskiou_p = fluid.layers.reshape(maskiou_p, shape=(-1,1))
@@ -575,34 +485,10 @@ class YolactHead(object):
             boxes = fluid.layers.gather(boxes, idx)
             box_pred = fluid.layers.concat([classes, mask_scores, boxes], -1)           
 
-        # mask_pred = fluid.layers.concat([classes, bbox_scores, masks], -1)
-        # fluid.layers.py_func(func=debug_shape, x=box_pred ,out=None)
-        # return {'bbox': box_pred, 'mask': mask_pred}
-        
         return {'bbox': box_pred, 'mask': masks}
 
     def get_loss(self, body_feats, spatial_scale, im_info, gt_box, gt_class, gt_mask, is_crowd, gt_num):
-        """
-        Calculate the loss of retinanet.
-        Args:
-            fpn_dict(dict): A dictionary represents the output of FPN with
-                their name.
-            spatial_scale(list): A list of multiplicative spatial scale factor.
-            im_info(Variable): A 2-D LoDTensor with shape [B, 3]. B is the
-                number of input images, each element consists of im_height,
-                im_width, im_scale.
-            gt_box(Variable): The ground-truth bounding boxes with shape [M, 4].
-                M is the number of groundtruth.
-            gt_label(Variable): The ground-truth labels with shape [M, 1].
-                M is the number of groundtruth.
-            is_crowd(Variable): Indicates groud-truth is crowd or not with
-                shape [M, 1]. M is the number of groundtruth.
 
-        Returns:
-            Type: dict
-                loss_cls(Variable): focal loss.
-                loss_bbox(Variable): smooth l1 loss.
-        """
         output = self._get_output(body_feats, spatial_scale)
         bbox_pred_reshape_list = output['loc']
         conf_pred_reshape_list = output['conf']
@@ -611,9 +497,6 @@ class YolactHead(object):
         proto_data = output['proto']
         segm_pred_reshape_list = output['segm']
 
-        # fluid.layers.py_func(func=debug_shape, x=segm_pred_reshape_list ,out=None)
-
-        
         loc_data = fluid.layers.concat(bbox_pred_reshape_list, axis=1)
         conf_data = fluid.layers.concat(conf_pred_reshape_list, axis=1)
         mask_data = fluid.layers.concat(mask_pred_reshape_list, axis=1)
@@ -621,89 +504,42 @@ class YolactHead(object):
         priors = fluid.layers.cast(priors, 'float32')
         priors.stop_gradient = True
 
-        # fluid.layers.py_func(func=debug_func, x=[loc_data, conf_data, mask_data, priors, proto_data, segm_pred_reshape_list] ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=loc_data ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=conf_data ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=mask_data ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=proto_data ,out=None)
-        # fluid.layers.py_func(func=debug_sum, x=segm_pred_reshape_list ,out=None)
-        # point_form_tensor(priors)
-        
-        # batch_size = self.batch_size
-        # num_priors = self.num_priors
-        # num_classes = self.num_classes
-        
         batch_size = self.batch_size
         num_priors = self.num_priors
         num_classes = self.num_classes
         
         loc_t, gt_box_t, conf_t, idx_t, pos = get_target_tensor(gt_box, priors, gt_class, is_crowd, gt_num, loc_data, batch_size, num_priors)
         labels = gt_class
-        
-        # loc_t = create_tmp_var('loc_t','float32',[batch_size, num_priors, 4])
-        # gt_box_t = create_tmp_var('gt_box_t','float32',[batch_size, num_priors, 4])
-        # conf_t = create_tmp_var('conf_t','int32',[batch_size, num_priors])
-        # idx_t = create_tmp_var('idx_t','int32',[batch_size, num_priors])
-        
-        # pos = create_tmp_var('pos','bool',[batch_size, num_priors])
-        
-        # labels = create_tmp_var('labels','int32',[batch_size, 50])
-            
-        
-        # fluid.layers.py_func(func=get_target, x=[gt_box, priors, gt_class, is_crowd, gt_num, loc_data] ,out=[loc_t, gt_box_t, conf_t, idx_t, pos, labels])
-    
-        
-        # loc_t.stop_gradient=True
-        # conf_t.stop_gradient=True
-        # idx_t.stop_gradient=True
-        # labels.stop_gradient=True
-        # gt_box_t.stop_gradient=True
-        # pos.stop_gradient=True
-        # num_pos.stop_gradient=True
-        # pos_idx.stop_gradient=True
-        
-        
+
         losses = {}
         
         
         out = fluid.layers.where(pos)
         out.stop_gradient=True
-        # fluid.layers.py_func(func=debug_gt, x=out ,out=None)
         loc_pt = fluid.layers.gather_nd(loc_data, out)
         loc_tt = fluid.layers.gather_nd(loc_t, out)
     
-        # fluid.layers.py_func(func=debug_gt, x=loc_pt ,out=None)
-        # fluid.layers.py_func(func=debug_gt, x=loc_tt ,out=None)
         loc_tt.stop_gradient = True
         loss_bbox = fluid.layers.smooth_l1(
             x=fluid.layers.cast(loc_pt,'float32'),
             y=fluid.layers.cast(loc_tt,'float32'))
         losses['B'] = fluid.layers.reduce_sum(loss_bbox) * 1.5
-        # fluid.layers.py_func(func=debug_gt, x=losses['B'] ,out=None)
-        
+
         losses['M'], maskiou_targets = self.lincomb_mask_loss(pos, idx_t, mask_data, proto_data, gt_mask, gt_box_t, labels, gt_num, batch_size, num_priors)
-        # losses.update(loss)
-        # fluid.layers.py_func(func=debug_gt, x=losses['M'] ,out=None)   
-        
+
         losses['C'] = self.ohem_conf_loss(conf_data, conf_t, pos, batch_size, num_priors)
-        # fluid.layers.py_func(func=debug_gt, x=losses['C'] ,out=None)
-        
+
         losses['S'] = self.semantic_segmentation_loss(segm_pred_reshape_list, gt_mask, labels, batch_size, gt_num)
-        # fluid.layers.py_func(func=debug_gt, x=losses['S'] ,out=None)
-        
-        # # # aa = self.mask_iou_loss([8, 16, 32, 64, 128, 80], maskiou_targets)
+
         losses['I'] = self.mask_iou_loss([8, 16, 32, 64, 128, 80], maskiou_targets)
         
         total_num_pos = fluid.layers.reduce_sum(fluid.layers.cast(pos, 'int32'))
-        # fluid.layers.py_func(func=debug_gt, x=total_num_pos ,out=None)
         
         for k in losses:
             if k not in ('P', 'E', 'S'):
                 losses[k] /= total_num_pos
             else:
                 losses[k] /= batch_size        
-        # fluid.layers.py_func(func=debug_gt, x=losses['B'] ,out=None)
-        # print('loss------------------------------------------------------')
         return losses
         
 
@@ -711,9 +547,7 @@ class YolactHead(object):
         stride_list = [2,2,2,2,2,1]
         kernel_list = [3,3,3,3,3,1]        
         subnet_blob_in = maskiou_net_input
-        # fluid.layers.py_func(func=debug_gt, x=maskiou_t ,out=None)
         for i in range(len(net)):
-            # fluid.layers.py_func(func=debug_shape, x=subnet_blob_in ,out=None)
             conv_name = 'maskiou_conv_n{}'.format(i)
             subnet_blob = fluid.layers.conv2d(
                 input=subnet_blob_in,
@@ -764,34 +598,18 @@ class YolactHead(object):
             cur_segment = segment_data[idx]
             cur_class_t = class_t[idx]
             cur_num = gt_num[idx]
-            
-            # segment_t = create_tmp_var('segment_t','float32',[80, 72, 72])
-            
-            # fluid.layers.py_func(func=get_segment_t, x=[mask_t[idx], cur_class_t, cur_num] ,out=[segment_t])
-            
             segment_t = get_segment_t_tensor(mask_t[idx], cur_class_t, cur_num, mask_w, mask_h)
             segment_t.stop_gradient = True
-            # fluid.layers.py_func(func=debug_sum, x=cur_segment ,out=None)
             loss = fluid.layers.sigmoid_cross_entropy_with_logits(
                     x=fluid.layers.reshape(cur_segment, shape=(80,-1)),
                     label=fluid.layers.reshape(segment_t, shape=(80,-1)))
             
             loss_s += fluid.layers.reduce_sum(loss)
-            # fluid.layers.py_func(func=debug_sum, x=fluid.layers.reduce_sum(loss) ,out=None)
             
         loss_s = loss_s / mask_h / mask_w
         return loss_s
         
     def ohem_conf_loss(self, conf_data, conf_t, pos, num, num_priors):
-         
-         
-        # fluid.layers.py_func(func=debug_max, x=conf_data ,out=None)
-        
-        # posneg_idx = create_tmp_var('posneg_idx','bool',[num * num_priors * 81, 1])
-        # t = create_tmp_var('t','bool',[num, num_priors])
-        # posneg = create_tmp_var('posneg','bool',[num*num_priors, 1])
-        # fluid.layers.py_func(func=get_posneg, x=[conf_data, conf_t, pos], out=[t, posneg, posneg_idx])
-        
         batch_conf = fluid.layers.reshape(conf_data, shape=(-1, 81))
         x_max = fluid.layers.reduce_max(batch_conf)
         loss_c = fluid.layers.log(fluid.layers.reduce_sum(fluid.layers.exp(batch_conf - x_max), dim=1)) + x_max
@@ -808,23 +626,15 @@ class YolactHead(object):
         _, loss_idx = fluid.layers.argsort(loss_c, 1, descending=True)
         _, idx_rank = fluid.layers.argsort(loss_idx, 1)
         idx_rank = fluid.layers.cast(idx_rank, 'int32')
-        
-        
         num_pos = fluid.layers.reduce_sum(pos, dim=1, keep_dim=True)
-        # fluid.layers.py_func(func=debug_gt, x=num_pos ,out=None)
         negpos_ratio = 3
         num_neg = fluid.layers.elementwise_min(fluid.layers.elementwise_max(negpos_ratio * num_pos, fluid.layers.zeros([1], dtype='int32')), fluid.layers.shape(pos)[1]-1)
-        # fluid.layers.py_func(func=debug_sum, x=num_neg ,out=None)
         neg = idx_rank < fluid.layers.expand_as(num_neg, idx_rank)
         
         neg = fluid.layers.cast(neg, 'int32')
         neg *= -(pos - 1) 
         neg *= -(fluid.layers.cast(conf_t < 0, 'int32') - 1)        
-        
-        
         posneg = (pos + neg) > 0
-        
-        # posneg = pos > 0
         
         out = fluid.layers.where(posneg)
         out.stop_gradient = True
@@ -832,18 +642,12 @@ class YolactHead(object):
         conf_tt = fluid.layers.gather_nd(conf_t, out)
         conf_tt = fluid.layers.reshape(conf_tt, shape=(-1,1))
         
-        
-        # conf_data_t.stop_gradient=True
         conf_tt.stop_gradient=True
-        # fluid.layers.py_func(func=debug_gt, x=conf_data_t ,out=None)  
-        # fluid.layers.py_func(func=debug_max, x=conf_tt ,out=None) 
         loss = fluid.layers.softmax_with_cross_entropy(
             logits=fluid.layers.cast(conf_data_t,'float32'), 
             label=fluid.layers.cast(conf_tt,'int64'))
 
         loss = fluid.layers.reduce_sum(loss)
-        # fluid.layers.py_func(func=debug_gt, x=loss ,out=None)  
-        # fluid.layers.py_func(func=debug_gt, x=t ,out=None) 
         return loss
         
     def lincomb_mask_loss(self, pos, idx_t, mask_data, proto_data, masks, gt_box_t, labels, gt_num, batch_size, num_priors, interpolation_mode='bilinear'):
@@ -851,7 +655,6 @@ class YolactHead(object):
         mask_w = 138
         
         flag = create_tmp_var('flag','bool',[1])
-        # fluid.layers.py_func(func=debug_gt, x=flag ,out=None)
         maskiou_t_list = []
         maskiou_net_input_list = []
         label_t_list = []
@@ -863,24 +666,15 @@ class YolactHead(object):
                                         fluid.layers.unsqueeze(input=masks[idx], axes=[0]), 
                                         out_shape=[mask_h, mask_w], align_corners=False),
                                     axes=[0])
-            # downsampled_masks = fluid.layers.transpose(downsampled_masks, perm=[1, 2, 0])
             downsampled_masks = fluid.layers.cast(downsampled_masks > 0.5,'float32')
             
             
             cur_pos = fluid.layers.cast(pos,'int32')[idx]
             out = fluid.layers.where(fluid.layers.cast(cur_pos,'bool'))
             out.stop_gradient = True
-            # idx_t.stop_gradient=True
-            # gt_box_t.stop_gradient=True
             pos_idx_t = fluid.layers.gather_nd(idx_t[idx], out)
             pos_gt_box_t = fluid.layers.gather_nd(gt_box_t[idx], out)
-            # fluid.layers.py_func(func=debug_gt, x=out ,out=None)
-            
-            # fluid.layers.py_func(func=iszero, x=pos_idx_t ,out=flag)
-            
-            # if flag:
-            #     continue
-            
+
             proto_masks = proto_data[idx]
             proto_coef = fluid.layers.gather_nd(mask_data[idx], out)
             
@@ -897,18 +691,14 @@ class YolactHead(object):
             proto_coef = fluid.layers.gather(proto_coef, select, overwrite=True)
             pos_idx_t = fluid.layers.gather(pos_idx_t, select, overwrite=True)
             pos_gt_box_t = fluid.layers.gather(pos_gt_box_t, select, overwrite=True)
-            # fluid.layers.py_func(func=debug_max, x=pos_idx_t ,out=None)
             
             pos_idx_t.stop_gradient=True
             pos_gt_box_t.stop_gradient=True            
             downsampled_masks.stop_gradient=True
             downsampled_masks = fluid.layers.gather(downsampled_masks, pos_idx_t, overwrite=True)
-            label_t = fluid.layers.gather(labels[idx], pos_idx_t, overwrite=True)
-            # fluid.layers.py_func(func=debug_max, x=label_t ,out=None) 
-            mask_t = fluid.layers.transpose(downsampled_masks, perm=[1, 2, 0])
-            # fluid.layers.py_func(func=debug_gt, x=mask_t ,out=None) 
-            
-            # proto_coef.stop_gradient=True
+            label_t = fluid.layers.gather(labels[idx], pos_idx_t, overwrite=True) 
+            mask_t = fluid.layers.transpose(downsampled_masks, perm=[1, 2, 0]) 
+
             pred_masks = fluid.layers.matmul(proto_masks, proto_coef, transpose_x=False, transpose_y=True)
             pred_masks = fluid.layers.sigmoid(pred_masks)
             
@@ -944,10 +734,7 @@ class YolactHead(object):
             one = fluid.layers.fill_constant(shape=[1], dtype='int32', value=1)
             pred = fluid.layers.less_than(fluid.layers.shape(out)[0], one) 
             out1 = fluid.layers.reshape(fluid.layers.range(0, fluid.layers.shape(pos_gt_box_t)[0], 1, 'int32'), (-1,1))
-            # fluid.layers.py_func(func=debug_shape, x=out1 ,out=None) 
-            #静态图判断不太会，只能这么代替了
             out_res = fluid.layers.cond(pred, lambda: out1, lambda: out)
-            # fluid.layers.py_func(func=debug_shape, x=out_res ,out=None) 
             
             out_res.stop_gradient = True
             pos_gt_box_t = fluid.layers.gather(pos_gt_box_t, out_res)
@@ -968,17 +755,10 @@ class YolactHead(object):
             label_t_list.append(label_t)
             
         mask_alpha = 6.125
-        # loss_m.stop_gradient=True
         losses = loss_m * mask_alpha / mask_h / mask_w
-        
-        # fluid.layers.py_func(func=debug_gt, x=loss_m ,out=None) 
-        # # if len(maskiou_t_list) == 0:
-        # #     return losses, None      
-        
         maskiou_t = fluid.layers.concat(maskiou_t_list, axis=0)
         label_t = fluid.layers.concat(label_t_list, axis=0)
         maskiou_net_input = fluid.layers.concat(maskiou_net_input_list, axis=0) 
-        # fluid.layers.py_func(func=debug_max, x=label_t ,out=None) 
         return losses, [maskiou_net_input, maskiou_t, label_t]
         
     def _mask_iou(self, mask1, mask2):
@@ -1014,18 +794,6 @@ class YolactHead(object):
         fluid.layers.cond(pred, noop, select_right)
         
         return pred_masks, pos_gt_box_t, mask_t, label_t
-    
-def debug_sum(x):
-    x = np.array(x)
-    print(np.shape(x),np.sum(x))
-
-def debug_min(x):
-    x = np.array(x)
-    print('min',np.min(x))
-
-def debug_max(x):
-    x = np.array(x)
-    print('max',np.max(x))
 
 def transform_index(idx):
     idx = np.array(idx)
@@ -1040,10 +808,8 @@ def debug_shape(x):
 
 def get_select(gt_mask_area):
     gt_mask_area = np.array(gt_mask_area)
-    #########
     discard_mask_area = 10
     select = gt_mask_area > discard_mask_area
-    # print('select',select)
     return select
 
 def get_box_height_width_tensor(pos_gt_box_t, mask_w, mask_h):
@@ -1064,7 +830,6 @@ def get_box_height_width(pos_gt_box_t):
     pos_gt_csize = center_size(pos_gt_box_t)
     gt_box_width  = pos_gt_csize[:, 2] * mask_w
     gt_box_height = pos_gt_csize[:, 3] * mask_h
-    # print('gt_box_width',np.shape(gt_box_width))
     return gt_box_width.astype('float32'), gt_box_height.astype('float32')
 
 def get_mast_to_train(x):
@@ -1081,11 +846,9 @@ def get_mast(x):
     
     perm = np.random.permutation(np.shape(x)[0])
     return perm
-    # return np.reshape(perm[:masks_to_train], (-1,1))
     
 def iszero(x):
     x = np.array(x)
-    # print('xlen:',np.shape(x)[0])
     return True if np.shape(x)[0] == 0 else False
 
 def get_cur_pos(cur_pos):
@@ -1156,15 +919,9 @@ def get_posneg(conf_data, conf_t, pos):
     batch_size = np.shape(conf_data)[0]
     conf_t = np.array(conf_t)
     pos = np.array(pos)
-    
-    # print('pos start',np.sum(pos))
-    
-    # Compute max conf across batch for hard negative mining
     batch_conf = np.reshape(conf_data, (-1, 81))
     loss_c = log_sum_exp(batch_conf) - np.reshape(batch_conf[:, 0],(-1,1))
-    # print('loss_c:',loss_c)
-    
-    # Hard Negative Mining
+
     loss_c = np.reshape(loss_c, (batch_size, -1))
     loss_c[pos] = 0
     loss_c[conf_t < 0] = 0
@@ -1184,14 +941,8 @@ def get_posneg(conf_data, conf_t, pos):
     
     posneg_idx = np.add(pos_idx, neg_idx)
     posneg = np.add(pos, neg)
-    # print('posneg',np.sum(posneg))
-    # print('posneg shape:',np.shape(posneg))
-    # print('posneg:',posneg)
     posneg_idx = np.reshape(posneg_idx,(-1,1))
-    # posneg = np.reshape(posneg,(-1,1))
-    
-    # print('get_posneg------------------------------------------------------------------------------------------------------------------------------------------------')
-    
+
     return posneg, np.reshape(posneg,(-1,1)), posneg_idx
     
 def log_sum_exp(x):
@@ -1209,7 +960,6 @@ def end_time():
     print('time2',time.clock() - start_t)
 
 def crop_tensor(masks, boxes):
-    # fluid.layers.py_func(func=start_time, x=fluid.layers.shape(masks) ,out=None)
     padding = 1
     s = fluid.layers.shape(masks)
     h = fluid.layers.cast(s[0], 'float32')
@@ -1220,7 +970,6 @@ def crop_tensor(masks, boxes):
 
     rows = fluid.layers.expand_as(fluid.layers.reshape(fluid.layers.range(0, w, 1, 'float32'), shape=(1, -1, 1)), target_tensor=masks)
     cols = fluid.layers.expand_as(fluid.layers.reshape(fluid.layers.range(0, h, 1, 'float32'), shape=(-1, 1, 1)), target_tensor=masks)
-    # fluid.layers.py_func(func=debug_sum, x=rows ,out=None)
     
     masks_left  = rows >= fluid.layers.reshape(x1, shape=(1,1,-1))
     masks_right = rows <  fluid.layers.reshape(x2, shape=(1,1,-1))
@@ -1233,9 +982,7 @@ def crop_tensor(masks, boxes):
     masks_down  = fluid.layers.cast(masks_down, 'float32')
     
     crop_mask = masks_left * masks_right * masks_up * masks_down
-    # fluid.layers.py_func(func=end_time, x=fluid.layers.shape(masks) ,out=None)
     crop_mask.stop_gradient = True
-    # fluid.layers.py_func(func=debug_sum, x=crop_mask ,out=None) 
     return masks * crop_mask
     
 def sanitize_coordinates_tensor(_x1, _x2, img_size, padding:int=0, cast:bool=True, is_mask=True):
@@ -1272,7 +1019,6 @@ def crop(masks, boxes):
     y1, y2 = sanitize_coordinates(boxes[:, 1], boxes[:, 3], h, padding, cast=False)
     rows = np.broadcast_to(np.reshape(np.arange(w, dtype=x1.dtype),(1, -1, 1)),(h, w, n))
     cols = np.broadcast_to(np.reshape(np.arange(h, dtype=x1.dtype),(-1, 1, 1)),(h, w, n))
-    # print('rows',np.sum(rows))
     
     masks_left  = rows >= np.reshape(x1, (1, 1, -1))
     masks_right = rows <  np.reshape(x2, (1, 1, -1))
@@ -1280,10 +1026,7 @@ def crop(masks, boxes):
     masks_down  = cols <  np.reshape(y2, (1, 1, -1))
     
     crop_mask = masks_left * masks_right * masks_up * masks_down
-    
-    # print('crop_mask:',np.sum(crop_mask))
     end_time = time.time()
-    # print('time1',end_time - start_time)
     return crop_mask.astype('float32')
 
 def sanitize_coordinates(_x1, _x2, img_size:int, padding:int=0, cast:bool=True):
@@ -1342,15 +1085,6 @@ def get_target_tensor(gt_box, priors, gt_class, is_crowd, gt_num, loc_data, batc
     gt_box_t = fluid.layers.stack(gt_box_t, 0)
     conf_t = fluid.layers.stack(conf_t, 0)
     idx_t = fluid.layers.stack(idx_t, 0)
-
-    # loc_t = fluid.layers.concat(loc_t, 0)
-    # loc_t = fluid.layers.reshape(loc_t, (batch_size, num_priors, 4))
-    # gt_box_t = fluid.layers.concat(gt_box_t, 0)
-    # gt_box_t = fluid.layers.reshape(gt_box_t, (batch_size, num_priors, 4))
-    # conf_t = fluid.layers.concat(conf_t, 0)
-    # conf_t = fluid.layers.reshape(conf_t, (batch_size, num_priors))
-    # idx_t = fluid.layers.concat(idx_t, 0)
-    # idx_t = fluid.layers.reshape(idx_t, (batch_size, num_priors))
     
     pos = conf_t > 0
     
@@ -1388,9 +1122,7 @@ def match_tensor(pos_thresh, neg_thresh, truths, priors, labels, crowd_boxes, lo
     overlaps = jaccard_tensor(truths, decoded_priors)
     best_truth_overlap, best_truth_idx = fluid.layers.argsort(overlaps, 0, descending=True)
     best_truth_overlap = best_truth_overlap[0]
-    # fluid.layers.py_func(func=debug_gt, x=best_truth_overlap ,out=None)
     best_truth_idx = best_truth_idx[0]
-    # fluid.layers.py_func(func=debug_gt, x=best_truth_idx ,out=None)
     
     fluid.layers.py_func(func=assign_labels, x=[overlaps, best_truth_overlap, best_truth_idx] ,out=[best_truth_overlap, best_truth_idx])
     
@@ -1398,12 +1130,6 @@ def match_tensor(pos_thresh, neg_thresh, truths, priors, labels, crowd_boxes, lo
     matches = fluid.layers.gather(truths, best_truth_idx)
     conf = fluid.layers.gather(labels, best_truth_idx)
     fluid.layers.py_func(func=transform_conf, x=[conf, best_truth_overlap] ,out=conf)
-      
-    # crowd_iou_threshold = 0.7
-    # if crowd_boxes is not None:
-    #     crowd_overlaps = jaccard(decoded_priors, crowd_boxes, iscrowd=True)
-    #     best_crowd_overlap, best_crowd_idx = crowd_overlaps.max(1)
-    #     conf[(conf <= 0) & (best_crowd_overlap > crowd_iou_threshold)] = -1
         
     loc = encode_tensor(matches, priors, use_yolo_regressors)
     
