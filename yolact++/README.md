@@ -39,6 +39,7 @@
 - [数据处理配置文件](configs/yolactplus_reader.yml)
 
 ## 模型下载
+下载如下链接模型压缩至output/yolactplus_r50_fpn/下
 
 ```
 https://aistudio.baidu.com/aistudio/datasetdetail/38635
@@ -68,3 +69,22 @@ python -u tools/infer.py -c configs/yolactplus_r50_fpn.yml \
                     --draw_threshold=0.5 \
                     -o weights=output/yolactplus_r50_fpn/1020000  \
 ```
+
+## 数据增强
+原repo在数据预处理部分采用和ssd相同的方式，复现过程中发现RandomDistort效果不佳，便注释了该部分。
+```
+  # - !RandomDistort
+  #   brightness_lower: 0.875
+  #   brightness_upper: 1.125
+  #   is_order: true
+  - !ExpandImage
+    max_ratio: 4
+    prob: 0.5
+    segm_flag: true
+  - !RandomCrop
+    allow_no_crop: true
+```
+
+
+
+
