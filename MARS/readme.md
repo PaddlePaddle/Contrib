@@ -28,6 +28,7 @@
          --frame_dir "dataset/hmdb_flowframe" --annotation_path "dataset/hmdb51_label" --result_path "results/" \
          --Flow_premodel_path "models/Flow" --Flow_resume_path "models/model_Flow"
      ```
+     
      训练RGB流和训练MARS流的命令可以仿照上面训练FLOW流的命令
      
 3、测试flow流可以使用以下命令：
@@ -39,11 +40,12 @@
           --annotation_path "dataset/HMDB51_labels" \
           --result_path "results/"
     ```
+     
      测试RGB流和训练MARS流的命令可以仿照上面测试FLOW流的命令
 
 4、模型精度
 Model|Top1
 ---|---
-RGB|0.680
+RGB|0.681
 FLOW|0.719
 MARS|0.721
