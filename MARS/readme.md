@@ -27,6 +27,7 @@ python Flow_train.py --dataset HMDB51 --modality Flow --n_classes 400 --n_finetu
     --annotation_path "dataset/hmdb51_split01" --result_path "results/" --Flow_premodel_path "models/Flow_Kinetics_16f" \
     --Flow_resume_path "models/model_Flow" --ft_begin_index 4 --split 1
 ```
+注意：上面的训练脚本在使用过程中数据路径及模型路径要修改成自己的，frame_dir指提取的视频帧及光流图像的路径、annotation_path指图像标签的路径（split01），Flow_premodel_path指预训练模型的路径，Flow_resume_path指模型的保存路径
    
 **从Kinetics预训练的模型开始训练MARS流可以使用以下命令：**
 ```bash
@@ -37,6 +38,7 @@ python MARS_train.py --dataset HMDB51 --modality RGB_Flow --n_classes 400  --n_f
     --Flow_resume_path "models/model_Flow/model_Flow_165_saved" --output "avgpool" --ft_begin_index 4  --split 1 \
     --MARS_alpha 50 
 ```
+注意：上面的训练脚本在使用过程中数据路径及模型路径要修改成自己的，frame_dir指提取的视频帧及光流图像的路径、annotation_path指图像标签的路径（split01），MARS_premodel_path指预训练模型的路径，MARS_resume_path指模型的保存路径，Flow_resume_path是训练好的Flow流模型的路径
 
 **从Kinetics预训练的模型开始训练RGB流可以使用以下命令：**
 ```bash
@@ -45,7 +47,7 @@ python RGB_train.py --dataset HMDB51 --modality RGB --n_classes 400 --n_finetune
     --annotation_path "dataset/hmdb51_split01" --result_path "results/" --RGB_premodel_path "models/RGB_Kinetics_16f" \
     --RGB_resume_path "models/model_RGB" --ft_begin_index 4 --split 1
 ```
-
+注意：上面的训练脚本在使用过程中数据路径及模型路径要修改成自己的，frame_dir指提取的视频帧及光流图像的路径、annotation_path指图像标签的路径（split01），RGB_premodel_path指预训练模型的路径，RGB_resume_path指模型的保存路径
 ## 3、模型精度
 Model|Top1
 ---|---
@@ -72,3 +74,4 @@ python test_single_stream.py --dataset HMDB51 --modality RGB --n_classes 51 --ba
     --sample_duration 16 --model resnext --model_depth 101 --result_path "results/" --frame_dir "dataset/hmdb_flowframe"  \
     --annotation_path "dataset/hmdb51_split01"   --RGB_resume_path "models/model_Flow/model_Flow_165_saved"  --split 1
 ```
+注意：需要修改Flow_resume_path、MARS_resume_path、RGB_resume_path到训练好的模型路径
