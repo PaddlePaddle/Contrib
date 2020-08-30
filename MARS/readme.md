@@ -35,7 +35,7 @@ python MARS_train.py --dataset HMDB51 --modality RGB_Flow --n_classes 400  --n_f
     --batch_size 64 --checkpoint 1 --sample_duration 16 --model resnext --model_depth 101      \
     --frame_dir "dataset/hmdb_flowframe" --annotation_path "dataset/hmdb51_split01" --result_path "results/" \
     --MARS_premodel_path "models/MARS_Kinetics_16f" --MARS_resume_path "models/model_MARS" \
-    --Flow_resume_path "models/model_Flow/model_Flow_165_saved" --output "avgpool" --ft_begin_index 4  --split 1 \
+    --Flow_resume_path "models/model_Flow/model_Flow_XX" --output "avgpool" --ft_begin_index 4  --split 1 \
     --MARS_alpha 50 
 ```
 注意：上面的训练脚本在使用过程中数据路径及模型路径要修改成自己的，frame_dir指提取的视频帧及光流图像的路径、annotation_path指图像标签的路径（split01），MARS_premodel_path指预训练模型的路径，MARS_resume_path指模型的保存路径，Flow_resume_path是训练好的Flow流模型的路径
@@ -60,18 +60,18 @@ MARS|0.721
 ```bash
 python test_single_stream.py --dataset HMDB51 --modality Flow --n_classes 51 --batch_size 1  --checkpoint 1 \
 --sample_duration 16 --model resnext --model_depth 101 --result_path "results/" --frame_dir "dataset/hmdb_flowframe"  \
---annotation_path "dataset/hmdb51_split01"   --Flow_resume_path "models/model_Flow/model_Flow_165_saved"  --split 1
+--annotation_path "dataset/hmdb51_split01"   --Flow_resume_path "models/model_Flow/model_Flow_XX"  --split 1
 ```
 **测试MARS流模型可以使用以下命令：**
 ```bash
 python test_single_stream.py --dataset HMDB51 --modality RGB_Flow --n_classes 51 --batch_size 1  --checkpoint 1 \
     --sample_duration 16 --model resnext --model_depth 101 --result_path "results/" --frame_dir "dataset/hmdb_flowframe"  \
-    --annotation_path "dataset/hmdb51_split01" --MARS_resume_path "models/model_MARS/model_MARS_"  --split 1
+    --annotation_path "dataset/hmdb51_split01" --MARS_resume_path "models/model_MARS/model_MARS_XX"  --split 1
 ```
 **测试RGB流模型可以使用以下命令：**
 ```bash
 python test_single_stream.py --dataset HMDB51 --modality RGB --n_classes 51 --batch_size 1  --checkpoint 1 \
     --sample_duration 16 --model resnext --model_depth 101 --result_path "results/" --frame_dir "dataset/hmdb_flowframe"  \
-    --annotation_path "dataset/hmdb51_split01"   --RGB_resume_path "models/model_Flow/model_Flow_165_saved"  --split 1
+    --annotation_path "dataset/hmdb51_split01"   --RGB_resume_path "models/model_Flow/model—_RGB_XX"  --split 1
 ```
 注意：需要修改Flow_resume_path、MARS_resume_path、RGB_resume_path到训练好的模型路径
