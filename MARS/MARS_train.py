@@ -82,6 +82,9 @@ def train():
         opt.n_classes = 400 
         model_MARS, parameters = generate_model(opt)
         print("Initializing the optimizer ...")
+        if opt.RGB_premodel_path: 
+            opt.weight_decay = 1e-5
+            opt.learning_rate = 0.001
         print("lr = {} \t momentum = {} \t weight_decay = {}, \t nesterov = {}"
             .format(opt.learning_rate, opt.momentum, opt. weight_decay, opt.nesterov))
         print("LR patience = ", opt.lr_patience) 
