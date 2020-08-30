@@ -60,7 +60,7 @@ def parse_opts():
     #     参数优化的参数设置
     ###############################
     #学习率
-    parser.add_argument('--learning_rate',default=0.01,type=float,help='Initial learning rate (divided by 10 while training by lr scheduler)')
+    parser.add_argument('--learning_rate',default=0.1,type=float,help='Initial learning rate (divided by 10 while training by lr scheduler)')
     #动量
     parser.add_argument('--momentum', default=0.9, type=float, help='Momentum')
     #权重衰减因子
@@ -75,7 +75,7 @@ def parse_opts():
     #光流权重增加了MSE损失
     parser.add_argument('--MARS_alpha', default=50, type=float, help='Weight of Flow augemented MSE loss')
     #总共训练多少个迭代
-    parser.add_argument('--n_epochs',default=550,type=int,help='Number of total epochs to run')
+    parser.add_argument('--n_epochs',default=100,type=int,help='Number of total epochs to run')
     
     parser.add_argument('--begin_epoch',default=1,type=int,help='Training begins at this epoch. Previous trained model indicated by resume_path is loaded.')
     ###############################
@@ -95,7 +95,6 @@ def parse_opts():
     parser.add_argument( '--Flow_resume_path', default='', type=str, help='FLOW resume model')
     parser.add_argument( '--RGB_resume_path', default='', type=str, help='RGB resume model')
     parser.add_argument( '--continue_train', default=False, type=bool, help='')
-    parser.add_argument('--log',default=1,type=int,help='Log training and validation')
     #训练模型时，每迭代多少轮，保存一次
     parser.add_argument('--checkpoint',default=2,type=int,help='Trained model is saved at every this epochs.')
     #手动设置随机种子

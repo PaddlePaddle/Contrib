@@ -123,12 +123,4 @@ def calculate_accuracy(outputs, targets):
     n_correct_elems = fluid.layers.reduce_sum(correct).numpy()
     return n_correct_elems/batch_size
     
-    
-def calculate_accuracy_video(output_buffer, i):
-    true_value = output_buffer[: i+1,-1]
-    pred_value = np.argmax(output_buffer[:i+1, :-1], axis = 1)
-#    print(output_buffer[0:3,:])
-    # print(true_value)
-    # print(pred_value)
-    # print("accuracy = ", 1*(np.equal(true_value, pred_value)).sum()/len(true_value))
-    return 1*(np.equal(true_value, pred_value)).sum()/len(true_value)
+

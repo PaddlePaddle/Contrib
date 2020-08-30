@@ -7,7 +7,7 @@ import pdb
 import paddle
 import paddle.fluid as fluid
 
-__all__ = ['ResNeXt', 'resnet50', 'resnet101']
+__all__ = ['ResNeXt', 'resnet101', 'resnet152']
 
 def downsample_basic_block(x, planes, stride):
     out = fluid.layers.pool3d(x, kernel_size=1, stride=stride)
@@ -80,8 +80,7 @@ class ResNeXt(fluid.dygraph.Layer):
                  cardinality=32,
                  num_classes=400,
                  input_channels=3,
-                 output_layers=[],
-                 curr_mode='Flow'):
+                 output_layers=[]):
         self.inplanes = 64
         super(ResNeXt, self).__init__()
         param_attr=fluid.ParamAttr(initializer=fluid.initializer.MSRAInitializer(uniform=True))
@@ -94,9 +93,8 @@ class ResNeXt(fluid.dygraph.Layer):
         self.last_duration = int(math.ceil(sample_duration / 16))
         self.last_size = int(math.ceil(sample_size / 32))
         self.fc = fluid.dygraph.Linear(cardinality * 32 * block.expansion, num_classes,
-                                param_attr=fluid.ParamAttr(name=curr_mode+'_linear_1.w_0',
-                                                            initializer=fluid.initializer.MSRAInitializer(uniform=True)), 
-                                bias_attr=paddle.fluid.ParamAttr(name=curr_mode+'_linear_1.b_0', initializer=None),act="softmax")
+                                param_attr=fluid.ParamAttr(initializer=fluid.initializer.MSRAInitializer(uniform=True)), 
+                                bias_attr=paddle.fluid.ParamAttr(initializer=None),act="softmax")
         self.output_layers = output_layers
         self.lastfeature_size=cardinality * 32 * block.expansion
 
@@ -157,13 +155,33 @@ class ResNeXt(fluid.dygraph.Layer):
 
         return out
 
-    def freeze_batch_norm(self):
-        for name,m in self.named_modules():
-            if isinstance(m, fluid.dygraph.BatchNorm): # PHIL: i Think we can write just  "if isinstance(m, nn._BatchNorm)
-                m.eval() # use mean/variance from the training
-                m.weight.requires_grad = False
-                m.bias.requires_grad = False
+def get_fine_tuning_parameters(model, ft_begin_index):
+    if ft_begin_index == 0:
+        return model.parameters()
+    # pdb.set_trace()
+    ft_module_names = []
+    for i in range(ft_begin_index, 5):
+        ft_module_names.append('layer{}'.format(i))
+    ft_module_names.append('fc')
 
+    print("Layers to finetune : ", ft_module_names)
+
+    parameters = []
+    for k, v in model.named_parameters():
+        for ft_module in ft_module_names:
+            if ft_module in k:
+                parameters.append(v)
+                break
+        # else:
+        #     parameters.append({'params': v, 'lr': 0.0})
+    #pdb.set_trace()
+    return parameters
+
+def resnet50(**kwargs):
+    """
+    """
+    model = ResNeXt(ResNeXtBottleneck, [3, 4, 6, 3], **kwargs)
+    return model
 
 def resnet101(**kwargs):
     """

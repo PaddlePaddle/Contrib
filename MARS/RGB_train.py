@@ -59,38 +59,19 @@ def train():
         print("Preprocessing train data ...")
         #pdb.set_trace()
         train_data   = globals()['{}_test'.format(opt.dataset)](split = opt.split, train = 1, opt = opt)
-        train_dataloader = paddle.batch(train_data, batch_size=opt.batch_size, drop_last=True)
+        # train_dataloader = paddle.batch(train_data, batch_size=opt.batch_size, drop_last=True)
+        train_dataloader = paddle.batch(fluid.io.shuffle(train_data,opt.batch_size*4), batch_size=opt.batch_size, drop_last=True)
         #验证数据加载句柄
         print("Preprocessing validation data ...")
         val_data   = globals()['{}_test'.format(opt.dataset)](split = opt.split, train = 2, opt = opt)
         val_dataloader = paddle.batch(val_data, batch_size=opt.batch_size, drop_last=True)
         
         #如果使用图像进行训练，输入通道数为3
-        if opt.modality=='RGB': opt.input_channels = 3
+        opt.input_channels = 3
         
-        #日志文件设置
-        log_path = os.path.join(opt.result_path, opt.dataset)
-        if not os.path.exists(log_path):
-            os.makedirs(log_path)
-        if opt.log == 1:
-            if not opt.continue_train and opt.RGB_premodel_path=='':
-                epoch_logger = Logger_MARS(os.path.join(log_path, 'PreModel_RGB_{}_{}_train_batch{}_sample{}_model{}{}_ftbeginidx{}.log'
-                    .format(opt.dataset, opt.split, opt.batch_size, opt.sample_size, opt.model, opt.model_depth, opt.ft_begin_index))
-                    ,['epoch', 'loss', 'acc'], opt.RGB_premodel_path, opt.begin_epoch)
-                val_logger   = Logger_MARS(os.path.join(log_path, 'PreModel_RGB_{}_{}_val_batch{}_sample{}_model{}{}_ftbeginidx{}.log'
-                    .format(opt.dataset,opt.split,  opt.batch_size, opt.sample_size, opt.model, opt.model_depth, opt.ft_begin_index))
-                    ,['epoch', 'loss', 'acc'], opt.RGB_premodel_path, opt.begin_epoch)
-            else:
-                epoch_logger = Logger_MARS(os.path.join(log_path, 'RGB_{}_{}_train_batch{}_sample{}__model{}{}_ftbeginidx{}.log'
-                    .format(opt.dataset, opt.split, opt.batch_size, opt.sample_size, opt.model, opt.model_depth, opt.ft_begin_index))
-                    ,['epoch', 'loss',  'acc'], opt.RGB_resume_path, opt.begin_epoch)
-                val_logger   = Logger_MARS(os.path.join(log_path, 'RGB_{}_{}_val_batch{}_sample{}_model{}{}_ftbeginidx{}.log'
-                    .format(opt.dataset, opt.split, opt.batch_size, opt.sample_size, opt.model, opt.model_depth, opt.ft_begin_index))
-                    ,['epoch', 'loss', 'acc'], opt.RGB_resume_path, opt.begin_epoch)
-    
         #构建网络模型结构
         print("Loading Flow model... ", opt.model, opt.model_depth)
-        model = generate_model(opt,'RGB')
+        model,parameters = generate_model(opt)
 
         print("Initializing the optimizer ...")
         if opt.RGB_premodel_path: 
@@ -101,10 +82,9 @@ def train():
                     .format(opt.learning_rate, opt.momentum, opt.nesterov, opt.lr_patience))
         #构建优化器
         optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=opt.learning_rate, 
-                    momentum=opt.momentum, parameter_list=model.parameters(), 
+                    momentum=opt.momentum, parameter_list=parameters, 
                     use_nesterov=opt.nesterov)
         #从checkpoint加载模型和优化器参数
-        #pdb.set_trace()
         scheduler = ReduceLROnPlateau(opt.learning_rate, mode='min',  patience=opt.lr_patience)
         if opt.continue_train and opt.Flow_resume_path != '':
             resume_params(model, optimizer, opt)
@@ -120,6 +100,7 @@ def train():
             end_time   = time.time()
             for i, data in enumerate(train_dataloader()):
                 #输入视频图像或者光流
+                # pdb.set_trace()
                 inputs = np.array([x[0] for x in data]).astype('float32')
                 # 输入视频图像或者光流的标签   
                 targets = np.array([x[1] for x in data]).astype('int')
@@ -156,9 +137,6 @@ def train():
                       data_time=data_time,
                       loss=losses,
                       acc=accuracies))
-            if opt.log == 1:
-                epoch_logger.log({'epoch': epoch,'loss': losses.avg, 'acc': accuracies.avg,
-                })
             losses_avg[0]=losses.avg
             scheduler.step(losses_avg)
             if epoch % opt.checkpoint == 0 and epoch != 0:
@@ -200,13 +178,5 @@ def train():
                             loss=losses,
                             acc=accuracies))
                               
-            if opt.log == 1:
-                val_logger.log({'epoch': epoch, 'loss': losses.avg, 'acc': accuracies.avg})
-            
-            
-
-
-
-
 if __name__=="__main__":
     train()

@@ -27,14 +27,14 @@ if __name__=="__main__":
 
     with fluid.dygraph.guard(place = fluid.CUDAPlace(0)):
         print("Preprocessing validation data ...")
-        val_data   = globals()['{}_test'.format(opt.dataset)](split = opt.split, train = 2, opt = opt)
-        val_dataloader = paddle.batch(val_data, batch_size=opt.batch_size, drop_last=True)
+        test_data   = globals()['{}_test'.format(opt.dataset)](split = opt.split, train = 0, opt = opt)
+        test_dataloader = paddle.batch(test_data, batch_size=opt.batch_size, drop_last=False)
         
-        if opt.modality=='RGB': opt.input_channels = 3
-        elif opt.modality=='Flow': opt.input_channels = 2
+        if opt.modality=='Flow': opt.input_channels = 2
+        else: opt.input_channels = 3
     
         # Loading model and checkpoint
-        model = generate_model(opt,opt.modality)
+        model,_ = generate_model(opt)
         if opt.modality=='RGB' and opt.RGB_resume_path!='':
             para_dict, _ = fluid.dygraph.load_dygraph(opt.RGB_resume_path)
             model.set_dict(para_dict)
@@ -50,29 +50,26 @@ if __name__=="__main__":
         if not os.path.exists(result_path):
             os.makedirs(result_path)    
 
-        if opt.log:
-            f = open(os.path.join(result_path, "test_{}{}_{}_{}_{}_{}.txt".format( opt.model, opt.model_depth, opt.dataset, opt.split, opt.modality, opt.sample_duration)), 'w+')
-            f.write(str(opt))
-            f.write('\n')
-            f.flush()
-        for i, data in enumerate(val_dataloader()):
+        for i, data in enumerate(test_dataloader()):
             #输入视频图像、光流
-            inputs = np.array([x[0] for x in data]).astype('float32')    
+            # pdb.set_trace()
+            clip = np.array([x[0] for x in data]).astype('float32')    
             # #输入视频图像、光流的标签       
             targets = np.array([x[1] for x in data]).astype('int')
+            clip = np.squeeze(clip)
+            if opt.modality == 'Flow':
+                inputs = np.zeros((int(clip.shape[1]/opt.sample_duration), 2, opt.sample_duration, opt.sample_size, opt.sample_size),dtype=np.float32)
+            else:
+                inputs = np.zeros((int(clip.shape[1]/opt.sample_duration), 3, opt.sample_duration, opt.sample_size, opt.sample_size),dtype=np.float32)
+            for k in range(inputs.shape[0]):
+                inputs[k,:,:,:,:] = clip[:,k*opt.sample_duration:(k+1)*opt.sample_duration,:,:]  
             #将视频图像和光流分离开
             inputs = fluid.dygraph.base.to_variable(inputs)
             targets = fluid.dygraph.base.to_variable(targets)
             outputs= model(inputs)
-            acc = calculate_accuracy(outputs[0], targets)   
+            preds = fluid.layers.reduce_mean(outputs, dim=0, keep_dim=True)
+            # pdb.set_trace()
+            acc = calculate_accuracy(preds, targets) 
             accuracies.update(acc[0], targets.shape[0])            
-            line = "Video[" + str(i) + "] : top1 = " + str(acc[0]) +  "\t  acc = " + str(accuracies.avg)
-            print(line)
-            if opt.log:
-                f.write(line + '\n')
-                f.flush()
         
         print("Video accuracy = ", accuracies.avg)
-        line = "Video accuracy = " + str(accuracies.avg) + '\n'
-        if opt.log:
-            f.write(line)

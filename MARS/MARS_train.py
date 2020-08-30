@@ -59,43 +59,17 @@ def train():
         #训练数据加载函数
         print("Preprocessing train data ...")
         train_data   = globals()['{}_test'.format(opt.dataset)](split = opt.split, train = 1, opt = opt)
-        train_dataloader = paddle.batch(train_data, batch_size=opt.batch_size, drop_last=True)
+        train_dataloader = paddle.batch(fluid.io.shuffle(train_data,opt.batch_size*4), batch_size=opt.batch_size, drop_last=True)
         #验证数据加载函数
         print("Preprocessing validation data ...")
         val_data   = globals()['{}_test'.format(opt.dataset)](split = opt.split, train = 2, opt = opt)
-        val_dataloader = paddle.batch(val_data, batch_size=opt.batch_size, drop_last=True)
-        
-        #日志文件设置
-        log_path = os.path.join(opt.result_path, opt.dataset)
-        if not os.path.exists(log_path):
-            os.makedirs(log_path)
-        if opt.log == 1:
-            if opt.MARS_premodel_path != '':
-                epoch_logger = Logger_MARS(os.path.join(log_path, 'PreModel_MARS_{}_{}_train_batch{}_sample{}_model{}{}_ftbeginidx{}_layer{}.log'
-                    .format(opt.dataset, opt.split, opt.batch_size, opt.sample_size, opt.model, opt.model_depth, opt.ft_begin_index, opt.output_layers[0]))
-                    ,['epoch', 'loss', 'loss_MSE', 'loss_MARS', 'acc'], opt.MARS_premodel_path, opt.begin_epoch)
-                val_logger   = Logger_MARS(os.path.join(log_path, 'PreModel_MARS_{}_{}_val_batch{}_sample{}_model{}{}_ftbeginidx{}_layer{}.log'
-                    .format(opt.dataset,opt.split,  opt.batch_size, opt.sample_size, opt.model, opt.model_depth, opt.ft_begin_index, opt.output_layers[0]))
-                    ,['epoch', 'loss', 'acc'], opt.MARS_premodel_path, opt.begin_epoch)
-            else:
-                epoch_logger = Logger_MARS(os.path.join(log_path, 'MARS_{}_{}_train_batch{}_sample{}__model{}{}_ftbeginidx{}_layer{}.log'
-                    .format(opt.dataset, opt.split, opt.batch_size, opt.sample_size, opt.model, opt.model_depth, opt.ft_begin_index, opt.output_layers[0]))
-                    ,['epoch', 'loss', 'loss_MSE', 'loss_MARS', 'acc'], opt.MARS_resume_path, opt.begin_epoch)
-                val_logger   = Logger_MARS(os.path.join(log_path, 'MARS_{}_{}_val_batch{}_sample{}_model{}{}_ftbeginidx{}_layer{}.log'
-                    .format(opt.dataset, opt.split, opt.batch_size, opt.sample_size, opt.model, opt.model_depth, opt.ft_begin_index, opt.output_layers[0]))
-                    ,['epoch', 'loss', 'acc'], opt.MARS_resume_path, opt.begin_epoch)
-    
+        val_dataloader = paddle.batch(val_data, batch_size=opt.batch_size, drop_last=False)
         
         #构建光流网络模型
         print("Loading Flow model... ", opt.model, opt.model_depth) 
         opt.input_channels =2 
-        if opt.dataset == 'HMDB51':
-            opt.n_classes = 51
-        elif opt.dataset == 'Kinetics':
-            opt.n_classes = 400 
-        elif opt.dataset == 'UCF101':
-            opt.n_classes = 101 
-        model_Flow = generate_model(opt,'Flow')
+        opt.n_classes = 51
+        model_Flow, _ = generate_model(opt)
         #如果光流部分网络有预定义模型，则加载预定义模型
         if opt.Flow_resume_path:
             print('loading Flow checkpoint {}'.format(opt.Flow_resume_path))
@@ -105,24 +79,22 @@ def train():
         #构建图像网络模型
         print("Loading MARS model... ", opt.model, opt.model_depth)
         opt.input_channels =3
-        if opt.MARS_premodel_path != '':
-            opt.n_classes = 400 
-        model_MARS = generate_model(opt,'MARS')
+        opt.n_classes = 400 
+        model_MARS, parameters = generate_model(opt)
         print("Initializing the optimizer ...")
         print("lr = {} \t momentum = {} \t weight_decay = {}, \t nesterov = {}"
             .format(opt.learning_rate, opt.momentum, opt. weight_decay, opt.nesterov))
         print("LR patience = ", opt.lr_patience) 
         #定义优化器
         optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=opt.learning_rate, 
-                    momentum=opt.momentum, parameter_list=model_MARS.parameters(), 
+                    momentum=opt.momentum, parameter_list=parameters, 
                     use_nesterov=opt.nesterov)
-        #pdb.set_trace()
         scheduler = ReduceLROnPlateau(opt.learning_rate, mode='min',  patience=opt.lr_patience)
         if opt.MARS_resume_path != '' and opt.continue_train:
             resume_params(model_MARS, optimizer, opt)
         print('run')
         #在网络训练过程中，光流网络参数保持固定
-        model_Flow.train()
+        # model_Flow.eval()
         losses_avg=np.zeros((1,),dtype=np.float)
         for epoch in range(opt.begin_epoch, opt.n_epochs + 1):
             #设置模型为训练模式，模型中的参数可以被训练优化
@@ -151,13 +123,14 @@ def train():
                 #计算图像的网络输出结果
                 outputs_MARS  = model_MARS(inputs_MARS)
                 #计算光流的网络输出结果
-                outputs_Flow = model_Flow(inputs_FLOW)[1]
+                #pdb.set_trace()
+                outputs_Flow = model_Flow(inputs_FLOW)[1].detach()
+                #outputs_Flow.stop_gradient = True
                 #计算图像网络输出和标签的交叉熵损失
                 loss_MARS = fluid.layers.cross_entropy(outputs_MARS[0], targets)
                 loss_MARS = fluid.layers.mean(loss_MARS)
                 #计算图像网络和光流网络提取特征的mse损失
-                loss_MSE = opt.MARS_alpha*fluid.layers.mean(fluid.layers.mse_loss(outputs_MARS[1], outputs_Flow))
-                
+                loss_MSE = opt.MARS_alpha*fluid.layers.mse_loss(outputs_MARS[1], outputs_Flow)
                 #计算总的损失
                 loss     = loss_MARS + loss_MSE
                 optimizer.clear_gradients()
@@ -167,7 +140,6 @@ def train():
                 optimizer.minimize(loss)
                 #计算网络预测精度
                 acc = calculate_accuracy(outputs_MARS[0], targets)
-                
                 losses.update(loss.numpy()[0], inputs.shape[0])
                 losses_MARS.update(loss_MARS.numpy()[0], inputs.shape[0])
                 losses_MSE.update(loss_MSE.numpy()[0], inputs.shape[0])
@@ -193,14 +165,6 @@ def train():
                       acc=accuracies))
             losses_avg[0]=losses.avg
             scheduler.step(losses_avg)
-            if opt.log == 1:
-                epoch_logger.log({
-                    'epoch': epoch,
-                    'loss': losses.avg,
-                    'loss_MSE' : losses_MSE.avg,
-                    'loss_MARS': losses_MARS.avg,
-                    'acc': accuracies.avg
-                })
             
             if epoch % opt.checkpoint == 0:
                 fluid.dygraph.save_dygraph(model_MARS.state_dict(),os.path.join(opt.MARS_resume_path,'model_MARS_'+str(epoch)+'_saved'))
@@ -241,14 +205,6 @@ def train():
                             data_time=data_time,
                             loss=losses,
                             acc=accuracies))
-                              
-            if opt.log == 1:
-                val_logger.log({'epoch': epoch, 'loss': losses.avg, 'acc': accuracies.avg})
             
-            
-
-
-
-
 if __name__=="__main__":
     train()
