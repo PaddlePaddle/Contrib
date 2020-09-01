@@ -1,5 +1,5 @@
 ## 1、数据下载及准备工作
- 数据集：数据可使用HMDB51，可以在https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/下载HMDB51数据集
+ 数据集：数据可使用HMDB51，可以在https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/ 下载HMDB51数据集
 
  **准备工作**
 1. 安装带GPU支持的opencv
@@ -15,7 +15,7 @@ g++ -std=c++11 tvl1_videoframes.cpp -o tvl1_videoframes -I${OPENCV}include/openc
 
 python utils1/extract_frames_flows.py path_to_video_files path_to_extracted_flows_frames start_class end_cl
 ```
-4. 需要从https://drive.google.com/drive/folders/1OVhBnZ_FmqMSj6gw9yyrxJJR8yRINb_G?usp=sharing下载预训练的pytorch模型
+4. 需要从https://drive.google.com/drive/folders/1OVhBnZ_FmqMSj6gw9yyrxJJR8yRINb_G?usp=sharing 下载预训练的pytorch模型
 
 5. 将pytorch预训练模型转化为paddle模型格式，具体可以看transfermodeltorch2paddle.py，里面的参数需要根据具体情况进行修改
 
