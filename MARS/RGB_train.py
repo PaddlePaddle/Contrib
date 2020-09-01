@@ -60,7 +60,7 @@ def train():
         #pdb.set_trace()
         train_data   = globals()['{}_test'.format(opt.dataset)](split = opt.split, train = 1, opt = opt)
         # train_dataloader = paddle.batch(train_data, batch_size=opt.batch_size, drop_last=True)
-        train_dataloader = paddle.batch(fluid.io.shuffle(train_data,opt.batch_size*4), batch_size=opt.batch_size, drop_last=True)
+        train_dataloader = paddle.batch(train_data, batch_size=opt.batch_size, drop_last=True)
         #验证数据加载句柄
         print("Preprocessing validation data ...")
         val_data   = globals()['{}_test'.format(opt.dataset)](split = opt.split, train = 2, opt = opt)
