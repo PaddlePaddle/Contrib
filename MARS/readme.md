@@ -1,13 +1,48 @@
-## 1、数据下载及准备工作
- 数据集：数据可使用HMDB51，可以在https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/ 下载HMDB51数据集
+# MARS 视频分类模型动态图实现
 
- **准备工作**
-1. 安装带GPU支持的opencv
-2. 从视频中提取帧可以使用
+---
+## 内容
+
+- [模型简介](#模型简介)
+- [准备工作](#准备工作)
+- [模型训练](#模型训练)
+- [复现精度](#复现精度)
+- [模型预测](#模型预测)
+- [参考论文](#参考论文)
+
+## 模型简介
+在MARS(MARS: Motion-Augmented RGB Stream for ActionRecognition)这篇论文中作者提出了两种新的学习策略，即基于蒸馏的概念和在特权信息下的学习，以避免在测试时进行光流计算，同时保留双流方法的性能。
+
+详细内容请参考CVPR 2019论文[MARS: Motion-Augmented RGB Stream for ActionRecognition](https://hal.inria.fr/hal-02140558)
+
+## 准备工作
+ 数据集：数据使用HMDB51，可以在https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/ 下载HMDB51数据集
+
+**安装带GPU支持的opencv**
+```bash
+wget https://github.com/opencv/opencv/archive/4.3.0.tar.gz -O opencv-4.3.0.tar.gz
+wget https://github.com/opencv/opencv_contrib/archive/4.3.0.tar.gz -O opencv_contrib-4.3.0.tar.gz
+tar -xzvf opencv-4.3.0.tar.gz
+tar -xzvf opencv_contrib-4.3.0.tar.gz
+cd opencv-4.3.0
+mkdir build
+mkdir install
+cd build
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+      -D CMAKE_INSTALL_PREFIX=../install \ #指定安装路径
+      -D CUDA_ARCH_BIN='7.5' \ #指定GPU算力，在NVIDIA官网查询
+      -D WITH_CUDA=ON \ #使用CUDA
+      -D WITH_CUBLAS=ON \
+      -D WITH_TBB=ON \
+      -D WITH_V4L=ON \
+      -D WITH_OPENGL=ON \
+      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.3.0/modules \ #opencv_contrib modules路径
+``` 
+**从视频中提取帧可以使用**
 ```bash
 python utils1/extract_frames.py path_to_video_files path_to_extracted_frames start_class end_class
 ```  
-3. 从视频中提取帧+光流可以使用
+**从视频中提取帧+光流可以使用**
 ```bash
 export OPENCV=path_where_opencv_is_installed
 
@@ -15,9 +50,11 @@ g++ -std=c++11 tvl1_videoframes.cpp -o tvl1_videoframes -I${OPENCV}include/openc
 
 python utils1/extract_frames_flows.py path_to_video_files path_to_extracted_flows_frames start_class end_cl
 ```
-4. 需要从https://drive.google.com/drive/folders/1OVhBnZ_FmqMSj6gw9yyrxJJR8yRINb_G?usp=sharing 下载预训练的pytorch模型
+**下载预训练模型**
+需要从https://drive.google.com/drive/folders/1OVhBnZ_FmqMSj6gw9yyrxJJR8yRINb_G?usp=sharing 下载预训练的pytorch模型
 
-5. 将pytorch预训练模型转化为paddle模型格式，具体可以看transfermodeltorch2paddle.py，里面的参数需要根据具体情况进行修改
+**预训练模型转化**
+将pytorch预训练模型转化为paddle模型格式，具体可以看transfermodeltorch2paddle.py，里面的参数需要根据具体情况进行修改
 
 ## 2、训练脚本
 **从Kinetics预训练的模型开始训练Flow流可以使用以下命令：**
