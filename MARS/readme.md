@@ -58,7 +58,7 @@ python utils1/extract_frames_flows.py path_to_video_files path_to_extracted_flow
 **预训练模型转化**
 将pytorch预训练模型转化为paddle模型格式，具体可以看transfermodeltorch2paddle.py，里面的参数需要根据具体情况进行修改
 
-## 训练脚本
+## 模型训练
 **从Kinetics预训练的模型开始训练Flow流可以使用以下命令：**
 ``` bash
 python Flow_train.py --dataset HMDB51 --modality Flow --n_classes 400 --n_finetune_classes 51 --batch_size 64 \
@@ -87,14 +87,14 @@ python RGB_train.py --dataset HMDB51 --modality RGB --n_classes 400 --n_finetune
     --RGB_resume_path "models/model_RGB" --ft_begin_index 4 --split 1
 ```
 注意：上面的训练脚本在使用过程中数据路径及模型路径要修改成自己的，frame_dir指提取的视频帧及光流图像的路径、annotation_path指图像标签的路径（split01），RGB_premodel_path指预训练模型的路径，RGB_resume_path指模型的保存路径
-## 模型精度
+## 复现精度
 Model|Top1
 ---|---
 RGB|0.681
 FLOW|0.719
 MARS|0.721
 
-## 测试脚本
+## 模型测试
 **测试Flow流模型可以使用以下命令：**
 ```bash
 python test_single_stream.py --dataset HMDB51 --modality Flow --n_classes 51 --batch_size 1  --checkpoint 1 \
@@ -114,3 +114,7 @@ python test_single_stream.py --dataset HMDB51 --modality RGB --n_classes 51 --ba
     --annotation_path "dataset/hmdb51_split01"   --RGB_resume_path "models/model_Flow/model—_RGB_XX"  --split 1
 ```
 注意：需要修改Flow_resume_path、MARS_resume_path、RGB_resume_path到训练好的模型路径
+
+## 参考论文
+[MARS: Motion-Augmented RGB Stream for ActionRecognition](https://hal.inria.fr/hal-02140558)
+
