@@ -28,18 +28,11 @@ cd opencv-4.3.0
 mkdir build
 mkdir install
 cd build
-cmake -D CMAKE_BUILD_TYPE=RELEASE \
-      -D CMAKE_INSTALL_PREFIX=../install \ #指定安装路径
-      -D CUDA_ARCH_BIN='7.5' \ #指定GPU算力，在NVIDIA官网查询
-      -D WITH_CUDA=ON \ #使用CUDA
-      -D WITH_CUBLAS=ON \
-      -D WITH_TBB=ON \
-      -D WITH_V4L=ON \
-      -D WITH_OPENGL=ON \
-      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.3.0/modules \ #opencv_contrib modules路径
+cmake  -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../install -D WITH_V4L=ON -D WITH_OPENGL=ON -D WITH_CUDA=ON  -D ENABLE_FAST_MATH=1 -D CUDA_FAST_MATH=1 -D CUDA_NVCC_FLAGS="-D_FORCE_INLINES" -D WITH_CUBLAS=1 -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.3.0/modules ..
 make -j4
 make install
 ``` 
+安装过程中遇到问题可以参考博客[OpenCV: Linux下编译GPU版本(4.2.0版本)](https://blog.csdn.net/Felaim/article/details/103971397)
 **从视频中提取帧可以使用**
 ```bash
 python utils1/extract_frames.py path_to_video_files path_to_extracted_frames start_class end_class
