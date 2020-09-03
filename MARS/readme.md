@@ -33,6 +33,7 @@ make -j4
 make install
 ``` 
 安装过程中遇到问题可以参考博客[OpenCV: Linux下编译GPU版本(4.2.0版本)](https://blog.csdn.net/Felaim/article/details/103971397)
+
 **从视频中提取帧可以使用**
 ```bash
 python utils1/extract_frames.py path_to_video_files path_to_extracted_frames start_class end_class
