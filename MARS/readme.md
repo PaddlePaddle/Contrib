@@ -94,7 +94,7 @@ RGB|0.681
 FLOW|0.719
 MARS|0.721
 
-## 模型测试
+## 模型预测
 **测试Flow流模型可以使用以下命令：**
 ```bash
 python test_single_stream.py --dataset HMDB51 --modality Flow --n_classes 51 --batch_size 1  --checkpoint 1 \
