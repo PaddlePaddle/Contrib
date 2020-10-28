@@ -1,6 +1,5 @@
 # First Order Motion Model for Image Animation 动态图实现
 
----
 ## 内容
 
 - [模型简介](#模型简介)
@@ -10,7 +9,7 @@
 - [模型评估](#模型评估)
 - [模型推断](#模型推断)
 - [参考论文](#参考论文)
-
+- [原项目链接](https://github.com/AliaksandrSiarohin/first-order-model)
 
 ## 模型简介
 
@@ -23,8 +22,6 @@
 1. 将源图像与驱动帧分别输入keypoint detector，分别得到关键点及二者对于参考帧$R$的局部仿射变换，并进一步计算二者的仿射变换$J_k$。
 2. 将源图像、关键点与仿射变换输入dense motion，得到optical flow与occlusion map。其中occlusion map用于指示需要被进行inpainting的部分。
 3. 结合dense motion输出以及源图像生成目标图像。
-
-[原项目链接](https://github.com/AliaksandrSiarohin/first-order-model)
 
 ## 代码结构
 ```
