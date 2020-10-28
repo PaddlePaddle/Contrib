@@ -1,4 +1,4 @@
---------------------------- LICENSE FOR first-order-model --------------------------------
+--------------------------- LICENSE FOR first-order-model [https://github.com/AliaksandrSiarohin/first-order-model]--------------------------------
 ## creative commons
 
 # Attribution-NonCommercial 4.0 International
