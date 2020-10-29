@@ -100,15 +100,6 @@ def train(config, generator, discriminator, kp_detector, save_dir, dataset):
     ###### Restore Part ######
     ckpt_config = config['ckpt_model']
     has_key = lambda key: key in ckpt_config.keys() and ckpt_config[key] is not None
-    if has_key('vgg19_model'):
-        vggVarList = [i for i in generator_full.vgg.parameters()][2:]
-        paramset = np.load(ckpt_config['vgg19_model'], allow_pickle=True)['arr_0']
-        for var, v in zip(vggVarList, paramset):
-            if list(var.shape) == list(v.shape):
-                var.set_value(v)
-            else:
-                logging.warning('VGG19 cannot be loaded')
-        logging.info('Pre-trained VGG19 is loaded from *.npz')
     if has_key('generator'):
         if ckpt_config['generator'][-3:] == 'npz':
             G_param = np.load(ckpt_config['generator'], allow_pickle=True)['arr_0'].item()
@@ -191,7 +182,15 @@ def train(config, generator, discriminator, kp_detector, save_dir, dataset):
     # create model
     generator_full = GeneratorFullModel(kp_detector, generator, discriminator, train_params)
     discriminator_full = DiscriminatorFullModel(kp_detector, generator, discriminator, train_params)
-    
+    if has_key('vgg19_model'):
+        vggVarList = [i for i in generator_full.vgg.parameters()][2:]
+        paramset = np.load(ckpt_config['vgg19_model'], allow_pickle=True)['arr_0']
+        for var, v in zip(vggVarList, paramset):
+            if list(var.shape) == list(v.shape):
+                var.set_value(v)
+            else:
+                logging.warning('VGG19 cannot be loaded')
+        logging.info('Pre-trained VGG19 is loaded from *.npz')
     generator_full.train()
     discriminator_full.train()
     for epoch in trange(start_epoch, train_params['num_epochs']):
