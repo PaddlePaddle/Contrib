@@ -61,13 +61,14 @@ class FramesDataset:
     """
 
     def __init__(self, root_dir, frame_shape=(256, 256, 3), id_sampling=False, is_train=True,
-                 random_seed=0, pairs_list=None, augmentation_params=None, process_time=False):
+                 random_seed=0, pairs_list=None, augmentation_params=None, process_time=False, create_frames_folder=True):
         self.root_dir = root_dir
         self.videos = os.listdir(root_dir)
         self.frame_shape = tuple(frame_shape)
         self.pairs_list = pairs_list
         self.id_sampling = id_sampling
         self.process_time = process_time
+        self.create_frames_folder = create_frames_folder
         if os.path.exists(os.path.join(root_dir, 'train')):
             assert os.path.exists(os.path.join(root_dir, 'test'))
             logging.info("Use predefined train-test split.")
@@ -87,7 +88,6 @@ class FramesDataset:
             self.videos = train_videos
         else:
             self.videos = test_videos
-
         self.buffed = [None]*len(self.videos)
         self.is_train = is_train
 
@@ -146,7 +146,11 @@ class FramesDataset:
                 video_array = [np.tile(i[..., np.newaxis], (1, 1, 3)) for i in video_array]
         else:
             if self.buffed[idx] is None:
-                video_array = read_video(path, frame_shape=self.frame_shape)
+                if self.create_frames_folder:
+                    video_array = read_video(path, frame_shape=self.frame_shape, saveto='folder')
+                    self.videos[idx] = name.split('.')[0]
+                else:
+                    video_array = read_video(path, frame_shape=self.frame_shape, saveto=None)
             else:
                 video_array = self.buffed[idx]
             num_frames = len(video_array)
