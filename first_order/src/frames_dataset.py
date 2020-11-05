@@ -34,6 +34,8 @@ def read_video(name, frame_shape, saveto='folder'):
         if len(video[0].shape) == 3:
             if video[0].shape[-1] == 1:
                 video = [gray2rgb(frame) for frame in video]
+        elif len(video[0].shape) == 2:
+            video = [gray2rgb(frame) for frame in video]
         if video[0].shape[-1] == 4:
             video = [i[..., :3] for i in video]
         video_array = np.array(video)
