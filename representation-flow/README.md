@@ -1,39 +1,42 @@
 # representation-flow
 
 #### 介绍
-{**以下是码云平台说明，您可以替换此简介**
-码云是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用码云实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+[CVPR19]Representation Flow for Action Recognition：双流网络中光流计算量较大，且光流生产需要保存到硬盘，这样不能做到实时的动作识别。Representation Flow是一个可微分的网络层迭代计算光流信息，并且可以通过Flow of Flow堆叠多个光流层来提升性能。
 
-#### 软件架构
-软件架构说明
+网络结构
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0203/144029_c54f5a91_5371233.png "屏幕截图.png")
 
+算法描述
 
-#### 安装教程
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0203/144454_92cda52b_5371233.png "屏幕截图.png")
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+#### 环境、数据准备
+1，安装FFmpeg和Lintel
+  在.bashrc文件里面添加以下内容并source
+```bash
+export ffmpegpath=/home/aistudio/work/FFmpeg
+export PATH=${ffmpegpath}/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=${ffmpegpath}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export CPATH=${ffmpegpath}/include${CPATH:+:${CPATH}}
+export LIBRARY_PATH=${ffmpegpath}/lib${LIBRARY_PATH:+:${LIBRARY_PATH}}
+```
+运行以下程序安装配置环境：
+```bash
+$python envprepare.py
+```
+将avi格式文件转换为mp4文件方便lintel读取：
+```bash
+$python avitomp4.py
+```
 
-#### 使用说明
+#### 模型训练&预测
+```bash
+$python train_model.py -mode='rgb' -exp_name='train2dfof' -learnable='[1,1,1,1]' -niter=2 -model='2d' -system='hmdb' -batch_size 12 -learning_rate 1e-2 -momentum 0.9 
+```
+使用optimizer.MomentumOptimizer优化器lr=1e-2, momentum=0.9 训练20个epoch后训练集精度达到0.99以上，再用lr=2e-3, momentum=0.4训练7个epoch，测试集精度在0.89左右。
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+通过以下方式预测模型
+```bash
+$python test_model.py -mode='rgb' -exp_name='eval2dfof' -learnable='[1,1,1,1]' -niter=2 -model='2d' -system='hmdb' -batch_size 128  -check_point pretrained
+```
 
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 码云特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
