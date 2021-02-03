@@ -36,23 +36,21 @@ class Inception(paddle.nn.Layer):
     def __init__(self, num_channels, ch1x1, ch3x3reduced, ch3x3, doublech3x3reduced, doublech3x3_1, doublech3x3_2, pool_proj):
         '''
         @Brief
-            传入参数用于定义 `Inception` 结构
+             `Inception` 
  
         @Parameters
-            num_channels : 传入图片通道数
-            ch1x1        : 1x1卷积操作的输出通道数
-            ch3x3reduced : 3x3卷积之前的1x1卷积的通道数
-            ch3x3        : 3x3卷积操作的输出通道数
-            doublech3x3reduced : 两个3x3卷积叠加之前的1x1卷积的通道数
-            doublech3x3_1        : 第一个3x3卷积操作的输出通道数
-            doublech3x3_2        : 第而个3x3卷积操作的输出通道数
-            pool_proj    : 池化操作之后1x1卷积的通道数
+            num_channels : channel numbers of input tensor
+            ch1x1        : output channel numbers of 1x1 conv
+            ch3x3reduced : channel numbers of 1x1 conv before 3x3 conv
+            ch3x3        : output channel numbers of 3x3 conv
+            doublech3x3reduced : channel numbers of 1x1 conv before the double 3x3 convs
+            doublech3x3_1        : output channel numbers of the first 3x3 conv
+            doublech3x3_2        : output channel numbers of the second 3x3 conv
+            pool_proj    : output channel numbers of 1x1 conv after pool
 
         @Return
-            返回 `Inception` 网络模型
+             `Inception` model
 
-        @Examples
-        ------------
         '''
 
         super(Inception, self).__init__()
@@ -110,7 +108,7 @@ class Inception(paddle.nn.Layer):
     def forward(self, inputs):
         '''
         @Parameters :
-            inputs     :   原始数据
+            inputs: input tensor
         '''
 
         branch1 = self.branch1(inputs)
@@ -127,21 +125,19 @@ class Inception3c(paddle.nn.Layer):
     def __init__(self, num_channels, ch3x3reduced, ch3x3, doublech3x3reduced, doublech3x3_1, doublech3x3_2):
         '''
         @Brief
-            传入参数用于定义 `Inception3c` 结构
+             `Inception3c`
  
         @Parameters
-            num_channels : 传入图片通道数
-            ch3x3reduced : 3x3卷积之前的1x1卷积的通道数
-            ch3x3        : 3x3卷积操作的输出通道数
-            doublech3x3reduced : 两个3x3卷积叠加之前的1x1卷积的通道数
-            doublech3x3_1        : 第一个3x3卷积操作的输出通道数
-            doublech3x3_2        : 第而个3x3卷积操作的输出通道数
+            num_channels : channel numbers of input tensor
+            ch3x3reduced : channel numbers of 1x1 conv before 3x3 conv
+            ch3x3        : output channel numbers of 3x3 conv
+            doublech3x3reduced : channel numbers of 1x1 conv before the double 3x3 convs
+            doublech3x3_1        : output channel numbers of the first 3x3 conv
+            doublech3x3_2        : output channel numbers of the second 3x3 conv
 
         @Return
-            返回 `Inception_3c` 网络模型
+            `Inception_3c` model
 
-        @Examples
-        ------------
         '''
 
         super(Inception3c, self).__init__()
@@ -183,13 +179,11 @@ class Inception3c(paddle.nn.Layer):
         self.branch4 = MaxPool2D(kernel_size=3,
                         stride=2,
                         padding=1)
-
-        # brach4_list 的pool_padding从0改为1，与原代码有出入，但与论文相符
     
     def forward(self, inputs):
         '''
         @Parameters :
-            inputs     :   原始数据
+            inputs: input tensor
         '''
 
         branch1 = self.branch1(inputs)
@@ -207,23 +201,21 @@ class Inception4e(paddle.nn.Layer):
     def __init__(self, num_channels, ch3x3reduced, ch3x3, doublech3x3reduced, doublech3x3_1, doublech3x3_2, pool_proj):
         '''
         @Brief
-            传入参数用于定义 `Inception4e` 结构
+            `Inception4e`
  
         @Parameters
-            num_channels : 传入图片通道数
-            ch1x1        : 1x1卷积操作的输出通道数
-            ch3x3reduced : 3x3卷积之前的1x1卷积的通道数
-            ch3x3        : 3x3卷积操作的输出通道数
-            doublech3x3reduced : 两个3x3卷积叠加之前的1x1卷积的通道数
-            doublech3x3_1        : 第一个3x3卷积操作的输出通道数
-            doublech3x3_2        : 第而个3x3卷积操作的输出通道数
-            pool_proj    : 池化操作之后1x1卷积的通道数
+            num_channels : channel numbers of input tensor
+            ch1x1        : output channel numbers of 1x1 conv
+            ch3x3reduced : channel numbers of 1x1 conv before 3x3 conv
+            ch3x3        : output channel numbers of 3x3 conv
+            doublech3x3reduced : channel numbers of 1x1 conv before the double 3x3 convs
+            doublech3x3_1        : output channel numbers of the first 3x3 conv
+            doublech3x3_2        : output channel numbers of the second 3x3 conv
+            pool_proj    : output channel numbers of 1x1 conv after pool
 
         @Return
-            返回 `Inception_4e` 网络模型
+            `Inception_4e`
 
-        @Examples
-        ------------
         '''
 
         super(Inception4e, self).__init__()
@@ -267,7 +259,7 @@ class Inception4e(paddle.nn.Layer):
     def forward(self, inputs):
         '''
         @Parameters :
-            inputs     :   原始数据
+            inputs: input tensor
         '''
 
         branch1 = self.branch1(inputs)
@@ -284,23 +276,21 @@ class Inception5a(paddle.nn.Layer):
     def __init__(self, num_channels, ch1x1, ch3x3reduced, ch3x3, doublech3x3reduced, doublech3x3_1, doublech3x3_2, pool_proj):
         '''
         @Brief
-            传入参数用于定义 `Inception5a` 结构
+            `Inception5a`
  
         @Parameters
-            num_channels : 传入图片通道数
-            ch1x1        : 1x1卷积操作的输出通道数
-            ch3x3reduced : 3x3卷积之前的1x1卷积的通道数
-            ch3x3        : 3x3卷积操作的输出通道数
-            doublech3x3reduced : 两个3x3卷积叠加之前的1x1卷积的通道数
-            doublech3x3_1        : 第一个3x3卷积操作的输出通道数
-            doublech3x3_2        : 第而个3x3卷积操作的输出通道数
-            pool_proj    : 池化操作之后1x1卷积的通道数
+            num_channels : channel numbers of input tensor
+            ch1x1        : output channel numbers of 1x1 conv
+            ch3x3reduced : channel numbers of 1x1 conv before 3x3 conv
+            ch3x3        : output channel numbers of 3x3 conv
+            doublech3x3reduced : channel numbers of 1x1 conv before the double 3x3 convs
+            doublech3x3_1        : output channel numbers of the first 3x3 conv
+            doublech3x3_2        : output channel numbers of the second 3x3 conv
+            pool_proj    : output channel numbers of 1x1 conv after pool
 
         @Return
-            返回 `Inception_5a` 网络模型
+            `Inception_5a` model
 
-        @Examples
-        ------------
         '''
 
         super(Inception5a, self).__init__()
@@ -356,7 +346,7 @@ class Inception5a(paddle.nn.Layer):
     def forward(self, inputs):
         '''
         @Parameters :
-            inputs     :   原始数据
+            inputs: input tensor
         '''
 
         branch1 = self.branch1(inputs)
@@ -373,23 +363,21 @@ class Inception5b(paddle.nn.Layer):
     def __init__(self, num_channels, ch1x1, ch3x3reduced, ch3x3, doublech3x3reduced, doublech3x3_1, doublech3x3_2, pool_proj):
         '''
         @Brief
-            传入参数用于定义 `Inception5b` 结构
+            `Inception5b`
  
         @Parameters
-            num_channels : 传入图片通道数
-            ch1x1        : 1x1卷积操作的输出通道数
-            ch3x3reduced : 3x3卷积之前的1x1卷积的通道数
-            ch3x3        : 3x3卷积操作的输出通道数
-            doublech3x3reduced : 两个3x3卷积叠加之前的1x1卷积的通道数
-            doublech3x3_1        : 第一个3x3卷积操作的输出通道数
-            doublech3x3_2        : 第而个3x3卷积操作的输出通道数
-            pool_proj    : 池化操作之后1x1卷积的通道数
+            num_channels : channel numbers of input tensor
+            ch1x1        : output channel numbers of 1x1 conv
+            ch3x3reduced : channel numbers of 1x1 conv before 3x3 conv
+            ch3x3        : output channel numbers of 3x3 conv
+            doublech3x3reduced : channel numbers of 1x1 conv before the double 3x3 convs
+            doublech3x3_1        : output channel numbers of the first 3x3 conv
+            doublech3x3_2        : output channel numbers of the second 3x3 conv
+            pool_proj    : output channel numbers of 1x1 conv after pool
 
         @Return
-            返回 `Inception_5b` 网络模型
+            `Inception_5b` model
 
-        @Examples
-        ------------
         '''
 
         super(Inception5b, self).__init__()
@@ -445,7 +433,7 @@ class Inception5b(paddle.nn.Layer):
     def forward(self, inputs):
         '''
         @Parameters :
-            inputs     :   原始数据
+            inputs: input tensor
         '''
 
         branch1 = self.branch1(inputs)
@@ -462,24 +450,21 @@ class GoogLeNet(paddle.nn.Layer):
     def __init__(self, class_dim=101, seg_num=24, seglen=1, modality="RGB", weight_devay=None):
         '''
         @Brief:
-            搭建 `GoogLeNet` 模型
-            注: 图片最好是 224 * 224
+            `GoogLeNet` model
+            input image should be 224 * 224
         @Parameters:
-            num_channels : 输入的图片通道数
-            out_dim      : 输出的维度(几分类就是几)
+            num_channels : channel numbers of input tensor
+            out_dim      : the number of classes for classification
         @Return:
-            out          : 主输出(shape=(X, class_dim))
-            out1         : 辅助分类器_1的输出(shape=(X, class_dim))
-            out2         : 辅助分类器_2的输出(shape=(X, class_dim))
-        @Examples:
-        ------------
+            out          : shape=(X, class_dim)
+
         >>> import numpy as np
-        >>> data = np.ones(shape=(8, 3, 224, 224), dtype=np.float32) # 假设为8张三通道的照片
-        >>> with fluid.dygraph.guard():
-                googlenet = GoogLeNet(class_dim=10)
-                data = fluid.dygraph.to_variable(data)
-                y, _, _ = googlenet(data)
-                print(y.numpy().shape)
+        >>> data = np.ones(shape=(8, 3, 224, 224), dtype=np.float32)
+        >>> 
+            googlenet = GoogLeNet(class_dim=10)
+            data = paddle.to_tensor(data)
+            y = googlenet(data)
+            print(y.numpy().shape)
         (8, 10)
         ''' 
         self.seg_num = seg_num
@@ -516,34 +501,34 @@ class GoogLeNet(paddle.nn.Layer):
                                         padding=1),
                         )
 
-        ##以上两个pool_padding将值从0 改为了1 从而达到论文中28x28的大小。但Caffe代码中的大小实际为27x27
+        ##the values of the two pool_padding layers above  are changed from 0 to 1 in order to comply with 28x28 in the paper。However it is 27x27 in the original Caffe code
 
 
         self.googLeNet_part1 = paddle.nn.Sequential(
-                                ('part1', self.part1_list), #[2, 64, 56, 56]
-                                ('part2', self.part2_list), #[2, 192, 28, 28]
-                                ('inception_3a', Inception(192,  64,  64, 64, 64, 96, 96, 32)), #[2, 256, 28, 28]
-                                ('inception_3b', Inception(256, 64, 64, 96, 64, 96, 96, 64)), #[2, 320, 28, 28]
+                                ('part1', self.part1_list), 
+                                ('part2', self.part2_list), 
+                                ('inception_3a', Inception(192,  64,  64, 64, 64, 96, 96, 32)), 
+                                ('inception_3b', Inception(256, 64, 64, 96, 64, 96, 96, 64)), 
                             )
 
         self.before3d = Inception3c(320, 128, 160, 64, 96, 96)
 
         self.googLeNet_part2 = paddle.nn.Sequential(
-                                ('inception_4a', Inception(576, 224, 64, 96, 96, 128, 128, 128)),#[2, 576, 14, 14]
-                                ('inception_4b', Inception(576, 192, 96, 128, 96, 128, 128, 128)),#[2, 576, 14, 14]
-                                ('inception_4c', Inception(576, 160, 128, 160, 128, 160, 160, 128)), #[2, 608, 14, 14]
-                                ('inception_4d', Inception(608, 96, 128, 192, 160, 192, 192, 128)), #[2, 608, 14, 14]
+                                ('inception_4a', Inception(576, 224, 64, 96, 96, 128, 128, 128)),
+                                ('inception_4b', Inception(576, 192, 96, 128, 96, 128, 128, 128)),
+                                ('inception_4c', Inception(576, 160, 128, 160, 128, 160, 160, 128)), 
+                                ('inception_4d', Inception(608, 96, 128, 192, 160, 192, 192, 128)), 
                             )
 
 
         self.googLeNet_part3 = paddle.nn.Sequential(
-                                ('inception_4e', Inception4e(608, 128, 192, 192, 256, 256, 608)), #[2, 1056, 7, 7]
-                                ('inception_5a', Inception5a(1056, 352, 192, 320, 160, 224, 224, 128)), #[2, 1024, 7, 7]
-                                ('inception_5b', Inception5b(1024, 352, 192, 320, 192, 224, 224, 128)), #[2, 1024, 7, 7]
-                                ('AvgPool1', paddle.nn.AdaptiveAvgPool2D(output_size=1)), #[2,1024,1,1]
+                                ('inception_4e', Inception4e(608, 128, 192, 192, 256, 256, 608)), 
+                                ('inception_5a', Inception5a(1056, 352, 192, 320, 160, 224, 224, 128)), 
+                                ('inception_5b', Inception5b(1024, 352, 192, 320, 192, 224, 224, 128)), 
+                                ('AvgPool1', paddle.nn.AdaptiveAvgPool2D(output_size=1)), 
                             )
 
-        self.res3d = Res3D.ResNet3D('resnet', modality='RGB', channels=96) # channel数与2D网络输出channel数一致
+        self.res3d = Res3D.ResNet3D('resnet', modality='RGB', channels=96) 
 
         self.out = Linear(in_features=1536,
                           out_features=class_dim,
@@ -557,8 +542,6 @@ class GoogLeNet(paddle.nn.Layer):
 
         inputs = paddle.reshape(inputs, [-1, inputs.shape[2], inputs.shape[3], inputs.shape[4]])
 
-        
-
         googLeNet_part1 = self.googLeNet_part1(inputs)
 
 
@@ -570,8 +553,7 @@ class GoogLeNet(paddle.nn.Layer):
             self.out_3d[:self.seg_num - 1] = self.out_3d[1:]
             self.out_3d[self.seg_num - 1] = before3d
             self.out_3d[self.seg_num - 2].stop_gradient = True
-            # for input_old in self.out_3d[:self.seg_num - 1]:
-            #     input_old.stop_gradient = True
+
         else:
             while len(self.out_3d) < self.seg_num:
                 self.out_3d.append(before3d)

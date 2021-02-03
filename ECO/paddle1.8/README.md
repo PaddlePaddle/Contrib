@@ -1,71 +1,93 @@
-# PaddlePaddle implementation of ECO
+简体中文 | [English](README_en.md)
 
-["ECO: Efficient Convolutional Network for Online Video Understanding, European Conference on Computer Vision (ECCV), 2018." By Mohammadreza Zolfaghari, Kamaljeet Singh, Thomas Brox](https://arxiv.org/abs/1804.09066)
+# ECO视频分类模型
 
-[The author's Repository for ECO](https://github.com/mzolfaghari/ECO-efficient-video-understanding)
+---
+## 内容
 
-
-## Introduction
-
-This repository contains all the required codes and results for the [PaddlePaddle](https://github.com/paddlepaddle) implementation of the paper ECO: Efficient Convolutional Network for Online Video Understanding.
-
-## Environment
-
-Python 3.7.4
-
-PaddlePaddle 1.8.0
-
-## Repository Structure
-
-* data: the dataset for training and testing, downloading by yourself is needed
-* configs: model, training and testing configuration parameters
-* model: the eco-full model
-* trained_model: the trained model
-* training_results: the images for the training analysis
-* result_data: the training information saved as npz, accuray vs. steps
-* avi2jpg.py: for converting avi files to jpg files
-* jpg2pkl.py: for converting jpg files to avi files
-* data_list_gener.py: for generating training list and testing list based on Split01
-* reader.py: for sampling frames for training, evaluating and testing
-* config.py: project configuration file
-* utils.py: project utils file
-* train.py: for training
-* test.py: for testing
-* requirements.txt: the required packages
-* README.md: repository description file
+- [模型简介](#模型简介)
+- [数据准备](#数据准备)
+- [模型训练](#模型训练)
+- [模型测试](#模型测试)
+- [参考论文](#参考论文)
+- [其它参考](#其它参考)
 
 
-## Training on manually splited UCF-101
+## 模型简介
 
-The UCF-101 dataset is manually splited between training, evaluating and testing with 9090 videos for training, 909 videos for evaluating and 3321 videos for testing. 
+ECO是视频分类领域的高精度模型，使用2D和3D两个分支。2D分支捕捉视频中空间维度的信息。3D分支捕获视频中时间维度的信息，最终将两个分支的特征拼接得到预测结果。
 
-The final accuracy result on the testing part is about 94.34%.
+<p align="center">
+<img src="images/eco.png" height=300 width=500 hspace='10'/> <br />
+ECO Overview
+</p>
 
-The later fine-tuning stage for training and evaluating is shown in the following image.
+详细内容请参考ECCV 2018论文[ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066)
 
-![training accuracy](https://github.com/eepgxxy/ECO_PaddlePaddle/blob/master/training_results/train_1.png)
 
-![eval accuracy](https://github.com/eepgxxy/ECO_PaddlePaddle/blob/master/training_results/eval_1.png)
+## 数据准备
 
-## Training on trainlist01 of UCF-101
+ECO模型的训练数据采用UCF-101数据集。
 
-Preliminary training is also done on the trainlist01 of UCF-101 dataset and testing is done on testlist01. 
+*  方法1：
+原始数据请在[UCF-101数据集](https://www.crcv.ucf.edu/data/UCF101.php)下载
 
-In order to use the pretrained model, we created a new label file myclassID.txt.
+下载到data文件夹后可以运行如下命令进行数据预处理：
 
-The final accuracy result on the testing part is currently about 97.568% for seg_num 12, 97.938% for seg_num 24, 97.224% for seg_num 32.
+```bash
+python avi2jpg.py
 
-Train and eval stages for seg_num 24 and seg_num 32 are illustrated by the following images:
+python jpg2pkl.py
 
-![training and eval for seg_num 24](https://github.com/eepgxxy/ECO_PaddlePaddle/blob/master/training_results/train_eval_24.png)
+python data_list_gener.py
+```
+*  方法2(建议采用该方法)：
 
-![training and eval for seg_num 32](https://github.com/eepgxxy/ECO_PaddlePaddle/blob/master/training_results/train_eval_32.png)
+直接下载视频转为jpg图片的[图片数据集](https://aistudio.baidu.com/aistudio/datasetdetail/52155)并解压，然后运行如下命令：
 
-## Other experiments
+```bash
+python jpg2pkl.py
 
-The network architecture for this model is Inception + 3DResNet based on the original paper. Other network architectures are explored, such as ResNet + 3DResNet, and similar results are found.
+python data_list_gener.py
+```
 
-## TBD
+## 模型训练
 
-Further experiments will be done and update will be made here.
+数据准备完成后，可通过如下方式启动训练：
 
+```bash
+python train.py --epoch 5 --use_gpu True --pretrain True
+
+```
+- 通过 `-pretrain`参数，您可以下载我们训练好的模型进行训练微调[Baidu Pan](https://pan.baidu.com/s/1yU3TILs-39CCPWuBD8NqHg) code: h47v
+
+
+### 训练资源要求
+
+*  单卡V100，seg\_num=12, batch\_size=12，显存占用约30G。
+
+
+## 模型测试
+
+可通过如下命令进行模型测试:
+
+```bash
+python test.py --weights 'trained_model/eco_1_8.pdparams'
+```
+
+- 通过 `--weights`参数指定待测试模型文件的路径，您可以下载我们训练好的模型进行测试[Baidu Pan](https://pan.baidu.com/s/1yU3TILs-39CCPWuBD8NqHg) code: h47v
+
+在UCF-101数据集下评估精度如下:
+
+| Acc1 | 
+| :---: | 
+| 97.57 | 
+
+
+## 参考论文
+
+- [ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066), Mohammadreza Zolfaghari, Kamaljeet Singh, Thomas Brox 
+
+## 其它参考
+
+- [AI Studio 项目链接](https://aistudio.baidu.com/aistudio/projectdetail/674555)

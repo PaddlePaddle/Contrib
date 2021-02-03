@@ -14,14 +14,13 @@ label_dir = {}
 with open('classInd.txt', 'r') as f:
     label_paths = f.readlines()
 
-###由于要让标签从0开始，故给classInd.txt文件中的每个类别的标签减去1
+###to make label start from 0, we subtract 1 from the labels in classInd.txt
 for path in label_paths:
     label_dir[path.split(' ')[1][:-1]] = int(int(path.split(' ')[0]) - 1)
 
 np.save('label_dir.npy', label_dir)
 
 label_dic = np.load('label_dir.npy', allow_pickle=True).item()
-# print(label_dic)
 
 source_dir = 'data/UCF-101'
 target_train_dir = 'data/UCF-101/train'
@@ -35,7 +34,6 @@ if not os.path.exists(target_test_dir):
 
 for key in label_dic:
     each_mulu = key + '_jpg'
-    # print(each_mulu, key) #IceDancing_jpg IceDancing
 
     label_dir = os.path.join(source_dir, each_mulu)
     label_mulu = os.listdir(label_dir)
@@ -62,4 +60,3 @@ for key in label_dic:
         f = open(output_pkl, 'wb')
         pickle.dump((vid, label_dic[key], frame), f, -1)
         f.close()
-    # break

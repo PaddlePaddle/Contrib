@@ -128,7 +128,6 @@ class ECO_Dataset(IterableDataset):
                         continue
                     self.batch_out.append((imgs, label))
                     if len(self.batch_out) == self.batch_size:
-                        # print(self.batch_out)
                         yield self.batch_out
                         self.batch_out = []
         for data in _reader():

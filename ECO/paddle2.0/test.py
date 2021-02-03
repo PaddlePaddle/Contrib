@@ -97,7 +97,7 @@ def eval(args):
         out, acc = val_model(img, label)
         acc_list.append(acc.numpy()[0])
 
-    print("测试集准确率为:{}".format(np.mean(acc_list)))
+    print("testing accuracy is :{}".format(np.mean(acc_list)))
                      
             
 if __name__ == "__main__":

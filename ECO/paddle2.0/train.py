@@ -106,7 +106,7 @@ def train(args):
     opt = paddle.optimizer.Momentum(0.001, 0.9, parameters=train_model.parameters())
 
     if args.pretrain:
-        # 加载上一次训练的模型，继续训练
+        # load the pretrained model
         model_dict = paddle.load('best_model/best_model_seg12')
 
         train_model.set_state_dict(model_dict)
@@ -160,5 +160,4 @@ def train(args):
 
 if __name__ == "__main__":
     args = parse_args()
-    # logger.info(args)
     train(args)

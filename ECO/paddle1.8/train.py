@@ -171,6 +171,4 @@ def train(args):
 
 if __name__ == "__main__":
     args = parse_args()
-    # logger.info(args)
-
     train(args)
