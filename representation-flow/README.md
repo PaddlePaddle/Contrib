@@ -4,7 +4,7 @@
 [CVPR19]Representation Flow for Action Recognition：双流网络中光流计算量较大，且光流生产需要保存到硬盘，这样不能做到实时的动作识别。Representation Flow是一个可微分的网络层迭代计算光流信息，并且可以通过Flow of Flow堆叠多个光流层来提升性能。
 
 网络结构
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0203/144029_c54f5a91_5371233.png "屏幕截图.png")
+![网络结构](https://github.com/Qdriving/Contrib/blob/master/representation-flow/flow.png)
 
 算法描述
 
