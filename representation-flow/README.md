@@ -8,7 +8,7 @@
 
 算法描述
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0203/144454_92cda52b_5371233.png "屏幕截图.png")
+![算法描述](https://github.com/Qdriving/Contrib/blob/master/representation-flow/alg.png)
 
 #### 环境、数据准备
 1，安装FFmpeg和Lintel
@@ -40,3 +40,6 @@ $python train_model.py -mode='rgb' -exp_name='train2dfof' -learnable='[1,1,1,1]'
 $python test_model.py -mode='rgb' -exp_name='eval2dfof' -learnable='[1,1,1,1]' -niter=2 -model='2d' -system='hmdb' -batch_size 128  -check_point pretrained
 ```
 
+#### 精度对比
+
+![精度对比](https://github.com/Qdriving/Contrib/blob/master/representation-flow/acc.png)
