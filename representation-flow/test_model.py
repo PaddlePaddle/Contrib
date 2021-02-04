@@ -14,8 +14,6 @@ import paddle.fluid.optimizer as optimizer
 
 
 #import models
-import flow_2d_resnets
-import hmdb_2d_model
 import hmdb_2d_resnets
 
 
@@ -33,10 +31,6 @@ parser.add_argument('-learning_rate', type = float, default = 0.01)
 parser.add_argument('-movement', type = float, default = 0.9)
 
 args = parser.parse_args()
-
-
-
-#place = fluid.CUDAPlace()
 
 ##################
 #
@@ -132,13 +126,6 @@ with fluid.dygraph.guard(place):
 
 
     repmodel = hmdb_2d_resnets.resnet50(pretrained=False, mode='rgb')  #
-    #repmodel = hmdb_2d_model.ResNet(name_scope='resnet', layers=50, class_dim=51)   #.resnet_3d_v1(50, 51)  #flow_2p1d_resnets.resnet50(pretrained=False, mode=args.mode, n_iter=args.niter, learnable=eval(args.learnable), num_classes=400)
-    # scale lr for flow layer
-    params = repmodel.parameters()
-    params = [p for p in params]
-    other = []
-    print('Params :', len(params))
-    #ln = eval(args.learnable)
     
 #exit()
 

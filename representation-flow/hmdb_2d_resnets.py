@@ -19,15 +19,6 @@ __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
 
 
-model_urls = {
-    'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
-    'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
-    'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
-    'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
-    'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
-}
-
-
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
     return Conv2D(in_planes, out_planes, filter_size=3, stride=stride,
@@ -216,23 +207,6 @@ class ResNet(fluid.dygraph.Layer):
 
         # return BxClass prediction 
         #return x
-
-    def load_state_dict(self, state_dict, strict=True):
-        # ignore fc layer
-        state_dict = {k:v for k,v in state_dict.items() if 'fc' not in k}
-        md = self.state_dict()
-        md.update(state_dict)
-        # convert to flow representation
-        if self.inp != 3:
-            for k,v in md.items():
-                if k == 'conv1.weight':
-                    if isinstance(v, nn.Parameter):
-                        v = v.data
-                    # change image CNN to 20-channel flow by averaing RGB channels and repeating 20 times
-                    v = torch.mean(v, dim=1).unsqueeze(1).repeat(1, self.inp, 1, 1)
-                    md[k] = v
-        
-        super(ResNet, self).load_state_dict(md, strict)
 
 
     

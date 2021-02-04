@@ -1,11 +1,7 @@
 import paddle.fluid as fluid
-import paddle.fluid.layers as layers
-import paddle
+
 from paddle.fluid.dygraph import Conv2D, Conv3D, to_variable, Linear
-#import torch.nn as nn
-#import torch.nn.functional as F
-import math
-import time
+
 import numpy as np
 
 def my_conv2d(name=None, x=None, filterdata = None, padding=0, stride =1):
@@ -30,9 +26,7 @@ class FlowLayer(fluid.dygraph.Layer):
         self.unbottleneck = Conv2D(num_channels=bottleneck*2, num_filters=channels, filter_size=1, stride=1, padding=0, bias_attr=False)
         self.bn = fluid.BatchNorm(channels)
         channels = bottleneck
-################################
-        #self.img_gradconv2d = Conv2D()
-################################
+
         
         self.n_iter = n_iter
         if params[0]:
