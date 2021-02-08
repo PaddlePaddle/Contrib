@@ -101,7 +101,7 @@ class Image_data:
 
                 for i in records:
                     img, img2, domain = i
-                    # print(img,img2,domain)
+
                     img = Image.open(img)  # .convert('RGB')
                     img = img.resize((self.img_height, self.img_width), Image.BILINEAR)
 
@@ -113,7 +113,7 @@ class Image_data:
                     img = img.transpose([2, 0, 1])
                     img_batch.append(img)
 
-                    img2 = Image.open(img2)  # .convert('RGB')
+                    img2 = Image.open(img2)
                     img2 = img2.resize((self.img_height, self.img_width), Image.BILINEAR)
 
                     if self.augment_flag:
@@ -123,11 +123,7 @@ class Image_data:
                     img2 = preprocess_fit_train_image(img2)
                     img2 = img2.transpose([2, 0, 1])
                     img2_batch.append(img2)
-                    # print(img2.shape)
-
                     domain_batch.append(domain)
-                    # print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-                    # print(len(img_batch),len(img2_batch), len(domain_batch))
 
                     if len(img_batch) == len(img2_batch) == len(domain_batch) == self.batch_size:
                         yield img_batch, img2_batch, domain_batch
@@ -137,7 +133,6 @@ class Image_data:
                 if len(img_batch) == len(img2_batch) == len(domain_batch) != 0:
                     print('len data len is not batch')
                     continue
-                    # yield img_batch, img2_batch, domain_batch
 
         return reader()
 
@@ -147,7 +142,7 @@ class Image_data:
             image_list = glob(os.path.join(self.dataset_path, domain) + '/*.png') + glob(
                 os.path.join(self.dataset_path, domain) + '/*.jpg')
             shuffle_list = random.sample(image_list, len(image_list))
-            # print("len(image_list)",len(image_list))
+
             domain_list = [[idx]] * len(image_list)  # [ [0], [0], ... , [0] ]
 
             self.images.extend(image_list)
@@ -176,7 +171,6 @@ def preprocess_fit_train_image(images):
     images = (np.array(images).astype('float32') / 255.0 - 0.5) / 0.5
     images = np.clip(images, -1.0, 1.0)
 
-    # images = adjust_dynamic_range(images, range_in=(0.0, 255.0), range_out=(-1.0, 1.0), out_dtype="float32")
     return images
 
 
@@ -185,9 +179,6 @@ def postprocess_images(images):
 
     images = ((images + 1) * 127.5)
     images = np.clip(images, 0.0, 255.0)
-
-    # images = adjust_dynamic_range(images, range_in=(-1.0, 1.0), range_out=(0.0, 255.0), out_dtype="float32")
-    # images = fluid.layers.cast(images, dtype="uint8")
 
     return images
 
@@ -218,7 +209,7 @@ def load_images(image_path, img_size, img_channel):
 def augmentation(image, augment_height, augment_width):
     image = RandomHorizonFlip(image)
     image = CentorCrop(image, augment_height, augment_width)
-    # image = RandomCrop(image, augment_height, augment_width)
+
     return image
 
 
@@ -240,11 +231,6 @@ def load_test_image(image_path, img_width, img_height, img_channel):
     img = img / 127.5 - 1
 
     return img
-
-
-def save_images(images, size, image_path):
-    # size = [height, width]
-    return imsave(inverse_transform(images), size, image_path)
 
 
 def inverse_transform(images):
@@ -332,35 +318,5 @@ def soft_update(target, source, decay):
         target_param.set_value(decay * source_param +
                                (1.0 - decay) * target_param)
 
-    # pytorch version
-    # for target_param, param in zip(target.parameters(), source.parameters()):
-    #     target_param.data.copy_(target_param.data * (1.0 - tau) +
-    #                             param.data * tau)
 
-# def automatic_gpu_usage() :
-#     gpus = tf.config.experimental.list_physical_devices('GPU')
-#     if gpus:
-#         try:
-#             # Currently, memory growth needs to be the same across GPUs
-#             for gpu in gpus:
-#                 tf.config.experimental.set_memory_growth(gpu, True)
-#             logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-#             print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
-#         except RuntimeError as e:
-#             # Memory growth must be set before GPUs have been initialized
-# #             print(e)
-#
-# def multiple_gpu_usage():
-#     gpus = tf.config.experimental.list_physical_devices('GPU')
-#     if gpus:
-#         # Create 2 virtual GPUs with 1GB memory each
-#         try:
-#             tf.config.experimental.set_virtual_device_configuration(
-#                 gpus[0],
-#                 [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096),
-#                  tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)])
-#             logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-#             print(len(gpus), "Physical GPU,", len(logical_gpus), "Logical GPUs")
-#         except RuntimeError as e:
-#             # Virtual devices must be set before GPUs have been initialized
-#             print(e)
+

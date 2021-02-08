@@ -73,7 +73,6 @@ class Generator(fluid.dygraph.Layer):
                 x = x + mask  # self.hpf(mask * cache[x.shape[2]])
 
         x = self.to_rgb(x)
-        # print('Generator final x:', x.shape,)
         return x
 
 
@@ -112,7 +111,6 @@ class MappingNetwork(fluid.dygraph.Layer):
 
     def forward(self, x_init, training=True, mask=None):
         z, domain = x_init
-        # print('MappingNetwork z domain:',z.shape,domain.shape)
         h = self.shared(z)
         x = []
         for i in range(self.num_domains):
@@ -129,8 +127,6 @@ class MappingNetwork(fluid.dygraph.Layer):
             w = paddle.fluid.layers.index_select(x, index, dim=0)
             o += [fluid.layers.reshape(paddle.fluid.layers.index_select(w, dex, dim=1), shape=[64])]
         o = paddle.fluid.layers.stack(o, axis=0)
-        # print("MappingNetwork final x",o.shape)
-        # print(o.numpy())
         return o  # (4, 64)
 
 
@@ -186,7 +182,6 @@ class StyleEncoder(fluid.dygraph.Layer):
         for i in range(self.num_domains):
             z += [self.unshared[i](h)]
         z = paddle.fluid.layers.stack(z, axis=1)  # [bs, num_domains, style_dim]
-        #print('z',z.numpy())
         batch_size = int(x.shape[0])
         o = []
         for i in range(batch_size):
@@ -197,9 +192,6 @@ class StyleEncoder(fluid.dygraph.Layer):
             o += [fluid.layers.reshape(paddle.fluid.layers.index_select(w, dex, dim=1), shape=[64])]
 
         o = paddle.fluid.layers.stack(o, axis=0)
-
-        # print("StyleEncoder final x", o.shape)  #[batch,64]
-        #print(o.numpy())
         return o
 
 
@@ -249,26 +241,4 @@ class Discriminator(fluid.dygraph.Layer):
             o += [fluid.layers.reshape(paddle.fluid.layers.index_select(w, dex, dim=1), shape=[1])]
 
         o = paddle.fluid.layers.stack(o, axis=0)
-        # print('Discriminator final',o.shape)  #(batch,domian)
-        # print(o.numpy())
         return o
-
-# with fluid.dygraph.guard():
-#     import matplotlib.pyplot as plt
-#     import cv2
-#
-#     img = cv2.imread('002140.jpg')
-#     img = cv2.resize(img, (256, 256))
-#     img_ = np.array(img).astype('float32')
-#     img_ = img_.transpose([2, 0, 1])
-#     img_ = fluid.dygraph.to_variable(img_)
-#     img_ = fluid.layers.unsqueeze(img_, 0)
-#     print(img_.shape)
-#     fan = FAN(fname_pretrained='fan')
-#
-#     # print(len(fan.state_dict().keys()))
-#     # print(fan.state_dict().keys())
-#
-#     masks = fan.get_heatmap(img_)
-#     print('ssssssssssssssssssssssssssssssss')
-#     print(masks)

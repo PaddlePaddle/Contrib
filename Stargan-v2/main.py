@@ -99,8 +99,6 @@ def main():
 
     gan = StarGAN_v2(args, place)
 
-    # build graph
-    # gan.build_model()
 
     if args.phase == 'train':
         gan.train()

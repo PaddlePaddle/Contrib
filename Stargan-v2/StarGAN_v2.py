@@ -140,9 +140,7 @@ class StarGAN_v2():
             s_trg2 = self.style_encoder([x_ref2, y_trg])
 
         x_fake2 = self.generator([x_real, s_trg2], masks)
-
         x_fake2.stop_gradient = True
-        # x_fake2.numpy()
 
         g_ds_loss = -self.ds_weight * L1_loss(x_fake, x_fake2)
 
@@ -152,9 +150,7 @@ class StarGAN_v2():
         x_rec = self.generator([x_fake, s_org], masks)
         g_cyc_loss = self.cyc_weight * L1_loss(x_rec, x_real)
 
-        # regular_loss = regularization_loss(self.generator)
-
-        g_loss = g_adv_loss + g_sty_loss + g_ds_loss + g_cyc_loss  # + regular_loss
+        g_loss = g_adv_loss + g_sty_loss + g_ds_loss + g_cyc_loss
         g_adv_loss.persistable = True
         g_sty_loss.persistable = True
         g_ds_loss.persistable = True
@@ -167,33 +163,21 @@ class StarGAN_v2():
         with fluid.dygraph.no_grad():
             if z_trg is not None:
                 s_trg = self.mapping_network([z_trg, y_trg])
-                # print(s_trg.numpy())
-                # print('s_trg = self.mapping_network([z_trg, y_trg])')
 
             else:  # x_ref is not None
                 s_trg = self.style_encoder([x_ref, y_trg])
-                # print(s_trg.numpy())
-                # print('s_trg = self.style_encoder([x_ref, y_trg])')
 
             x_fake = self.generator([x_real, s_trg], masks)
-            # print('self.generator([x_real, s_trg])', x_fake.numpy())
+
         real_logit = self.discriminator([x_real, y_org])
         fake_logit = self.discriminator([x_fake, y_trg])
 
         real_loss, fake_loss = self.adv_weight * discriminator_loss(self.gan_type, real_logit, fake_logit)
         d_adv_loss = real_loss + fake_loss
-        # real_loss.persistable = True
-        # fake_loss.persistable = True
 
         if self.gan_type == 'gan-gp':
-
             d_adv_loss += self.r1_weight * r1_gp_req(self.discriminator, x_real, y_org)
-
-
         d_loss = d_adv_loss
-
-        # d_adv_loss.persistable = True
-        # d_loss_gp.persistable = True
 
         return real_loss, fake_loss, d_adv_loss, d_loss
 
@@ -224,11 +208,7 @@ class StarGAN_v2():
 
                 self.discriminator = Discriminator(self.img_size, self.num_domains, max_conv_dim=self.hidden_dim,
                                                    sn=self.sn)
-                # print(len(self.discriminator.state_dict()))
-                # print(self.discriminator.state_dict().keys())
-                #
-                # for name, parameters in self.discriminator.named_parameters():
-                #     print(name, ':', parameters.shape)
+
                 self.generator_ema = Generator(self.img_size, self.img_ch, self.style_dim,
                                                max_conv_dim=self.hidden_dim, sn=False, w_hpf=self.w_hpf)
                 self.mapping_network_ema = MappingNetwork(self.style_dim, self.hidden_dim,
@@ -248,26 +228,6 @@ class StarGAN_v2():
                 self.mapping_network_ema.train()
                 self.style_encoder_ema.train()
 
-                """ Finalize model (build) """
-
-                # x = np.ones(shape=[self.batch_size,self.img_ch , self.img_size, self.img_size], dtype=np.float32)
-                # y = np.ones(shape=[self.batch_size, 1], dtype=np.int32)
-                # z = np.ones(shape=[self.batch_size, self.latent_dim], dtype=np.float32)
-                # s = np.ones(shape=[self.batch_size, self.style_dim], dtype=np.float32)
-                # x=fluid.dygraph.to_variable(x)
-                # y=fluid.dygraph.to_variable(y)
-                # z=fluid.dygraph.to_variable(z)
-                # s=fluid.dygraph.to_variable(s)
-
-                # mapping_net = self.mapping_network([z, y])
-                # #_ = self.mapping_network_ema([z, y])
-                # tyle_en = self.style_encoder([x, y])
-                # #_ = self.style_encoder_ema([x, y])
-                # genera = self.generator([x, s])
-                # #_ = self.generator_ema([x, s])
-                # discrimina = self.discriminator([x, y])
-                # print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-                # print(mapping_net.shape, tyle_en.shape, genera.shape,discrimina.shape)
                 """ Optimizer """
                 self.g_optimizer = fluid.optimizer.Adam(learning_rate=self.lr, beta1=self.beta1,
                                                         beta2=self.beta2,
@@ -668,8 +628,6 @@ class StarGAN_v2():
 
                         y_trg = fluid.dygraph.to_variable(np.array([trg_idx] * 10))
 
-                        # print(y_trg)
-
                         masks = self.fan.get_heatmap(x_src) if self.w_hpf > 0 else None
 
                         # generate 10 outputs from the same input
@@ -677,18 +635,11 @@ class StarGAN_v2():
                         z_trgs = np.random.normal(size=[10, self.latent_dim]).astype('float32')
                         z_trgs = fluid.dygraph.to_variable(z_trgs)
 
-                        # print(x_src.shape)
-                        # print(z_trgs.shape)
-                        # print(y_trg.shape)
-
-                        # z_trg = paddle.fluid.layers.unsqueeze(z_trgs[j], axes=[0])
 
                         y_trg = paddle.fluid.layers.reshape(y_trg, shape=[-1, 1])
                         s_trg = self.mapping_network_ema([z_trgs, y_trg])
 
                         x_fake = self.generator_ema([x_src, s_trg], masks=masks)
-                        # print(x_fake.shape)
-                        # print(x_fake.numpy())
                         x_fake = postprocess_images(x_fake)
                         x_fake = np.transpose(x_fake, [0, 2, 3, 1])
 
@@ -699,85 +650,6 @@ class StarGAN_v2():
                             img = Image.fromarray(np.uint8(ox_fake))
 
                             img.save(filename)
-
-    # def latent_val(self):
-    #     with fluid.dygraph.guard():
-    #         """ Test """
-    #         """ Network """
-    #         self.generator_ema = Generator(self.img_size, self.img_ch, self.style_dim,
-    #                                        max_conv_dim=self.hidden_dim, sn=False, w_hpf=self.w_hpf)
-    #         self.mapping_network_ema = MappingNetwork(self.style_dim, self.hidden_dim, self.num_domains, sn=False)
-    #         self.style_encoder_ema = StyleEncoder(self.img_size, self.style_dim, self.num_domains,
-    #                                               max_conv_dim=self.hidden_dim, sn=False)
-    #         self.fan = FAN(fname_pretrained='fan')
-    #
-    #         # self.generator_ema.eval()
-    #         # self.mapping_network_ema.eval()
-    #         # self.style_encoder_ema.eval()
-    #
-    #         """ Load model """
-    #         self.load_model(choice='test')
-    #
-    #         domains = os.listdir(self.val_dataset_path)
-    #         domains.sort()
-    #         num_domains = len(domains)
-    #         print('Number of domains: %d' % num_domains)
-    #         for trg_idx, trg_domain in enumerate(domains):
-    #             src_domains = [x for x in domains if x != trg_domain]
-    #
-    #             for src_idx, src_domain in enumerate(src_domains):
-    #
-    #                 path_src = os.path.join(self.val_dataset_path, src_domain)
-    #                 loader_src = glob(os.path.join(path_src, '*.png')) + glob(os.path.join(path_src, '*.jpg'))
-    #                 loader_src.sort()
-    #                 print('path_src', path_src)
-    #                 print('len(loader_src)', len(loader_src))
-    #
-    #                 task = '%s2%s' % (src_domain, trg_domain)
-    #                 path_fake = os.path.join('./result/eval', task)
-    #                 shutil.rmtree(path_fake, ignore_errors=True)
-    #                 os.makedirs(path_fake)
-    #
-    #                 print('Generating images and calculating FID for %s...' % task)
-    #                 group_of_images = []
-    #                 for i, src_img_path in enumerate(tqdm(loader_src, total=len(loader_src))):
-    #
-    #                     src_name, src_extension = os.path.splitext(src_img_path)
-    #                     src_name = os.path.basename(src_name)
-    #
-    #                     src_img_ = load_images(src_img_path, self.img_size, self.img_ch)  # [img_size, img_size, img_ch]
-    #                     src_img = paddle.fluid.layers.unsqueeze(src_img_, axes=[0])
-    #
-    #                     x_src = fluid.dygraph.to_variable(src_img)
-    #                     y_trg = fluid.dygraph.to_variable(np.array(trg_idx))
-    #
-    #                     #print(y_trg)
-    #
-    #                     masks = self.fan.get_heatmap(x_src) if self.w_hpf > 0 else None
-    #
-    #                     # generate 10 outputs from the same input
-    #
-    #                     z_trgs = np.random.normal(size=[10, self.latent_dim]).astype('float32')
-    #                     z_trgs = fluid.dygraph.to_variable(z_trgs)
-    #                     for j in range(10):
-    #                         z_trg = paddle.fluid.layers.unsqueeze(z_trgs[j], axes=[0])
-    #
-    #                         y_trg = paddle.fluid.layers.reshape(y_trg, shape=[1, 1])
-    #                         s_trg = self.mapping_network_ema([z_trg, y_trg])
-    #
-    #                         x_fake = self.generator_ema([x_src, s_trg], masks=masks)
-    #
-    #
-    #                         # save generated images to calculate FID later
-    #
-    #                         filename = os.path.join(path_fake, '%.4i_%.2i.png' % (i * 10, j + 1))
-    #
-    #                         x_fake = postprocess_images(x_fake)
-    #                         x_fake = np.transpose(x_fake, [0, 2, 3, 1])
-    #                         x_fake = np.reshape(x_fake, [256, 256, 3])
-    #                         img = Image.fromarray(np.uint8(x_fake))
-    #
-    #                         img.save(filename)
 
     @fluid.dygraph.no_grad
     def test(self, merge=False, merge_size=0):
@@ -790,10 +662,6 @@ class StarGAN_v2():
             self.style_encoder_ema = StyleEncoder(self.img_size, self.style_dim, self.num_domains,
                                                   max_conv_dim=self.hidden_dim, sn=False)
             self.fan = FAN(fname_pretrained='fan')
-
-            # self.generator_ema.eval()
-            # self.mapping_network_ema.eval()
-            # self.style_encoder_ema.eval()
 
             """ Load model """
             self.load_model(choice='test')
