@@ -1,0 +1,2 @@
+Python>=3.7.0
+PaddlePaddle>=1.8.0

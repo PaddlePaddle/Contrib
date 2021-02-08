@@ -1,0 +1,2 @@
+Python>=3.7.4
+PaddlePaddle>=2.0.0-rc1

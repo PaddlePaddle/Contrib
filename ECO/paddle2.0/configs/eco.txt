@@ -1,0 +1,35 @@
+[MODEL]
+name = "ECO"
+format = "pkl"
+num_classes = 101
+seg_num = 24
+seglen = 1
+image_mean = [0.462, 0.520, 0.547]
+image_std = [0.229, 0.224, 0.225]
+
+
+[TRAIN]
+epoch = 50
+short_size = 240
+target_size = 224
+num_reader_threads = 1
+buf_size = 1024
+batch_size = 4
+use_gpu = True
+num_gpus = 1
+filelist = "./data/UCF-101/train.list"
+learning_rate = 0.01
+learning_rate_decay = 0.1
+l2_weight_decay = 1e-4
+momentum = 0.9
+
+[TEST]
+seg_num = 24
+short_size = 240
+target_size = 224
+num_reader_threads = 1
+buf_size = 1024
+batch_size = 1
+filelist = "./data/UCF-101/test.list"
+
+
