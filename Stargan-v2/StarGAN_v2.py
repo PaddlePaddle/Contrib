@@ -22,6 +22,7 @@ class StarGAN_v2():
         self.sample_dir = args.sample_dir
         self.dataset_name = args.dataset
         self.augment_flag = args.augment_flag
+        self.choice = args.choice
 
         self.ds_iter = args.ds_iter
         self.iteration = args.iteration
@@ -255,7 +256,7 @@ class StarGAN_v2():
                                                             regularization_coeff=1e-4))
 
                 # 加载模型
-                #self.load_model(choice='train')
+                self.load_model(choice=self.choice)
                 #self.load_model(choice='fine_tune')
 
                 # """ Checkpoint """

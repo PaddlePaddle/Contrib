@@ -9,6 +9,7 @@ def parse_args():
     desc = "Paddle implementation of StarGAN_v2"
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('--phase', type=str, default='train', help='train or test ?')
+    parser.add_argument('--choice', type=str, default='None', help='train or finetune?')
     parser.add_argument('--merge', type=str2bool, default=True,
                         help='In test phase, merge reference-guided image result or not')
     parser.add_argument('--merge_size', type=int, default=0, help='merge size matching number')
