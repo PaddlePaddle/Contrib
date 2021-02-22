@@ -1,0 +1,3 @@
+paddlepaddle-gpu
+tqdm==4.46.1
+munch
