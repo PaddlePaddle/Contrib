@@ -1,6 +1,11 @@
 import os
+import argparse
 
-root = 'data/data/'
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-data_dir', type=str, default='data/data/')
+
+root = data_path = args.data_dir       ##  path for train/test data.
 with open("data/hmdb/split_train.txt", 'r') as f:
     
     i = 0

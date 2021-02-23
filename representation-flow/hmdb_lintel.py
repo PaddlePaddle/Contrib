@@ -1,18 +1,8 @@
 import paddle.fluid as fluid
-
 import numpy as np
 import random
-
 import os
-
-os.environ['ffmpegpath'] = '/home/aistudio/work/FFmpeg'
-os.environ['PATH'] = os.environ['PATH'] + ':' + os.environ['ffmpegpath'] +'/bin'
-os.environ['LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH'] + ':' + os.environ['ffmpegpath'] +'/lib'
-os.environ['CPATH'] = os.environ['ffmpegpath'] +'/include'
-os.environ['LIBRARY_PATH'] = os.environ['LIBRARY_PATH'] + ':' + os.environ['ffmpegpath'] +'/lib'
-
 import lintel
-
 
 class HMDB(object):
 
