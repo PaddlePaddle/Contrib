@@ -23,10 +23,12 @@
 #### 准备工作
 1，安装FFmpeg和Lintel
    请单独下载并安装FFmpeg和Lintel，配置好环境变量，具体请参考百度内容；然后进行下一步。
-2，下载并解压hmdb数据集到你的目录，参考地址：https://aistudio.baidu.com/aistudio/datasetdetail/48783
+
+2，下载并解压hmdb数据集到你的目录，参考地址：https://aistudio.baidu.com/aistudio/datasetdetail/48783。
+
 3，参照一下命令，将avi格式文件转换为mp4文件方便lintel读取：
 ```bash
-$python avitomp4.py -data_dir "你自己的数据目录“”
+$python avitomp4.py -data_dir "你自己的数据目录"
 ```
 
 #### 模型训练

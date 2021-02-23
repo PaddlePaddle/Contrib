@@ -29,8 +29,10 @@ class FlowLayer(fluid.dygraph.Layer):
 
         
         self.n_iter = n_iter
+
+        ## img_grad， img_grad2 两个参数是否可以训练
+        ## 1 -- True,  0 -- False
         if params[0]:
-            #self.img_grad = nn.Parameter(torch.FloatTensor([[[[-0.5,0,0.5]]]]).repeat(channels,channels,1,1))
             self.img_grad = np.array([[[[-0.5,0,0.5]]]*channels]*channels)   #fluid.dygraph.to_variable(np.array([[[[-0.5,0,0.5]]]*channels]*channels))
             self.img_grad_conv2d = Conv2D(num_channels = 32, num_filters=1, filter_size=self.img_grad.shape[3], bias_attr=False,
                                             padding = (0, 1),
@@ -45,7 +47,7 @@ class FlowLayer(fluid.dygraph.Layer):
                                                                     trainable=True))
             
         else:
-            #self.img_grad = paddle.fluid.create_lod_tensor(np.array([[[[-0.5,0,0.5]]]*channels]*channels), fluid.CPUPlace())
+            
             self.img_grad = np.array([[[[-0.5,0,0.5]]]*channels]*channels)
             self.img_grad_conv2d0 = Conv2D(num_channels = 32, num_filters=1, filter_size=self.img_grad.shape[3], bias_attr=False,
                                             param_attr=fluid.ParamAttr(
@@ -57,6 +59,9 @@ class FlowLayer(fluid.dygraph.Layer):
                                             param_attr=fluid.ParamAttr(
                                                                     initializer=fluid.initializer.NumpyArrayInitializer(self.img_grad2),
                                                                     trainable=False))      
+        
+        ## f_grad f_grad2, div, div2 4个参数是否可以训练
+        ## 1 -- True,  0 -- False
         if params[1]:       
             #self.f_grad = paddle.fluid.create_lod_tensor(np.array([[[[-1],[1]]]*channels]*channels), fluid.CPUPlace())
             self.f_grad = np.array([[[[-1,1]]]*channels]*channels)
@@ -114,6 +119,7 @@ class FlowLayer(fluid.dygraph.Layer):
         self.a = np.array([0.25])
         #self.a = to_variable(self.a)        
 
+        ### t, l 2个参数是否可以训练， 1 -- True, 0 -- False
         if params[2]:
             #self.t = nn.Parameter(torch.FloatTensor([self.t]))
             #self.t = to_variable(np.array([self.t])) #fluid.Tensor()
@@ -128,6 +134,8 @@ class FlowLayer(fluid.dygraph.Layer):
                                     param_attr=fluid.ParamAttr(
                                         initializer=fluid.initializer.NumpyArrayInitializer(self.l),
                                         trainable=True))
+                                        
+        ### a 参数是否可以训练， 1 -- True, 0 -- False
         if params[4]:
             self.a_linear = Linear(1,1, bias_attr=False,
                                     param_attr=fluid.ParamAttr(
