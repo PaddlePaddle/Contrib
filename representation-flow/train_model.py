@@ -20,6 +20,7 @@ import hmdb_2d_resnets
 parser = argparse.ArgumentParser()
 parser.add_argument('-mode', type=str, help='rgb or flow')
 parser.add_argument('-exp_name', type=str)
+parser.add_argument('-data_dir', type=str, default='data/data/')
 parser.add_argument('-batch_size', type=int, default=24)
 parser.add_argument('-length', type=int, default=16)
 parser.add_argument('-learnable', type=str, default='[0,0,0,0,0]')
@@ -39,13 +40,9 @@ args = parser.parse_args()
 #
 ##################
 
-batch_size = args.batch_size
+data_path = args.data_dir       ##  path for train/test data.
 
-os.environ['ffmpegpath'] = '/home/aistudio/work/FFmpeg'
-os.environ['PATH'] = os.environ['PATH'] + ':' + os.environ['ffmpegpath'] +'/bin'
-os.environ['LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH'] + ':' + os.environ['ffmpegpath'] +'/lib'
-os.environ['CPATH'] = os.environ['ffmpegpath'] +'/include'
-os.environ['LIBRARY_PATH'] = os.environ['LIBRARY_PATH'] + ':' + os.environ['ffmpegpath'] +'/lib'
+batch_size = args.batch_size
 
 place = fluid.CUDAPlace(0)
 with fluid.dygraph.guard(place):
@@ -59,15 +56,15 @@ with fluid.dygraph.guard(place):
                     yield data
 
         return (_batch_reader)
-
+    
     if args.system == 'hmdb':
         from hmdb_lintel import HMDB as DS
-        dataseta = DS('/home/aistudio/work/representation-flow/data/hmdb/split1_train.txt', '/home/aistudio/data/data49479/', model=args.model, mode=args.mode, length=args.length)
+        dataseta = DS('data/hmdb/split_train.txt', data_path, model=args.model, mode=args.mode, length=args.length)
         train_reader = paddle.batch(batch_generator_creator(dataseta),
                                 batch_size=batch_size,
                                 drop_last=False)
     
-        dataset = DS('/home/aistudio/work/representation-flow/data/hmdb/split1_test.txt', '/home/aistudio/data/data49479/', model=args.model, mode=args.mode, length=args.length, c2i=dataseta.class_to_id)
+        dataset = DS('data/hmdb/split_test.txt', data_path, model=args.model, mode=args.mode, length=args.length, c2i=dataseta.class_to_id)
         eval_reader  = paddle.batch(batch_generator_creator(dataset),
                                 batch_size=batch_size,
                                 drop_last=False)

@@ -1,8 +1,8 @@
-
 import os
 
-with open("/home/aistudio/work/representation-flow/data/hmdb/split1_train.txt", 'r') as f:
-    root = '/home/aistudio/data/data49479/'
+root = 'data/data/'
+with open("data/hmdb/split_train.txt", 'r') as f:
+    
     i = 0
     for l in f.readlines():
         if len(l) <= 5:
@@ -21,8 +21,8 @@ with open("/home/aistudio/work/representation-flow/data/hmdb/split1_train.txt", 
             i +=1
     
 
-with open("/home/aistudio/work/representation-flow/data/hmdb/split1_test.txt", 'r') as f:
-    root = '/home/aistudio/data/data49479/'
+with open("data/hmdb/split_test.txt", 'r') as f:
+    
     i = 0
     for l in f.readlines():
         if len(l) <= 5:

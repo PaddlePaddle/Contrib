@@ -115,12 +115,14 @@ class HMDB(object):
     def __len__(self):
         return len(self.data)
 
+
+########### Test Only ###########
 import time
 
 if __name__ == '__main__':
     DS = HMDB
     dataseta = DS('/home/aistudio/work/representation-flow/data/hmdb/split1_train.txt', '/home/aistudio/data/data49479/', model='2d', mode='rgb', length=16)
-    #dataset = DS('/home/aistudio/work/representation-flow/data/hmdb/split1_test.txt', '/home/aistudio/data/data49479/', model='3d', mode='rgb', length=16, c2i=dataseta.class_to_id)
+    
     start = time.time()
     for i in range(10):
         print(i)

@@ -5,11 +5,11 @@ import math
 import numpy as np
 
 import rep_flow_layer as rf
-#import torch.utils.model_zoo as model_zoo
+
 
 ################
 #
-# Modified https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py
+# Modified from https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py
 # Adds support for B x T x C x H x W video data
 #
 ################
@@ -99,7 +99,7 @@ class Bottleneck(fluid.dygraph.Layer):
 class repofrep(fluid.dygraph.Layer):
     def __init__(self, name_scope, channels=512):
         super(repofrep, self).__init__(name_scope)
-        #self.convframe = Conv3D(num_channels=channels, num_filters=channels, filter_size=[7,1,1], stride=[5,1,1], padding=[1,0,0], bias_attr=False)
+        
         self.rep_flow =  rf.FlowLayer(channels)
 
         self.rep_flow02 = rf.FlowLayer(channels)
@@ -140,13 +140,6 @@ class ResNet(fluid.dygraph.Layer):
         self.avgpool = Pool2D(pool_size=size,pool_stride=1,pool_padding=0,pool_type='avg')  #nn.AvgPool2d(size, stride=1)
         self.dropout = Dropout(dropout)         #nn.Dropout(p=dropout)
         self.fc = Linear(512 * block.expansion, num_classes)
-
-        #for m in self.sublayers():
-         #   if isinstance(m, Conv2D):
-          #      nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-          #  elif isinstance(m, nn.BatchNorm2d):
-           #     nn.init.constant_(m.weight, 1)
-            #    nn.init.constant_(m.bias, 0)
 
     def _make_layer(self, block, planes, blocks, stride=1):
         downsample = None
@@ -264,8 +257,7 @@ def resnet152(pretrained=False, **kwargs):
 
     return model
 
-
-
+########### Test Only ###########
 if __name__ == '__main__':
     with fluid.dygraph.guard(fluid.CUDAPlace(0)):
         net = resnet50(pretrained=False, mode='rgb')
