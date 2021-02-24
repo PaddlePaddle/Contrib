@@ -20,7 +20,8 @@ import hmdb_2d_resnets
 parser = argparse.ArgumentParser()
 parser.add_argument('-mode', type=str, help='rgb or flow')
 parser.add_argument('-exp_name', type=str)
-parser.add_argument('-data_dir', type=str, default='data/data/')
+parser.add_argument('-video_dir', type=str, default='data/')
+parser.add_argument('-file_dir', type=str, default='data/hmdb/')
 parser.add_argument('-batch_size', type=int, default=24)
 parser.add_argument('-length', type=int, default=16)
 parser.add_argument('-learnable', type=str, default='[0,0,0,0,0]')
@@ -40,7 +41,8 @@ args = parser.parse_args()
 #
 ##################
 
-data_path = args.data_dir       ##  path for train/test data.
+data_path = args.video_dir       ##  path for train/test data.
+file_path = args.video_dir       ##  path for train/test description file.
 
 batch_size = args.batch_size
 
@@ -59,12 +61,12 @@ with fluid.dygraph.guard(place):
     
     if args.system == 'hmdb':
         from hmdb_lintel import HMDB as DS
-        dataseta = DS('data/hmdb/split_train.txt', data_path, model=args.model, mode=args.mode, length=args.length)
+        dataseta = DS(file_path, data_path, model=args.model, mode=args.mode, length=args.length)
         train_reader = paddle.batch(batch_generator_creator(dataseta),
                                 batch_size=batch_size,
                                 drop_last=False)
     
-        dataset = DS('data/hmdb/split_test.txt', data_path, model=args.model, mode=args.mode, length=args.length, c2i=dataseta.class_to_id)
+        dataset = DS(file_path, data_path, model=args.model, mode=args.mode, length=args.length, c2i=dataseta.class_to_id)
         eval_reader  = paddle.batch(batch_generator_creator(dataset),
                                 batch_size=batch_size,
                                 drop_last=False)
