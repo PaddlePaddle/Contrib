@@ -178,10 +178,7 @@ with fluid.dygraph.guard(place):
     if(args.check_point):
         check_point = os.path.join('logs/',args.check_point)
         #check_point = os.path.join(check_point,args.check_point)
-        premodel, _ = fluid.dygraph.load_dygraph(os.path.join(check_point,'Myrepflow'))
-        #repparms, _ = fluid.dygraph.load_dygraph('/home/aistudio/work/representation-flow/logs/08-26-140622-train/1000/Myrepflow')
-        #newparms = concatdict(repparms, premodel)
-        #print('[Final shot]', newparms['repflow02.t_linear.weight'])
+        premodel, _ = fluid.dygraph.load_dygraph(os.path.join(check_point,'Myrepflow'))   #load model.
         repmodel.set_dict(premodel)
 
     for epoch in range(num_epochs):
@@ -209,7 +206,7 @@ with fluid.dygraph.guard(place):
                 
                     loss = fluid.layers.cross_entropy(outputs, cls)
                     avg_loss = fluid.layers.mean(loss)
-                    acc=fluid.layers.accuracy(outputs,cls, k=1)       #计算精度
+                    acc=fluid.layers.accuracy(outputs,cls, k=1)       
 
                     tacc += acc.numpy()
                     tloss += avg_loss.numpy() #.item()

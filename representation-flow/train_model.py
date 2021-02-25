@@ -142,7 +142,7 @@ with fluid.dygraph.guard(place):
                 
                     loss = fluid.layers.cross_entropy(outputs, cls)
                     avg_loss = fluid.layers.mean(loss)
-                    acc=fluid.layers.accuracy(outputs,cls, k=1)       #计算精度
+                    acc=fluid.layers.accuracy(outputs,cls, k=1)       
 
                     tacc += acc.numpy()
                     tloss += avg_loss.numpy() #.item()
@@ -161,7 +161,7 @@ with fluid.dygraph.guard(place):
                 log['epoch acc'].append((tacc/(step+1e-12)).tolist())
 
                 param_path = os.path.join(log_path, str(epoch))
-                fluid.dygraph.save_dygraph(repmodel.state_dict(),os.path.join(param_path,'Myrepflow'))#保存模型
+                fluid.dygraph.save_dygraph(repmodel.state_dict(),os.path.join(param_path,'Myrepflow'))           #save model
                 
                 with open(os.path.join(log_path,'log.json'), 'w') as out:
                     json.dump(log, out)

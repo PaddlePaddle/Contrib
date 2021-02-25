@@ -12,7 +12,7 @@ file_path = args.file_dir         ##  path for txt file.
 
 for ifile in range(1, 4):
     with open(file_path + "split_train"  + str(ifile) + ".txt", 'r') as f:
-        root = data_path + 'data/'
+        root = video_path + 'data/'
         i = 0
         for l in f.readlines():
             if len(l) <= 5:
