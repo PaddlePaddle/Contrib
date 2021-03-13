@@ -1,5 +1,5 @@
 cd paddorch; pip install .
 cd ..
 
-cd  BigGAN-paddle/; pip -r   requirements.txt
+cd  BigGAN-paddle/; pip install -r   requirements.txt
 cd ..

@@ -26,7 +26,7 @@ Both dataset and pretrained model could be downloaded from AIstudio
 
 Use below script will download the data and exact to the correct directory.
 ```sh
-sh download.sh
+sh download_data.sh
 ```
  
 ### Install Dependence
