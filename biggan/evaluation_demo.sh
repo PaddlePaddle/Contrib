@@ -1,4 +1,3 @@
-cd ..
 ##evaluation
 
 cd  BigGAN-paddle/;  python sample.py --shuffle --batch_size 512 --G_batch_size 256  \
