@@ -10,7 +10,7 @@ import paddorch.nn.functional as F
 from paddorch.nn import Parameter as P
 
 import layers
-from sync_batchnorm import SynchronizedBatchNorm2d as SyncBatchNorm2d
+
 
 
 # Architectures for G

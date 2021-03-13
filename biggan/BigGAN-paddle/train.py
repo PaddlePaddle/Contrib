@@ -23,7 +23,6 @@ import inception_utils
 import utils
 import losses
 import train_fns
-from sync_batchnorm import patch_replication_callback
 from visualdl import LogWriter
 # The main training file. Config is a dictionary specifying the configuration
 # of this training run.
@@ -97,11 +96,7 @@ def run(config):
                        config['load_weights'] if config['load_weights'] else None,
                        G_ema if config['ema'] else None)
 
-  # If parallel, parallelize the GD module
-  if config['parallel']:
-    GD = nn.DataParallel(GD)
-    if config['cross_replica']:
-      patch_replication_callback(GD)
+
 
   # Prepare loggers for stats; metrics holds test metrics,
   # lmetrics holds any desired training metrics.

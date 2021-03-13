@@ -9,7 +9,7 @@ import paddorch.optim as optim
 import paddorch.nn.functional as F
 from paddorch.nn import Parameter as P
 
-from sync_batchnorm import SynchronizedBatchNorm2d as SyncBN2d
+
 
 
 # Projection of x onto y
