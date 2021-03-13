@@ -317,15 +317,3 @@ def prepare_inception_metrics(dataset, parallel, no_fid=False):
     del mu, sigma, pool, logits, labels
     return IS_mean, IS_std, FID
   return get_inception_metrics
-
-if __name__ == '__main__':
-  from paddle import fluid
-  place=fluid.CUDAPlace(0)
-  with fluid.dygraph.guard(place=place):
-    inception_model = inception_v3()
-    import torch as pytorch
-    torch_state_dict=pytorch.load( "inception_model.pth")
-    from paddorch.convert_pretrain_model import load_pytorch_pretrain_model
-
-    load_pytorch_pretrain_model(inception_model,torch_state_dict)
-    torch.save(inception_model.state_dict(),"inception_model.pdparams")

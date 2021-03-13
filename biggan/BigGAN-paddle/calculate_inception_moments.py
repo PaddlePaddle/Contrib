@@ -8,7 +8,6 @@
  so as to reduce non-determinism. '''
 import numpy as np
 import paddorch as torch
-import torch.nn as nn
 import paddorch.nn.functional as F
 
 import utils
