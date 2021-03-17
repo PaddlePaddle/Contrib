@@ -1,0 +1,81 @@
+[INFO]: current net device: eth0, ip: 172.28.1.229
+[INFO]: paddle job envs:
+POD_IP=172.28.1.229
+PADDLE_PORT=12345
+PADDLE_TRAINER_ID=0
+PADDLE_TRAINERS_NUM=1
+PADDLE_USE_CUDA=1
+NCCL_SOCKET_IFNAME=eth0
+PADDLE_IS_LOCAL=1
+OUTPUT_PATH=/root/paddlejob/workspace/output
+LOCAL_LOG_PATH=/root/paddlejob/workspace/log
+LOCAL_MOUNT_PATH=/mnt/code_20200905102723,/mnt/datasets_20200905102724
+JOB_ID=job-26e3e282c6bbc425395f835fff300f43
+TRAINING_ROLE=TRAINER
+[INFO]: user command: python -u train.py
+[INFO]: start trainer
+~/paddlejob/workspace/code /mnt
+/opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/sklearn/feature_extraction/text.py:17: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Mapping, defaultdict
+unzip success.
+2020-09-05 10:52:36.302072
+{'MODEL': {'name': 'TPN', 'format': 'mp4', 'num_classes': 400, 'seg_num': 1, 'seglen': 8, 'step': 8, 'image_mean': [0.485, 0.456, 0.406], 'image_std': [0.229, 0.224, 0.225], 'num_layers': 50, 'topk': 5, 'classind': './data/kinetics_400/kinetics400_label.txt'}, 'TRAIN': {'epoch': 3, 'short_size': 256, 'target_size': 224, 'num_reader_threads': 6, 'buf_size': 1024, 'batch_size': 128, 'use_gpu': True, 'num_gpus': 8, 'filelist': './data/kinetics_400/trainlist.txt', 'learning_rate': 0.01, 'learning_rate_decay': 1, 'l2_weight_decay': 0.0001, 'momentum': 0.9, 'video_path': '/root/paddlejob/workspace/datasets', 'total_videos': 234584}, 'VALID': {'short_size': 256, 'target_size': 224, 'num_reader_threads': 12, 'buf_size': 1024, 'batch_size': 64, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}, 'TEST': {'seg_num': 10, 'short_size': 256, 'target_size': 224, 'num_reader_threads': 6, 'buf_size': 1024, 'batch_size': 6, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}}
+{'MODEL': {'name': 'TPN', 'format': 'mp4', 'num_classes': 400, 'seg_num': 1, 'seglen': 8, 'step': 8, 'image_mean': [0.485, 0.456, 0.406], 'image_std': [0.229, 0.224, 0.225], 'num_layers': 50, 'topk': 5, 'classind': './data/kinetics_400/kinetics400_label.txt'}, 'TRAIN': {'epoch': 3, 'short_size': 256, 'target_size': 224, 'num_reader_threads': 6, 'buf_size': 1024, 'batch_size': 128, 'use_gpu': True, 'num_gpus': 8, 'filelist': './data/kinetics_400/trainlist.txt', 'learning_rate': 0.01, 'learning_rate_decay': 1, 'l2_weight_decay': 0.0001, 'momentum': 0.9, 'video_path': '/root/paddlejob/workspace/datasets', 'total_videos': 234584}, 'VALID': {'short_size': 256, 'target_size': 224, 'num_reader_threads': 12, 'buf_size': 1024, 'batch_size': 64, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}, 'TEST': {'seg_num': 10, 'short_size': 256, 'target_size': 224, 'num_reader_threads': 6, 'buf_size': 1024, 'batch_size': 6, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}}
+W0905 11:00:16.380790   214 device_context.cc:237] Please NOTE: device: 0, CUDA Capability: 70, Driver API Version: 10.1, Runtime API Version: 9.0
+W0905 11:00:16.385591   214 device_context.cc:245] device: 0, cuDNN Version: 7.6.
+Resueme from /root/paddlejob/workspace/output/tpn.pdparams
+gpus_num=1
+
+bs_denominator=8
+------- learning rate [0.01], learning rate counter [-] -----
+2020-09-05 11:00:30.427750
+I0905 11:01:01.729398   214 parallel_executor.cc:440] The Program will be executed on CUDA using ParallelExecutor, 8 cards are used, so 8 programs are executed in parallel.
+I0905 11:01:05.746496   214 build_strategy.cc:354] set enable_sequential_execution:1
+W0905 11:01:06.046403   214 fuse_all_reduce_op_pass.cc:74] Find all_reduce operators: 193. To make the speed faster, some all_reduce ops are fused during training, after fusion, the number of all_reduce ops is 193.
+I0905 11:01:06.087455   214 build_strategy.cc:365] SeqOnlyAllReduceOps:0, num_trainers:1
+I0905 11:01:09.546469   214 parallel_executor.cc:307] Inplace strategy is enabled, when build_strategy.enable_inplace = True
+I0905 11:01:09.879366   214 parallel_executor.cc:375] Garbage collection strategy is enabled, when FLAGS_eager_delete_tensor_gb = 0
+Epoch 0 iter 200 : acc: 0.6171875  aux_loss:1.1189427375793457 cls_loss: 1.6386563777923584 period:7.529765367507935
+Epoch 0 iter 400 : acc: 0.6640625  aux_loss:1.0853865146636963 cls_loss: 1.4097695350646973 period:7.28665566444397
+Epoch 0 iter 600 : acc: 0.5703125  aux_loss:1.106229543685913 cls_loss: 1.5656404495239258 period:7.419155597686768
+Epoch 0 iter 800 : acc: 0.640625  aux_loss:1.1778525114059448 cls_loss: 1.5168814659118652 period:7.12853479385376
+Epoch 0 iter 1000 : acc: 0.625  aux_loss:1.2176902294158936 cls_loss: 1.5843641757965088 period:7.354906320571899
+Epoch 0 iter 1200 : acc: 0.609375  aux_loss:1.2348655462265015 cls_loss: 1.7686370611190796 period:7.481194972991943
+Epoch 0 iter 1400 : acc: 0.578125  aux_loss:1.1938440799713135 cls_loss: 1.8002101182937622 period:7.702476263046265
+Epoch 0 iter 1600 : acc: 0.5703125  aux_loss:1.1958236694335938 cls_loss: 1.8716003894805908 period:7.814769268035889
+Epoch 0 iter 1800 : acc: 0.640625  aux_loss:0.9796174764633179 cls_loss: 1.2662818431854248 period:7.815164089202881
+------- learning rate [0.01], learning rate counter [-] -----
+2020-09-05 14:52:04.500436
+Epoch 1 iter 200 : acc: 0.671875  aux_loss:1.003129243850708 cls_loss: 1.3322851657867432 period:7.3202290534973145
+Epoch 1 iter 400 : acc: 0.625  aux_loss:1.0836124420166016 cls_loss: 1.4845640659332275 period:7.121242523193359
+Epoch 1 iter 600 : acc: 0.578125  aux_loss:1.0697321891784668 cls_loss: 1.5937676429748535 period:6.990344047546387
+Epoch 1 iter 800 : acc: 0.65625  aux_loss:0.984807014465332 cls_loss: 1.348921298980713 period:7.341947317123413
+Epoch 1 iter 1000 : acc: 0.6328125  aux_loss:1.1670830249786377 cls_loss: 1.5825788974761963 period:7.4226672649383545
+Epoch 1 iter 1200 : acc: 0.6640625  aux_loss:1.0424301624298096 cls_loss: 1.5061557292938232 period:7.119572401046753
+Epoch 1 iter 1400 : acc: 0.609375  aux_loss:1.1194781064987183 cls_loss: 1.6077167987823486 period:7.163445949554443
+Epoch 1 iter 1600 : acc: 0.6953125  aux_loss:0.8679051995277405 cls_loss: 1.3847637176513672 period:7.581518173217773
+Epoch 1 iter 1800 : acc: 0.640625  aux_loss:1.047332763671875 cls_loss: 1.481846809387207 period:7.305129051208496
+------- learning rate [0.01], learning rate counter [-] -----
+2020-09-05 18:34:35.321891
+Epoch 2 iter 200 : acc: 0.6015625  aux_loss:1.084388256072998 cls_loss: 1.593719720840454 period:7.395108938217163
+Epoch 2 iter 400 : acc: 0.6640625  aux_loss:1.0620741844177246 cls_loss: 1.4720656871795654 period:7.0045006275177
+Epoch 2 iter 600 : acc: 0.671875  aux_loss:1.0317919254302979 cls_loss: 1.373486042022705 period:7.083599805831909
+Epoch 2 iter 800 : acc: 0.640625  aux_loss:1.1357024908065796 cls_loss: 1.5707054138183594 period:7.358657598495483
+Epoch 2 iter 1000 : acc: 0.59375  aux_loss:0.9363336563110352 cls_loss: 1.4116368293762207 period:7.5518715381622314
+Epoch 2 iter 1200 : acc: 0.6328125  aux_loss:1.0171563625335693 cls_loss: 1.537921667098999 period:7.028998613357544
+Epoch 2 iter 1400 : acc: 0.6796875  aux_loss:0.8758531212806702 cls_loss: 1.2632858753204346 period:6.9765870571136475
+Epoch 2 iter 1600 : acc: 0.6796875  aux_loss:0.8717905879020691 cls_loss: 1.2792127132415771 period:7.762327671051025
+Epoch 2 iter 1800 : acc: 0.59375  aux_loss:1.0539655685424805 cls_loss: 1.7429193258285522 period:7.573209762573242
+share_vars_from is set, scope is ignored.
+I0905 22:19:17.758296   214 parallel_executor.cc:440] The Program will be executed on CUDA using ParallelExecutor, 8 cards are used, so 8 programs are executed in parallel.
+I0905 22:19:17.758428   214 build_strategy.cc:354] set enable_sequential_execution:1
+I0905 22:19:17.814546   214 build_strategy.cc:365] SeqOnlyAllReduceOps:0, num_trainers:1
+Valid iter 50 : acc: 0.671875  aux_loss:1.0904524326324463 cls_loss: 1.4956912994384766
+Valid iter 100 : acc: 0.625  aux_loss:0.7665343284606934 cls_loss: 1.3824644088745117
+Valid iter 150 : acc: 0.3125  aux_loss:1.452181100845337 cls_loss: 2.934908866882324
+Valid iter 200 : acc: 0.609375  aux_loss:1.1171993017196655 cls_loss: 1.4884519577026367
+Valid iter 250 : acc: 0.65625  aux_loss:0.7952731847763062 cls_loss: 1.1588940620422363
+Valid iter 300 : acc: 0.5  aux_loss:1.1164307594299316 cls_loss: 1.9587739706039429
+Valid: acc: 0.572138786315918  aux_loss:1.0766047239303589 cls_loss: 1.7852866649627686
+/mnt
+[INFO]: train job success!

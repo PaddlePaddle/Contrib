@@ -1,0 +1,50 @@
+[MODEL]
+name: "TPN"
+format: "mp4"
+num_classes: 400
+seg_num: 1
+seglen: 8
+step:8
+image_mean: [0.485, 0.456, 0.406]
+image_std: [0.229, 0.224, 0.225]
+num_layers: 50
+topk: 5
+classind: "./data/kinetics_400/kinetics400_label.txt"
+
+[TRAIN]
+epoch: 3
+short_size:  256
+target_size: 224#224
+num_reader_threads: 6
+buf_size: 1024
+batch_size: 128
+use_gpu: True
+num_gpus: 8
+filelist: "./data/kinetics_400/trainlist.txt"
+learning_rate: 0.01
+learning_rate_decay: 1
+l2_weight_decay: 1e-4
+momentum: 0.9
+video_path: "/root/paddlejob/workspace/datasets"
+total_videos: 234584
+
+
+[VALID]
+short_size:  256
+target_size: 224#224
+num_reader_threads: 12
+buf_size: 1024
+batch_size: 64
+filelist: "./data/kinetics_400/vallist.txt"
+video_path: "/root/paddlejob/workspace/datasets"
+
+[TEST]
+seg_num: 10
+short_size: 256
+target_size: 256
+num_reader_threads: 6
+buf_size: 1024
+batch_size: 8
+filelist: "./data/kinetics_400/vallist.txt"
+video_path: "/root/paddlejob/workspace/datasets"
+

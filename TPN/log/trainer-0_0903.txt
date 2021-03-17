@@ -1,0 +1,356 @@
+[INFO]: current net device: eth0, ip: 172.28.1.75
+[INFO]: paddle job envs:
+POD_IP=172.28.1.75
+PADDLE_PORT=12345
+PADDLE_TRAINER_ID=0
+PADDLE_TRAINERS_NUM=1
+PADDLE_USE_CUDA=1
+NCCL_SOCKET_IFNAME=eth0
+PADDLE_IS_LOCAL=1
+OUTPUT_PATH=/root/paddlejob/workspace/output
+LOCAL_LOG_PATH=/root/paddlejob/workspace/log
+LOCAL_MOUNT_PATH=/mnt/code_20200902230223,/mnt/datasets_20200902230223
+JOB_ID=job-0c1b6c355be47c8b532b7e0e6dfcba52
+TRAINING_ROLE=TRAINER
+[INFO]: user command: python -u train.py
+[INFO]: start trainer
+~/paddlejob/workspace/code /mnt
+/opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/sklearn/feature_extraction/text.py:17: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Mapping, defaultdict
+unzip success.
+2020-09-02 23:35:01.255370
+{'MODEL': {'name': 'TPN', 'format': 'mp4', 'num_classes': 400, 'seg_num': 1, 'seglen': 8, 'step': 8, 'image_mean': [0.485, 0.456, 0.406], 'image_std': [0.229, 0.224, 0.225], 'num_layers': 50, 'topk': 5, 'classind': './data/kinetics_400/kinetics400_label.txt'}, 'TRAIN': {'epoch': 3, 'short_size': 256, 'target_size': 224, 'num_reader_threads': 12, 'buf_size': 1024, 'batch_size': 128, 'use_gpu': True, 'num_gpus': 8, 'filelist': './data/kinetics_400/trainlist.txt', 'learning_rate': 0.01, 'learning_rate_decay': 1, 'l2_weight_decay': 0.0001, 'momentum': 0.9, 'video_path': '/root/paddlejob/workspace/datasets', 'total_videos': 234618}, 'VALID': {'short_size': 256, 'target_size': 224, 'num_reader_threads': 12, 'buf_size': 1024, 'batch_size': 64, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}, 'TEST': {'seg_num': 10, 'short_size': 240, 'target_size': 112, 'num_reader_threads': 6, 'buf_size': 1024, 'batch_size': 6, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}}
+{'MODEL': {'name': 'TPN', 'format': 'mp4', 'num_classes': 400, 'seg_num': 1, 'seglen': 8, 'step': 8, 'image_mean': [0.485, 0.456, 0.406], 'image_std': [0.229, 0.224, 0.225], 'num_layers': 50, 'topk': 5, 'classind': './data/kinetics_400/kinetics400_label.txt'}, 'TRAIN': {'epoch': 3, 'short_size': 256, 'target_size': 224, 'num_reader_threads': 12, 'buf_size': 1024, 'batch_size': 128, 'use_gpu': True, 'num_gpus': 8, 'filelist': './data/kinetics_400/trainlist.txt', 'learning_rate': 0.01, 'learning_rate_decay': 1, 'l2_weight_decay': 0.0001, 'momentum': 0.9, 'video_path': '/root/paddlejob/workspace/datasets', 'total_videos': 234618}, 'VALID': {'short_size': 256, 'target_size': 224, 'num_reader_threads': 12, 'buf_size': 1024, 'batch_size': 64, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}, 'TEST': {'seg_num': 10, 'short_size': 240, 'target_size': 112, 'num_reader_threads': 6, 'buf_size': 1024, 'batch_size': 6, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}}
+W0902 23:35:10.022248   216 device_context.cc:237] Please NOTE: device: 0, CUDA Capability: 70, Driver API Version: 10.1, Runtime API Version: 9.0
+W0902 23:35:10.059197   216 device_context.cc:245] device: 0, cuDNN Version: 7.6.
+Inflated conv1_weights from pretrained parameters.
+Inflated res2a_branch2a_weights from pretrained parameters.
+Inflated res2a_branch2b_weights from pretrained parameters.
+Inflated res2a_branch2c_weights from pretrained parameters.
+Inflated res2a_branch1_weights from pretrained parameters.
+Inflated res2b_branch2a_weights from pretrained parameters.
+Inflated res2b_branch2b_weights from pretrained parameters.
+Inflated res2b_branch2c_weights from pretrained parameters.
+Inflated res2c_branch2a_weights from pretrained parameters.
+Inflated res2c_branch2b_weights from pretrained parameters.
+Inflated res2c_branch2c_weights from pretrained parameters.
+Inflated res3a_branch2a_weights from pretrained parameters.
+Inflated res3a_branch2b_weights from pretrained parameters.
+Inflated res3a_branch2c_weights from pretrained parameters.
+Inflated res3a_branch1_weights from pretrained parameters.
+Inflated res3b_branch2a_weights from pretrained parameters.
+Inflated res3b_branch2b_weights from pretrained parameters.
+Inflated res3b_branch2c_weights from pretrained parameters.
+Inflated res3c_branch2a_weights from pretrained parameters.
+Inflated res3c_branch2b_weights from pretrained parameters.
+Inflated res3c_branch2c_weights from pretrained parameters.
+Inflated res3d_branch2a_weights from pretrained parameters.
+Inflated res3d_branch2b_weights from pretrained parameters.
+Inflated res3d_branch2c_weights from pretrained parameters.
+Inflated res4a_branch2a_weights from pretrained parameters.
+Inflated res4a_branch2b_weights from pretrained parameters.
+Inflated res4a_branch2c_weights from pretrained parameters.
+Inflated res4a_branch1_weights from pretrained parameters.
+Inflated res4b_branch2a_weights from pretrained parameters.
+Inflated res4b_branch2b_weights from pretrained parameters.
+Inflated res4b_branch2c_weights from pretrained parameters.
+Inflated res4c_branch2a_weights from pretrained parameters.
+Inflated res4c_branch2b_weights from pretrained parameters.
+Inflated res4c_branch2c_weights from pretrained parameters.
+Inflated res4d_branch2a_weights from pretrained parameters.
+Inflated res4d_branch2b_weights from pretrained parameters.
+Inflated res4d_branch2c_weights from pretrained parameters.
+Inflated res4e_branch2a_weights from pretrained parameters.
+Inflated res4e_branch2b_weights from pretrained parameters.
+Inflated res4e_branch2c_weights from pretrained parameters.
+Inflated res4f_branch2a_weights from pretrained parameters.
+Inflated res4f_branch2b_weights from pretrained parameters.
+Inflated res4f_branch2c_weights from pretrained parameters.
+Inflated res5a_branch2a_weights from pretrained parameters.
+Inflated res5a_branch2b_weights from pretrained parameters.
+Inflated res5a_branch2c_weights from pretrained parameters.
+Inflated res5a_branch1_weights from pretrained parameters.
+Inflated res5b_branch2a_weights from pretrained parameters.
+Inflated res5b_branch2b_weights from pretrained parameters.
+Inflated res5b_branch2c_weights from pretrained parameters.
+Inflated res5c_branch2a_weights from pretrained parameters.
+Inflated res5c_branch2b_weights from pretrained parameters.
+Inflated res5c_branch2c_weights from pretrained parameters.
+Delete fc_0.w_0 from pretrained parameters. Do not load it
+Delete fc_0.b_0 from pretrained parameters. Do not load it
+gpus_num=1
+
+bs_denominator=8
+------- learning rate [0.01], learning rate counter [-] -----
+2020-09-02 23:35:18.573328
+I0902 23:35:47.358988   216 parallel_executor.cc:440] The Program will be executed on CUDA using ParallelExecutor, 8 cards are used, so 8 programs are executed in parallel.
+W0902 23:35:51.214354   216 fuse_all_reduce_op_pass.cc:74] Find all_reduce operators: 193. To make the speed faster, some all_reduce ops are fused during training, after fusion, the number of all_reduce ops is 193.
+I0902 23:35:51.248119   216 build_strategy.cc:365] SeqOnlyAllReduceOps:0, num_trainers:1
+I0902 23:35:53.148069   216 parallel_executor.cc:307] Inplace strategy is enabled, when build_strategy.enable_inplace = True
+I0902 23:35:53.396410   216 parallel_executor.cc:375] Garbage collection strategy is enabled, when FLAGS_eager_delete_tensor_gb = 0
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/tap_dancing/1_nxfkY76mk_000001_000011.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/spray_painting/OvMUfpc3nHw_000060_000070.mp4
+Epoch 0 iter 200 : acc: 0.3125  aux_loss:2.7801315784454346 cls_loss: 3.3544423580169678 period:7.831585884094238
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/catching_fish/DSNcuU-e8bU_000021_000031.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/trapezing/_Lw6CGMq4nc_000120_000130.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/clean_and_jerk/zrpjA-ZKGEA_000105_000115.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dying_hair/jHODDw65G4A_000085_000095.mp4
+Epoch 0 iter 400 : acc: 0.375  aux_loss:2.504256010055542 cls_loss: 2.8869974613189697 period:7.9233317375183105
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/punching_bag/ixQrfusr6k8_000001_000011.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/shaving_head/_M6Ko0yRfD4_000097_000107.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/tai_chi/LlflsbkvcKw_000090_000100.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/deadlifting/Hm8X9u8jtOk_000022_000032.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/sailing/99ABSLQdgUc_000046_000056.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/salsa_dancing/nfjWfoyGApo_000220_000230.mp4
+Epoch 0 iter 600 : acc: 0.34375  aux_loss:2.388282537460327 cls_loss: 2.9386980533599854 period:8.0916588306427
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/bowling/OErKBwdGJIk_000057_000067.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/hitting_baseball/uz5cIbBTf4Y_000049_000059.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/picking_fruit/NLf-rU1wlTY_000161_000171.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/snatch_weight_lifting/GajaQD6qRkw_000057_000067.mp4
+Epoch 0 iter 800 : acc: 0.34375  aux_loss:2.263535499572754 cls_loss: 2.860875129699707 period:7.954376697540283
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/snowkiting/pDPbETciXhw_000167_000177.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/motorcycling/aj1bmhf-IyU_000118_000128.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/ice_skating/9D0o8lh8oeY_002353_002363.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/assembling_computer/xxUezLcXkDs_000256_000266.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/bungee_jumping/oyj6TFAxpiw_000229_000239.mp4
+Epoch 0 iter 1000 : acc: 0.296875  aux_loss:2.1571507453918457 cls_loss: 2.689617156982422 period:8.011813163757324
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/wrapping_present/rKJk6ws2sGs_000103_000113.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_recorder/bgCrldl9pQ8_000027_000037.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/eating_hotdog/lk5Ap5gZNj0_000009_000019.mp4
+Epoch 0 iter 1200 : acc: 0.390625  aux_loss:2.1978626251220703 cls_loss: 2.833864212036133 period:8.841032266616821
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/sweeping_floor/EuGXJiVQwCg_000005_000015.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_tennis/efTAWmCkLKE_000418_000428.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/cleaning_gutters/pM9KHPPo6oE_000046_000056.mp4
+Epoch 0 iter 1400 : acc: 0.484375  aux_loss:1.9734641313552856 cls_loss: 2.312666177749634 period:8.262055397033691
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_paintball/SZtj2TEWiHc_000195_000205.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/crossing_river/LSRil2XG1UU_000191_000201.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_paintball/zUZm-IvpnTo_000176_000186.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/spinning_poi/5_gyoV_sQXU_000001_000011.mp4
+Epoch 0 iter 1600 : acc: 0.390625  aux_loss:1.987365484237671 cls_loss: 2.554157257080078 period:8.953723669052124
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dancing_ballet/7x6LxAdMgb0_000118_000128.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/air_drumming/CUxsn4YXksI_000119_000129.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/riding_mountain_bike/w5ax4GiTkKg_000088_000098.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dying_hair/fNFXTBUF3nY_000230_000240.mp4
+Epoch 0 iter 1800 : acc: 0.4140625  aux_loss:1.886225700378418 cls_loss: 2.3991858959198 period:7.990908861160278
+------- learning rate [0.01], learning rate counter [-] -----
+2020-09-03 03:43:22.315399
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dying_hair/fNFXTBUF3nY_000230_000240.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_tennis/efTAWmCkLKE_000418_000428.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/snowkiting/pDPbETciXhw_000167_000177.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/tai_chi/LlflsbkvcKw_000090_000100.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_paintball/zUZm-IvpnTo_000176_000186.mp4
+Epoch 1 iter 200 : acc: 0.4453125  aux_loss:1.9000661373138428 cls_loss: 2.3910317420959473 period:8.078396558761597
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/bowling/OErKBwdGJIk_000057_000067.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/salsa_dancing/nfjWfoyGApo_000220_000230.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/riding_mountain_bike/w5ax4GiTkKg_000088_000098.mp4
+Epoch 1 iter 400 : acc: 0.4609375  aux_loss:1.8563942909240723 cls_loss: 2.352696180343628 period:8.054871559143066
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/wrapping_present/rKJk6ws2sGs_000103_000113.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/clean_and_jerk/zrpjA-ZKGEA_000105_000115.mp4
+Epoch 1 iter 600 : acc: 0.453125  aux_loss:1.8133296966552734 cls_loss: 2.4002885818481445 period:7.968731164932251
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/shaving_head/_M6Ko0yRfD4_000097_000107.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dying_hair/jHODDw65G4A_000085_000095.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/sailing/99ABSLQdgUc_000046_000056.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/motorcycling/aj1bmhf-IyU_000118_000128.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/hitting_baseball/uz5cIbBTf4Y_000049_000059.mp4
+Epoch 1 iter 800 : acc: 0.4375  aux_loss:1.730443000793457 cls_loss: 2.4408464431762695 period:8.066689014434814
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/sweeping_floor/EuGXJiVQwCg_000005_000015.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/air_drumming/CUxsn4YXksI_000119_000129.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/bungee_jumping/oyj6TFAxpiw_000229_000239.mp4
+Epoch 1 iter 1000 : acc: 0.4609375  aux_loss:1.8115549087524414 cls_loss: 2.354891538619995 period:7.775094985961914
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/snatch_weight_lifting/GajaQD6qRkw_000057_000067.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/catching_fish/DSNcuU-e8bU_000021_000031.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_recorder/bgCrldl9pQ8_000027_000037.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/picking_fruit/NLf-rU1wlTY_000161_000171.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/cleaning_gutters/pM9KHPPo6oE_000046_000056.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/eating_hotdog/lk5Ap5gZNj0_000009_000019.mp4
+Epoch 1 iter 1200 : acc: 0.4375  aux_loss:1.793955683708191 cls_loss: 2.262409210205078 period:7.926554203033447
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/assembling_computer/xxUezLcXkDs_000256_000266.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/punching_bag/ixQrfusr6k8_000001_000011.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/tap_dancing/1_nxfkY76mk_000001_000011.mp4
+Epoch 1 iter 1400 : acc: 0.515625  aux_loss:1.7221972942352295 cls_loss: 2.3297762870788574 period:7.992251396179199
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/spray_painting/OvMUfpc3nHw_000060_000070.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_paintball/SZtj2TEWiHc_000195_000205.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/spinning_poi/5_gyoV_sQXU_000001_000011.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dancing_ballet/7x6LxAdMgb0_000118_000128.mp4
+Epoch 1 iter 1600 : acc: 0.5078125  aux_loss:1.6501975059509277 cls_loss: 2.325575828552246 period:7.850885391235352
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/trapezing/_Lw6CGMq4nc_000120_000130.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/crossing_river/LSRil2XG1UU_000191_000201.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/deadlifting/Hm8X9u8jtOk_000022_000032.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/ice_skating/9D0o8lh8oeY_002353_002363.mp4
+Epoch 1 iter 1800 : acc: 0.4375  aux_loss:1.7087360620498657 cls_loss: 2.3361339569091797 period:8.029989242553711
+share_vars_from is set, scope is ignored.
+I0903 07:46:59.511354   216 parallel_executor.cc:440] The Program will be executed on CUDA using ParallelExecutor, 8 cards are used, so 8 programs are executed in parallel.
+I0903 07:46:59.561084   216 build_strategy.cc:365] SeqOnlyAllReduceOps:0, num_trainers:1
+Valid iter 50 : acc: 0.46875  aux_loss:1.7182855606079102 cls_loss: 2.5014233589172363
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x7fa384601040] moov atom not found
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/val_256/crossing_river/ZVdAl-yh9m0.mp4
+Valid iter 100 : acc: 0.609375  aux_loss:1.2236268520355225 cls_loss: 1.512665033340454
+Valid iter 150 : acc: 0.5625  aux_loss:1.3942041397094727 cls_loss: 1.9108672142028809
+Valid iter 200 : acc: 0.53125  aux_loss:2.065065860748291 cls_loss: 2.3454227447509766
+Valid iter 250 : acc: 0.5  aux_loss:1.438984751701355 cls_loss: 1.8965771198272705
+Valid iter 300 : acc: 0.25  aux_loss:1.740187168121338 cls_loss: 2.7203898429870605
+Valid: acc: 0.4779322147369385  aux_loss:1.5890235900878906 cls_loss: 2.3260724544525146
+------- learning rate [0.01], learning rate counter [-] -----
+2020-09-03 08:43:24.051216
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dying_hair/jHODDw65G4A_000085_000095.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_tennis/efTAWmCkLKE_000418_000428.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/motorcycling/aj1bmhf-IyU_000118_000128.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/air_drumming/CUxsn4YXksI_000119_000129.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/wrapping_present/rKJk6ws2sGs_000103_000113.mp4
+Epoch 2 iter 200 : acc: 0.4375  aux_loss:1.7294245958328247 cls_loss: 2.5931882858276367 period:19.18821120262146
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/crossing_river/LSRil2XG1UU_000191_000201.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/sweeping_floor/EuGXJiVQwCg_000005_000015.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/eating_hotdog/lk5Ap5gZNj0_000009_000019.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/shaving_head/_M6Ko0yRfD4_000097_000107.mp4
+Epoch 2 iter 400 : acc: 0.46875  aux_loss:1.6304316520690918 cls_loss: 2.5048460960388184 period:18.566893815994263
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/tai_chi/LlflsbkvcKw_000090_000100.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/assembling_computer/xxUezLcXkDs_000256_000266.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/sailing/99ABSLQdgUc_000046_000056.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/bungee_jumping/oyj6TFAxpiw_000229_000239.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/cleaning_gutters/pM9KHPPo6oE_000046_000056.mp4
+Epoch 2 iter 600 : acc: 0.4453125  aux_loss:1.652846097946167 cls_loss: 2.355987548828125 period:18.810893058776855
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/catching_fish/DSNcuU-e8bU_000021_000031.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dying_hair/fNFXTBUF3nY_000230_000240.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_paintball/SZtj2TEWiHc_000195_000205.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_recorder/bgCrldl9pQ8_000027_000037.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/hitting_baseball/uz5cIbBTf4Y_000049_000059.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/deadlifting/Hm8X9u8jtOk_000022_000032.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/ice_skating/9D0o8lh8oeY_002353_002363.mp4
+Epoch 2 iter 800 : acc: 0.515625  aux_loss:1.5737066268920898 cls_loss: 2.1913070678710938 period:18.291869640350342
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/punching_bag/ixQrfusr6k8_000001_000011.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/snatch_weight_lifting/GajaQD6qRkw_000057_000067.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/salsa_dancing/nfjWfoyGApo_000220_000230.mp4
+Epoch 2 iter 1000 : acc: 0.515625  aux_loss:1.546478509902954 cls_loss: 2.049891471862793 period:18.46432328224182
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/trapezing/_Lw6CGMq4nc_000120_000130.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/spray_painting/OvMUfpc3nHw_000060_000070.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/clean_and_jerk/zrpjA-ZKGEA_000105_000115.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/dancing_ballet/7x6LxAdMgb0_000118_000128.mp4
+Epoch 2 iter 1200 : acc: 0.3828125  aux_loss:1.5199507474899292 cls_loss: 2.2747597694396973 period:19.044989347457886
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/playing_paintball/zUZm-IvpnTo_000176_000186.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/riding_mountain_bike/w5ax4GiTkKg_000088_000098.mp4
+Epoch 2 iter 1400 : acc: 0.453125  aux_loss:1.5878968238830566 cls_loss: 2.1941111087799072 period:19.10583186149597
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/bowling/OErKBwdGJIk_000057_000067.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/spinning_poi/5_gyoV_sQXU_000001_000011.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/picking_fruit/NLf-rU1wlTY_000161_000171.mp4
+Epoch 2 iter 1600 : acc: 0.453125  aux_loss:1.484420657157898 cls_loss: 2.198023796081543 period:19.209089517593384
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/tap_dancing/1_nxfkY76mk_000001_000011.mp4
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/train_256/snowkiting/pDPbETciXhw_000167_000177.mp4
+Epoch 2 iter 1800 : acc: 0.5546875  aux_loss:1.4554567337036133 cls_loss: 1.942723274230957 period:18.958521366119385
+Valid iter 50 : acc: 0.515625  aux_loss:1.583299160003662 cls_loss: 2.400392532348633
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x7fa331e2d900] moov atom not found
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+Error when loading /root/paddlejob/workspace/datasets/val_256/crossing_river/ZVdAl-yh9m0.mp4
+Valid iter 100 : acc: 0.703125  aux_loss:1.1396675109863281 cls_loss: 1.2674586772918701
+Valid iter 150 : acc: 0.421875  aux_loss:1.35746169090271 cls_loss: 2.412576198577881
+Valid iter 200 : acc: 0.5  aux_loss:1.679208517074585 cls_loss: 2.3295302391052246
+Valid iter 250 : acc: 0.578125  aux_loss:1.0632727146148682 cls_loss: 1.2913305759429932
+Valid iter 300 : acc: 0.328125  aux_loss:1.6881520748138428 cls_loss: 2.741405963897705
+Valid: acc: 0.4984273612499237  aux_loss:1.4552170038223267 cls_loss: 2.2461535930633545
+/mnt
+[INFO]: train job success!
