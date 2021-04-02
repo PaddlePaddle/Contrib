@@ -1,0 +1,159 @@
+[INFO]: current net device: eth0, ip: 172.28.0.57
+[INFO]: paddle job envs:
+POD_IP=172.28.0.57
+PADDLE_PORT=12345
+PADDLE_TRAINER_ID=0
+PADDLE_TRAINERS_NUM=1
+PADDLE_USE_CUDA=1
+NCCL_SOCKET_IFNAME=eth0
+PADDLE_IS_LOCAL=1
+OUTPUT_PATH=/root/paddlejob/workspace/output
+LOCAL_LOG_PATH=/root/paddlejob/workspace/log
+LOCAL_MOUNT_PATH=/mnt/code_20201012205146,/mnt/datasets_20201012205146
+JOB_ID=job-a85ed8dc76ba5a831a49e215bbfcb27b
+TRAINING_ROLE=TRAINER
+[INFO]: user command: python -u eval.py
+[INFO]: start trainer
+~/paddlejob/workspace/code /mnt
+/opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/sklearn/feature_extraction/text.py:17: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Mapping, defaultdict
+unzip success.
+2020-10-12 21:21:49.974535
+{'MODEL': {'name': 'TPN', 'format': 'mp4', 'num_classes': 400, 'seg_num': 1, 'seglen': 8, 'step': 8, 'image_mean': [0.485, 0.456, 0.406], 'image_std': [0.229, 0.224, 0.225], 'num_layers': 50, 'topk': 5, 'classind': './data/kinetics_400/kinetics400_label.txt'}, 'TRAIN': {'epoch': 3, 'short_size': [256, 320], 'target_size': 224, 'num_reader_threads': 6, 'buf_size': 1024, 'batch_size': 128, 'use_gpu': True, 'num_gpus': 8, 'filelist': './data/kinetics_400/trainlist.txt', 'learning_rate': 0.0002, 'learning_rate_decay': 1, 'l2_weight_decay': 0.0001, 'momentum': 0.9, 'video_path': '/root/paddlejob/workspace/datasets', 'total_videos': 234584}, 'VALID': {'short_size': 256, 'target_size': 224, 'num_reader_threads': 12, 'buf_size': 1024, 'batch_size': 64, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}, 'TEST': {'seg_num': 10, 'short_size': 256, 'target_size': 256, 'num_reader_threads': 6, 'buf_size': 1024, 'batch_size': 8, 'filelist': './data/kinetics_400/vallist.txt', 'video_path': '/root/paddlejob/workspace/datasets'}}
+W1012 21:25:20.085964   212 device_context.cc:237] Please NOTE: device: 0, CUDA Capability: 70, Driver API Version: 10.1, Runtime API Version: 9.0
+W1012 21:25:20.091054   212 device_context.cc:245] device: 0, cuDNN Version: 7.6.
+test: /root/paddlejob/workspace/output/tpn.pdparams
+gpus_num=1
+
+bs_denominator=8
+2020-10-12 21:25:34.603413
+I1012 21:27:26.631094   212 parallel_executor.cc:440] The Program will be executed on CUDA using ParallelExecutor, 8 cards are used, so 8 programs are executed in parallel.
+I1012 21:27:30.726197   212 build_strategy.cc:365] SeqOnlyAllReduceOps:0, num_trainers:1
+I1012 21:27:30.795243   212 parallel_executor.cc:307] Inplace strategy is enabled, when build_strategy.enable_inplace = True
+I1012 21:27:30.853413   212 parallel_executor.cc:375] Garbage collection strategy is enabled, when FLAGS_eager_delete_tensor_gb = 0
+Tset iter 20 : acc: 0.375  aux_loss:1.5660501718521118 cls_loss: 2.7832083702087402
+Tset iter 40 : acc: 0.875  aux_loss:0.12634199857711792 cls_loss: 0.3350597023963928
+Tset iter 60 : acc: 1.0  aux_loss:0.8233346939086914 cls_loss: 0.6509069204330444
+Tset iter 80 : acc: 0.875  aux_loss:0.6205280423164368 cls_loss: 0.7412151098251343
+Tset iter 100 : acc: 0.625  aux_loss:1.1555336713790894 cls_loss: 2.062305212020874
+Tset iter 120 : acc: 1.0  aux_loss:0.041153740137815475 cls_loss: 0.020062608644366264
+Tset iter 140 : acc: 0.5  aux_loss:0.9921887516975403 cls_loss: 1.4378491640090942
+Tset iter 160 : acc: 0.625  aux_loss:1.0318562984466553 cls_loss: 1.697856068611145
+Tset iter 180 : acc: 1.0  aux_loss:0.18039199709892273 cls_loss: 0.12431326508522034
+Tset iter 200 : acc: 0.625  aux_loss:0.45930391550064087 cls_loss: 0.740172803401947
+Tset iter 220 : acc: 0.625  aux_loss:1.14652681350708 cls_loss: 2.005298376083374
+Tset iter 240 : acc: 0.875  aux_loss:0.4838677942752838 cls_loss: 0.37208235263824463
+Tset iter 260 : acc: 0.875  aux_loss:0.7739009857177734 cls_loss: 1.107886791229248
+Tset iter 280 : acc: 0.625  aux_loss:1.6527429819107056 cls_loss: 3.061630964279175
+Tset iter 300 : acc: 0.375  aux_loss:1.5813524723052979 cls_loss: 2.446521759033203
+Tset iter 320 : acc: 0.625  aux_loss:0.988903284072876 cls_loss: 1.161003589630127
+Tset iter 340 : acc: 0.75  aux_loss:0.35926997661590576 cls_loss: 0.46311184763908386
+Tset iter 360 : acc: 1.0  aux_loss:0.1829424798488617 cls_loss: 0.0022455272264778614
+Tset iter 380 : acc: 0.875  aux_loss:0.3029828667640686 cls_loss: 0.499845027923584
+Tset iter 400 : acc: 0.75  aux_loss:0.29248154163360596 cls_loss: 0.47150495648384094
+Tset iter 420 : acc: 0.75  aux_loss:0.7809373736381531 cls_loss: 1.248244285583496
+Tset iter 440 : acc: 0.875  aux_loss:0.5427270531654358 cls_loss: 0.5725680589675903
+Tset iter 460 : acc: 0.25  aux_loss:1.1237249374389648 cls_loss: 2.1109490394592285
+Tset iter 480 : acc: 1.0  aux_loss:0.5027523040771484 cls_loss: 0.5682150721549988
+Tset iter 500 : acc: 0.875  aux_loss:0.4500923454761505 cls_loss: 0.21839874982833862
+Tset iter 520 : acc: 0.875  aux_loss:0.36134210228919983 cls_loss: 0.35578402876853943
+Tset iter 540 : acc: 0.625  aux_loss:1.009553074836731 cls_loss: 1.5558905601501465
+Tset iter 560 : acc: 0.5  aux_loss:1.1881591081619263 cls_loss: 1.8509058952331543
+Tset iter 580 : acc: 0.75  aux_loss:0.7236262559890747 cls_loss: 0.7608440518379211
+Tset iter 600 : acc: 1.0  aux_loss:0.311239629983902 cls_loss: 0.23116078972816467
+Tset iter 620 : acc: 0.5  aux_loss:1.3613479137420654 cls_loss: 1.817287802696228
+Tset iter 640 : acc: 0.625  aux_loss:0.6593466997146606 cls_loss: 1.3510541915893555
+Tset iter 660 : acc: 0.5  aux_loss:0.6800055503845215 cls_loss: 1.123495101928711
+Tset iter 680 : acc: 0.375  aux_loss:1.4238924980163574 cls_loss: 2.701720714569092
+Tset iter 700 : acc: 0.125  aux_loss:1.5211154222488403 cls_loss: 2.3494906425476074
+Tset iter 720 : acc: 0.875  aux_loss:0.5211844444274902 cls_loss: 0.35394787788391113
+Tset iter 740 : acc: 0.625  aux_loss:0.7256211042404175 cls_loss: 0.9508798122406006
+Tset iter 760 : acc: 0.875  aux_loss:0.3487907350063324 cls_loss: 0.3110805153846741
+Tset iter 780 : acc: 1.0  aux_loss:0.11850762367248535 cls_loss: 0.1669294536113739
+Tset iter 800 : acc: 0.75  aux_loss:0.6656215190887451 cls_loss: 0.6336832642555237
+Tset iter 820 : acc: 0.875  aux_loss:0.22698114812374115 cls_loss: 0.3613353371620178
+Tset iter 840 : acc: 0.25  aux_loss:1.582726001739502 cls_loss: 2.8524627685546875
+Tset iter 860 : acc: 0.875  aux_loss:0.7047704458236694 cls_loss: 0.7374615669250488
+Tset iter 880 : acc: 0.875  aux_loss:0.6262757778167725 cls_loss: 0.562544584274292
+Tset iter 900 : acc: 0.75  aux_loss:0.6809811592102051 cls_loss: 1.311104416847229
+Tset iter 920 : acc: 0.5  aux_loss:0.8346036672592163 cls_loss: 1.2932970523834229
+Tset iter 940 : acc: 0.125  aux_loss:1.6554992198944092 cls_loss: 2.805596113204956
+Tset iter 960 : acc: 0.625  aux_loss:1.386404275894165 cls_loss: 1.7559834718704224
+Tset iter 980 : acc: 0.75  aux_loss:0.8067034482955933 cls_loss: 1.0145013332366943
+Tset iter 1000 : acc: 0.875  aux_loss:0.2506275177001953 cls_loss: 0.27929404377937317
+Tset iter 1020 : acc: 0.75  aux_loss:1.0558936595916748 cls_loss: 1.6731764078140259
+Tset iter 1040 : acc: 0.5  aux_loss:1.644911766052246 cls_loss: 2.856907367706299
+Tset iter 1060 : acc: 0.5  aux_loss:0.8408592939376831 cls_loss: 1.2941837310791016
+Tset iter 1080 : acc: 0.75  aux_loss:0.6471233367919922 cls_loss: 0.6667745113372803
+Tset iter 1100 : acc: 0.875  aux_loss:0.323853075504303 cls_loss: 0.27333593368530273
+Tset iter 1120 : acc: 0.875  aux_loss:0.468625545501709 cls_loss: 0.7776039838790894
+Tset iter 1140 : acc: 0.375  aux_loss:1.273072361946106 cls_loss: 2.435454845428467
+Tset iter 1160 : acc: 0.75  aux_loss:0.4888772666454315 cls_loss: 0.4865800738334656
+Tset iter 1180 : acc: 0.75  aux_loss:1.1105103492736816 cls_loss: 1.2147026062011719
+Tset iter 1200 : acc: 0.375  aux_loss:1.5311890840530396 cls_loss: 2.418336868286133
+Tset iter 1220 : acc: 1.0  aux_loss:0.2198440134525299 cls_loss: 0.23348161578178406
+Tset iter 1240 : acc: 0.875  aux_loss:0.3200043737888336 cls_loss: 0.5310044288635254
+Tset iter 1260 : acc: 0.75  aux_loss:0.6846098899841309 cls_loss: 0.9846488237380981
+Tset iter 1280 : acc: 0.5  aux_loss:1.298757553100586 cls_loss: 1.980987787246704
+Tset iter 1300 : acc: 1.0  aux_loss:0.3275890648365021 cls_loss: 0.03874283656477928
+Tset iter 1320 : acc: 0.75  aux_loss:0.658695638179779 cls_loss: 0.8770831823348999
+Tset iter 1340 : acc: 0.75  aux_loss:0.3684985637664795 cls_loss: 0.7400832176208496
+Tset iter 1360 : acc: 0.25  aux_loss:1.2463420629501343 cls_loss: 2.5738940238952637
+Tset iter 1380 : acc: 0.875  aux_loss:0.45818671584129333 cls_loss: 0.39403268694877625
+Tset iter 1400 : acc: 0.875  aux_loss:0.21988849341869354 cls_loss: 0.32947465777397156
+Tset iter 1420 : acc: 1.0  aux_loss:0.10597313195466995 cls_loss: 0.061595018953084946
+Tset iter 1440 : acc: 0.625  aux_loss:0.8851432204246521 cls_loss: 2.0335211753845215
+Tset iter 1460 : acc: 0.875  aux_loss:0.4270862340927124 cls_loss: 0.3433307111263275
+Tset iter 1480 : acc: 0.75  aux_loss:0.4867095947265625 cls_loss: 0.4075399935245514
+Tset iter 1500 : acc: 0.875  aux_loss:0.4440889060497284 cls_loss: 0.5966602563858032
+Tset iter 1520 : acc: 1.0  aux_loss:0.13411472737789154 cls_loss: 0.06587966531515121
+Tset iter 1540 : acc: 0.75  aux_loss:0.7824045419692993 cls_loss: 1.0624698400497437
+Tset iter 1560 : acc: 0.875  aux_loss:0.569624662399292 cls_loss: 1.1050716638565063
+Tset iter 1580 : acc: 1.0  aux_loss:0.30338168144226074 cls_loss: 0.4753798246383667
+Tset iter 1600 : acc: 0.375  aux_loss:1.338033676147461 cls_loss: 2.3984174728393555
+Tset iter 1620 : acc: 0.75  aux_loss:0.4853822588920593 cls_loss: 0.7398982644081116
+Tset iter 1640 : acc: 0.625  aux_loss:1.3636751174926758 cls_loss: 2.106534481048584
+Tset iter 1660 : acc: 1.0  aux_loss:0.2739875614643097 cls_loss: 0.18825165927410126
+Tset iter 1680 : acc: 0.875  aux_loss:0.40512675046920776 cls_loss: 0.32672449946403503
+Tset iter 1700 : acc: 0.75  aux_loss:0.6702026128768921 cls_loss: 0.7134396433830261
+Tset iter 1720 : acc: 1.0  aux_loss:0.44330811500549316 cls_loss: 0.37584057450294495
+Tset iter 1740 : acc: 0.875  aux_loss:0.4039807617664337 cls_loss: 0.442446231842041
+Tset iter 1760 : acc: 0.625  aux_loss:0.847648561000824 cls_loss: 1.4760667085647583
+Tset iter 1780 : acc: 0.5  aux_loss:1.555905818939209 cls_loss: 2.5639350414276123
+Tset iter 1800 : acc: 0.75  aux_loss:1.1587015390396118 cls_loss: 1.459089994430542
+Tset iter 1820 : acc: 1.0  aux_loss:0.22496524453163147 cls_loss: 0.04390544816851616
+Tset iter 1840 : acc: 0.75  aux_loss:0.4743345379829407 cls_loss: 0.8652613162994385
+Tset iter 1860 : acc: 1.0  aux_loss:0.2677478790283203 cls_loss: 0.34224462509155273
+Tset iter 1880 : acc: 0.125  aux_loss:1.3433916568756104 cls_loss: 3.052196741104126
+Tset iter 1900 : acc: 0.75  aux_loss:0.4580966830253601 cls_loss: 0.4684878885746002
+Tset iter 1920 : acc: 0.875  aux_loss:0.22210410237312317 cls_loss: 0.26360487937927246
+Tset iter 1940 : acc: 0.125  aux_loss:1.9002399444580078 cls_loss: 3.7870821952819824
+Tset iter 1960 : acc: 0.75  aux_loss:0.8921027183532715 cls_loss: 1.0700445175170898
+Tset iter 1980 : acc: 0.125  aux_loss:1.9869358539581299 cls_loss: 2.7411139011383057
+Tset iter 2000 : acc: 1.0  aux_loss:0.3587479889392853 cls_loss: 0.43892645835876465
+Tset iter 2020 : acc: 0.625  aux_loss:0.964582622051239 cls_loss: 1.5407795906066895
+Tset iter 2040 : acc: 0.625  aux_loss:0.980971097946167 cls_loss: 1.4543404579162598
+Tset iter 2060 : acc: 0.5  aux_loss:0.9479906558990479 cls_loss: 1.4414523839950562
+Tset iter 2080 : acc: 1.0  aux_loss:0.09331464767456055 cls_loss: 0.02088075876235962
+Tset iter 2100 : acc: 0.625  aux_loss:0.5707435011863708 cls_loss: 0.8883057236671448
+Tset iter 2120 : acc: 0.25  aux_loss:1.681898593902588 cls_loss: 3.3302371501922607
+Tset iter 2140 : acc: 0.75  aux_loss:0.9695097208023071 cls_loss: 1.3025128841400146
+Tset iter 2160 : acc: 0.75  aux_loss:0.6388307809829712 cls_loss: 1.4638590812683105
+Tset iter 2180 : acc: 0.375  aux_loss:1.2629070281982422 cls_loss: 1.9581280946731567
+Tset iter 2200 : acc: 1.0  aux_loss:0.2478918433189392 cls_loss: 0.08825787156820297
+Tset iter 2220 : acc: 0.75  aux_loss:1.0491524934768677 cls_loss: 1.274172067642212
+Tset iter 2240 : acc: 0.75  aux_loss:0.6945337057113647 cls_loss: 0.7672132849693298
+Tset iter 2260 : acc: 0.875  aux_loss:0.3936033248901367 cls_loss: 0.5800067782402039
+Tset iter 2280 : acc: 0.625  aux_loss:0.9857354760169983 cls_loss: 1.972179651260376
+Tset iter 2300 : acc: 0.625  aux_loss:1.1287715435028076 cls_loss: 1.6217937469482422
+Tset iter 2320 : acc: 1.0  aux_loss:0.4953562617301941 cls_loss: 0.3370608389377594
+Tset iter 2340 : acc: 0.625  aux_loss:1.048815131187439 cls_loss: 1.6137946844100952
+Tset iter 2360 : acc: 0.625  aux_loss:0.8296453952789307 cls_loss: 1.3775115013122559
+Tset iter 2380 : acc: 1.0  aux_loss:0.6396992206573486 cls_loss: 0.6459347605705261
+Tset iter 2400 : acc: 1.0  aux_loss:0.5747931003570557 cls_loss: 0.4544689655303955
+Tset iter 2420 : acc: 0.75  aux_loss:0.2710322141647339 cls_loss: 0.5424749255180359
+Tset iter 2440 : acc: 0.625  aux_loss:0.9802824258804321 cls_loss: 1.2647626399993896
+Tset iter 2460 : acc: 0.75  aux_loss:0.6988555788993835 cls_loss: 1.0011100769042969
+Test: acc: 0.7317813634872437  aux_loss:0.7401373386383057 cls_loss: 1.0876468420028687
+/mnt
+[INFO]: train job success!
