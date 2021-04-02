@@ -1,0 +1,2 @@
+paddlepaddle-gpu==1.8.4
+paddorch

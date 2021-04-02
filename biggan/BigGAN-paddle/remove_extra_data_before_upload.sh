@@ -1,0 +1,1 @@
+rm -rf weights logs samples data
