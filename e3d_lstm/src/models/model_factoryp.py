@@ -91,7 +91,13 @@ class Model(object):
     feed_dict.update({'real_input_flag': real_input_flag})
     # self.sess.run(fluid.default_startup_program())
     print('start training')
-    _, loss = self.sess.run(self.train_program, feed=feed_dict, fetch_list=[self.gen_ims, self.loss])
+    exec_strategy = fluid.ExecutionStrategy()
+    exec_strategy.num_threads = fluid.core.get_cuda_device_count()
+    exec_strategy.num_iteration_per_drop_scope = 100
+    build_strategy = fluid.BuildStrategy()
+    binary = fluid.compiler.CompiledProgram(self.train_program).with_data_parallel(
+      loss_name=self.loss.name, build_strategy=build_strategy, exec_strategy=exec_strategy)
+    _, loss = self.sess.run(binary, feed=feed_dict, fetch_list=[self.gen_ims, self.loss])
     # print('result: ', loss, _)
     print('after training', )
     return loss
