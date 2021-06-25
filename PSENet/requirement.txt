@@ -1,0 +1,5 @@
+mmcv
+paddlepaddle-gpu
+Polygon3
+pyclipper
+
