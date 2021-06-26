@@ -1,0 +1,5 @@
+numpy==1.19.3
+opencv_python==4.5.1.48
+paddlepaddle==2.0.0
+tqdm==4.59.0
+paddle==1.0.2
