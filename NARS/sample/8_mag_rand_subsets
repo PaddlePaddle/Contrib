@@ -1,0 +1,8 @@
+affiliated_with,cites,has_topic
+affiliated_with,writes
+affiliated_with,has_topic
+affiliated_with,cites
+affiliated_with,writes,cites,has_topic
+cites
+affiliated_with,writes,has_topic
+cites,has_topic
