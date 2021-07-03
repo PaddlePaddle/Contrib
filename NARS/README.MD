@@ -1,6 +1,7 @@
 # NARS
 ## 一、简介
 NARS(Neighbor Averaging over Relation Subgraphs)由Facebook研究院的Lingfan Yu等四名华人提出了关系子图上的邻居平均法（NARS），它在随机抽样的关系子图的邻居平均特征上训练一个分类器。我们描述了一些优化措施，以使这些节点特征集在训练和推理时都能以高效的记忆方式计算出来。NARS在OAG、ACM、OGBN-MAG等几个基准数据集上达到了新的技术水平，超过了更昂贵的基于GNN的方法。
+![avatar](./modelStructure.png)
 **论文:**[Scalable Graph Neural Networks for Heterogeneous Graphs](https://arxiv.org/abs/2011.09679)
 ## 二、复现精度
 | 准确率 | 原论文 | 复现精度 |
