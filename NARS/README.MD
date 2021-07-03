@@ -23,8 +23,8 @@ NARS(Neighbor Averaging over Relation Subgraphs)由Facebook研究院的Lingfan Y
 
 ``` bash
 # clone this repo
-git clone https://github.com/PaddlePaddle/models
-cd models/NARS
+ https://github.com/PaddlePaddle/Contrib
+cd Contrib/NARS
 ```
 ### step2: 训练
 ``` bash
@@ -55,8 +55,7 @@ loss:3.458: 100%|█████████████████████
     |-- model.py                  # 模型实现文件
 |-- utils                         # 工具类API文件夹
     |-- utils.py                  # 工具类API文件
-|-- README_cn.md                  # 中文用户手册
-|-- README.md                     # 英文用户手册
+|-- README.md                     # 用户手册
 |- train.py                       # 执行训练功能的代码
 |-- log.txt                       # 训练日志
 ```
