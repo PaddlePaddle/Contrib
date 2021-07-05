@@ -44,13 +44,14 @@ loss:3.458: 100%|█████████████████████
 ### 6.1 代码结构
 
 ```
-|-- config                        # 参数配置文件夹
 |-- data                          # 数据文件夹
     |-- label.npy                 # label标签
     |-- num_classes.npy           # 类别数目
     |-- test_nid.npy              # 测试集id
     |-- train_nid.npy             # 训练集id
     |-- val_nid.npy               # 验证集id
+|-- sample                        # 样本关系子集
+    |-- 8_mag_rand_subsets        # 样本关系子集
 |-- model                         # 模型实现文件夹
     |-- model.py                  # 模型实现文件
 |-- utils                         # 工具类API文件夹
