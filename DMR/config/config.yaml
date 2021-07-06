@@ -20,7 +20,7 @@ runner:
   use_gpu: True
   use_auc: True
   train_batch_size: 256
-  epochs: 5
+  epochs: 1
   print_interval: 50
   # model_init_path: "output_model_dmr/0" # init model
   model_save_path: "output_model_dmr"
