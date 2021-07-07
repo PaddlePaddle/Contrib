@@ -302,7 +302,7 @@ if __name__ == '__main__':
         paddle.fluid.dygraph.enable_dygraph()
 
     args = parse_args()
-    best_auc = 0.6
+    best_auc = 0.0
     best_lr = -1
 
     # # if you want to try different learning_rate in one running, set try_lrs as below:
