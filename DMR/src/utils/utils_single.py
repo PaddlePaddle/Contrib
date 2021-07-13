@@ -137,7 +137,7 @@ def reset_auc(auc_num=1):
         auc_var_name.append("_generated_var_{}".format(i))
 
     for name in auc_var_name:
-        param = paddle.fluid.global_scope().var(name)
+        param = paddle.static.global_scope().var(name)
         if param == None:
             continue
         tensor = param.get_tensor()

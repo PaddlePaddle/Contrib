@@ -42,7 +42,6 @@ from utils.save_load import load_model, save_model, save_jit_model
 from paddle.io import DistributedBatchSampler, DataLoader
 import argparse
 
-
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -58,7 +57,8 @@ def parse_args():
     return args
 
 
-def infer_test(dy_model, test_dataloader, dy_model_class, config, print_interval, epoch_id):
+def infer_test(dy_model, test_dataloader, dy_model_class, config,
+               print_interval, epoch_id):
     metric_list, metric_list_name = dy_model_class.create_metrics()
     paddle.seed(12345)
     dy_model.eval()
@@ -91,9 +91,8 @@ def infer_test(dy_model, test_dataloader, dy_model_class, config, print_interval
 
     metric_str = ""
     for metric_id in range(len(metric_list_name)):
-        metric_str += (
-            metric_list_name[metric_id] +
-            ": {:.6f},".format(metric_list[metric_id].accumulate()))
+        metric_str += (metric_list_name[metric_id] +
+                       ": {:.6f},".format(metric_list[metric_id].accumulate()))
 
     tensor_print_str = ""
     if tensor_print_dict is not None:
@@ -102,8 +101,8 @@ def infer_test(dy_model, test_dataloader, dy_model_class, config, print_interval
                 "{}:".format(var_name) + str(var.numpy()) + ",")
 
     logger.info("validation epoch: {} done, ".format(epoch_id) + metric_str +
-                tensor_print_str + " epoch time: {:.2f} s".format(
-                    time.time() - interval_begin))
+                tensor_print_str + " epoch time: {:.2f} s".format(time.time(
+                ) - interval_begin))
 
     dy_model.train()
     return metric_list[0].accumulate()
@@ -142,8 +141,8 @@ def main(args, lr):
     logger.info("**************common.configs**********")
     logger.info(
         "use_gpu: {}, use_visual: {}, train_batch_size: {}, train_data_dir: {}, epochs: {}, print_interval: {}, model_save_path: {}, save_checkpoint_interval: {}".
-            format(use_gpu, use_visual, train_batch_size, train_data_dir, epochs,
-                   print_interval, model_save_path, save_checkpoint_interval))
+        format(use_gpu, use_visual, train_batch_size, train_data_dir, epochs,
+               print_interval, model_save_path, save_checkpoint_interval))
     logger.info("**************common.configs**********")
 
     place = paddle.set_device('gpu' if use_gpu else 'cpu')
@@ -167,7 +166,8 @@ def main(args, lr):
 
     logger.info("read data")
     train_dataloader = create_data_loader(config=config, place=place)
-    test_dataloader = create_data_loader(config=config, place=place, mode="test")
+    test_dataloader = create_data_loader(
+        config=config, place=place, mode="test")
 
     last_epoch_id = config.get("last_epoch", -1)
     step_num = 0
@@ -206,8 +206,8 @@ def main(args, lr):
                 metric_str = ""
                 for metric_id in range(len(metric_list_name)):
                     metric_str += (
-                            metric_list_name[metric_id] +
-                            ":{:.6f}, ".format(metric_list[metric_id].accumulate())
+                        metric_list_name[metric_id] +
+                        ":{:.6f}, ".format(metric_list[metric_id].accumulate())
                     )
                     if use_visual:
                         log_visual.add_scalar(
@@ -218,7 +218,7 @@ def main(args, lr):
                 if tensor_print_dict is not None:
                     for var_name, var in tensor_print_dict.items():
                         tensor_print_str += (
-                                "{}:".format(var_name) + str(var.numpy()) + ",")
+                            "{}:".format(var_name) + str(var.numpy()) + ",")
                         if use_visual:
                             log_visual.add_scalar(
                                 tag="train/" + var_name,
@@ -229,9 +229,10 @@ def main(args, lr):
                         epoch_id, batch_id) + metric_str + tensor_print_str +
                     " avg_reader_cost: {:.5f} sec, avg_batch_cost: {:.5f} sec, avg_samples: {:.5f}, ips: {:.5f} ins/s, loss: {:.6f}".
                     format(train_reader_cost / print_interval, (
-                            train_reader_cost + train_run_cost) / print_interval,
+                        train_reader_cost + train_run_cost) / print_interval,
                            total_samples / print_interval, total_samples / (
-                                   train_reader_cost + train_run_cost), loss.numpy()[0]))
+                               train_reader_cost + train_run_cost),
+                           loss.numpy()[0]))
 
                 # if batch_id > 80000:
                 #     tmp_auc = infer_test(dy_model, test_dataloader, dy_model_class, config, print_interval, epoch_id)
@@ -249,18 +250,18 @@ def main(args, lr):
         metric_str = ""
         for metric_id in range(len(metric_list_name)):
             metric_str += (
-                    metric_list_name[metric_id] +
-                    ": {:.6f},".format(metric_list[metric_id].accumulate()))
+                metric_list_name[metric_id] +
+                ": {:.6f},".format(metric_list[metric_id].accumulate()))
 
         tensor_print_str = ""
         if tensor_print_dict is not None:
             for var_name, var in tensor_print_dict.items():
                 tensor_print_str += (
-                        "{}:".format(var_name) + str(var.numpy()) + ",")
+                    "{}:".format(var_name) + str(var.numpy()) + ",")
 
         logger.info("epoch: {} done, ".format(epoch_id) + metric_str +
                     tensor_print_str + " epoch time: {:.2f} s".format(
-            time.time() - epoch_begin))
+                        time.time() - epoch_begin))
 
         # if metric_list[0].accumulate() > best_metric:
         #     best_metric = metric_list[0].accumulate()
@@ -269,14 +270,18 @@ def main(args, lr):
         #     # save_jit_model(dy_model, model_save_path, prefix='tostatic')
         #     logger.info(f"saved best model, {metric_list_name[0]}: {best_metric}")
 
-        if epoch_id % save_checkpoint_interval == 0 and metric_list[0].accumulate() > 0.5:
-            save_model(dy_model, optimizer, model_save_path, epoch_id, prefix='rec')  # middle epochs
+        if epoch_id % save_checkpoint_interval == 0 and metric_list[
+                0].accumulate() > 0.5:
+            save_model(
+                dy_model, optimizer, model_save_path, epoch_id,
+                prefix='rec')  # middle epochs
 
         if metric_list[0].accumulate() >= 0.95:
             print('Already over fitting, stop training!')
             break
 
-    infer_auc = infer_test(dy_model, test_dataloader, dy_model_class, config, print_interval, epoch_id)
+    infer_auc = infer_test(dy_model, test_dataloader, dy_model_class, config,
+                           print_interval, epoch_id)
     return infer_auc, lr, train_batch_size, model_save_path
 
 
@@ -285,21 +290,26 @@ if __name__ == '__main__':
     import shutil
 
     def f(best_auc, best_lr, current_lr, args):
-        auc, current_lr, train_batch_size, model_save_path = main(args, current_lr)
+        auc, current_lr, train_batch_size, model_save_path = main(args,
+                                                                  current_lr)
         print(f'Trying Current_lr: {current_lr}, AUC: {auc}')
         if auc > best_auc:
             best_auc = auc
             best_lr = current_lr
             shutil.rmtree(f'{model_save_path}/1000', ignore_errors=True)
             shutil.copytree(f'{model_save_path}/0', f'{model_save_path}/1000')
-            os.rename(src=f'{model_save_path}/0',
-                      dst=f'{model_save_path}/b{train_batch_size}l{str(lr)[2:]}auc{str(auc)[2:]}')
-            print(f'rename 0 to b{train_batch_size}l{str(lr)[2:]}auc{str(auc)[2:]}')
+            os.rename(
+                src=f'{model_save_path}/0',
+                dst=f'{model_save_path}/b{train_batch_size}l{str(lr)[2:]}auc{str(auc)[2:]}'
+            )
+            print(
+                f'rename 0 to b{train_batch_size}l{str(lr)[2:]}auc{str(auc)[2:]}'
+            )
         return best_auc, best_lr
 
     def reset_graph():
-        paddle.fluid.dygraph.disable_dygraph()
-        paddle.fluid.dygraph.enable_dygraph()
+        paddle.enable_static()
+        paddle.disable_static()
 
     args = parse_args()
     best_auc = 0.0
