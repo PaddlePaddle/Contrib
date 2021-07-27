@@ -1,0 +1,14 @@
+psutil
+scikit-learn
+scipy
+coverage
+coveralls
+black
+pytest
+networkx==2.3
+numpy
+matplotlib
+seaborn
+tqdm
+visualdl
+decorator==4.4.2
