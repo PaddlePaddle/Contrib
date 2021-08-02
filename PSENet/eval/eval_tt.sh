@@ -1,0 +1,1 @@
+cd tt && /home/aistudio/python2/bin/python2 Deteval.py && cd ..
