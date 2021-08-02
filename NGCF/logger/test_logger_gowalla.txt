@@ -1,0 +1,1 @@
+0 {'precision': array([0.00017248]), 'recall': array([0.00047364]), 'ndcg': array([0.00031975])}
