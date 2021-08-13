@@ -1,0 +1,2 @@
+numpy
+paddlepaddle-gpu==2.0.2
