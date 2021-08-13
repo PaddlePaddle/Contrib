@@ -25,7 +25,7 @@
 This project reproduces Wide Resnet based on the paddlepaddle framework. It is a variation of ResNet. The main difference lies in the improvement of shortcut of ResNet, the use of "wider" convolution and the addition of dropout layer.
 
 
-**论文:**
+**paper:**
 - [1]  Zagoruyko S ,  Komodakis N . Wide Residual Networks[J].  2016.<br>
 - link：[Wide Residual Networks](https://arxiv.org/abs/1605.07146)
 
@@ -78,7 +78,7 @@ git clone https://github.com/PaddlePaddle/Contrib.git
 cd wide_resnet
 export PYTHONPATH=./
 ```
-**安装依赖**
+**install**
 ```bash
 python3 -m pip install -r requirements.txt
 ```
