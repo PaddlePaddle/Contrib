@@ -53,6 +53,14 @@
 
 scripts/paddle_e3d_lstm_kth_train.sh 为训练脚本
 
+注意
+当继续训练之前训练的模型时, 需要根据已训练轮数适当调整scheduled sampling参数. 当已训练轮数超过scheduled sampling推荐的轮数(100000)时, 可设置以下参数 
+
+--sampling_stop_iter 0 --sampling_start_value 0
+
+---
+
+
 scripts/paddle_e3d_lstm_kth_test.sh 为预测（测试）脚本。预测脚本与训练脚本的参数区别：训练脚本is_training参数为True, 以及测试脚本没有save_dir参数
 
 
