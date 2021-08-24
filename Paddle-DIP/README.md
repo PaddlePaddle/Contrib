@@ -26,7 +26,7 @@
 
 **参考项目：** [https://github.com/DmitryUlyanov/deep-image-prior](https://github.com/DmitryUlyanov/deep-image-prior)
 
-**项目aistudio地址**：https://aistudio.baidu.com/aistudio/projectdetail/2251959
+**项目aistudio地址**：https://aistudio.baidu.com/aistudio/projectdetail/66666666
 
 ## 二、复现精度
 
@@ -112,5 +112,5 @@ cd Paddle-DIP
 | 框架版本 | >= Paddle 2.1.2|
 | 应用场景 | 图像重建 |
 | 支持硬件 | GPU、CPU |
-| 下载链接 |[aistudio](https://aistudio.baidu.com/aistudio/datasetdetail/104172) |
+| 下载链接 |[aistudio](https://aistudio.baidu.com/aistudio/datasetdetail/666666) |
 

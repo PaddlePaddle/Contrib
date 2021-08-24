@@ -26,7 +26,7 @@ This project is based on the paddlepaddle framework to reproduce Deep image prio
 
 **Reference project：** [https://github.com/DmitryUlyanov/deep-image-prior](https://github.com/DmitryUlyanov/deep-image-prior)
 
-**AI studio项目地址**：https://aistudio.baidu.com/aistudio/projectdetail/2251959
+**AI studio adress**：https://aistudio.baidu.com/aistudio/projectdetail/666666666
 
 ## 2 Accuracy
 
@@ -113,5 +113,5 @@ For other information about the model, refer to the following table：
 | Framework version | >= Paddle 2.1.2|
 | Application scenario | image reconstruction  |
 | Support hardware | GPU、CPU |
-| Download link |[aistudio](https://aistudio.baidu.com/aistudio/datasetdetail/104172) |
+| Download link |[aistudio](https://aistudio.baidu.com/aistudio/datasetdetail/666666) |
 
