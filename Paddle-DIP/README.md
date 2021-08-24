@@ -53,6 +53,7 @@ Set14 数据集： [https://github.com/jbhuang0604/SelfExSR/tree/master/data](ht
   - PaddlePaddle >= 2.0.0
   - matplotlib = 3.4
   - sikt-image = 0.18
+  - opencv-python = 4.5.3
 
 ## 五、快速开始
 
@@ -106,7 +107,7 @@ cd Paddle-DIP
 
 | 信息 | 说明 |
 | --- | --- |
-| 发布者 | 钱坤、石华榜、|
+| 发布者 | 钱坤、李芯瑶、石华榜|
 | 时间 | 2021.08 |
 | 框架版本 | >= Paddle 2.1.2|
 | 应用场景 | 图像重建 |

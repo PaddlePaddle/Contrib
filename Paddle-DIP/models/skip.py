@@ -1,6 +1,21 @@
+# encoding=utf8
+# Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import paddle
-import paddle.nn as nn
 from .common import *
+
 
 class Down(nn.Layer):
     def __init__(self, n_input, n_down, filter_size_down,
@@ -11,10 +26,12 @@ class Down(nn.Layer):
                           act_fun=act_fun, pad=pad, downsample_mode=downsample_mode)
         self.conv2 = Conv(n_down, n_down, filter_size_down, stride=1, bias=need_bias,
                           act_fun=act_fun, pad=pad)
+
     def forward(self, x):
         x = self.conv1(x)
         x = self.conv2(x)
         return x
+
 
 class Up(nn.Layer):
     def __init__(self, n_input, n_up, filter_size_up,
@@ -62,7 +79,6 @@ class Concat(nn.Layer):
         return paddle.concat(inputs_, axis=self.dim)
 
 
-
 class SkipNet(nn.Layer):
     def __init__(self, num_input_channels=2, num_output_channels=3,
                  num_channels_down=[16, 32, 64, 128, 128], num_channels_up=[16, 32, 64, 128, 128],
@@ -106,12 +122,11 @@ class SkipNet(nn.Layer):
         self.Skip = nn.LayerList()
         self.Concat = Concat(dim=1)
 
-
         n_input = num_input_channels
         for i in range(n_scales):
             self.Down_path.append(Down(n_input, num_channels_down[i], filter_size_down[i],
-                                     need_bias=need_bias, act_fun=act_fun,
-                                     pad=pad, downsample_mode=downsample_mode))
+                                       need_bias=need_bias, act_fun=act_fun,
+                                       pad=pad, downsample_mode=downsample_mode))
 
             if num_channels_skip[i] != 0:
                 self.Skip.append(Conv(n_input, num_channels_skip[i], filter_skip_size,
@@ -125,7 +140,7 @@ class SkipNet(nn.Layer):
 
             self.Up_path1.append(nn.Upsample(scale_factor=2, mode=upsample_mode[i]))
             self.Up_path2.append(Up(num_channels_skip[i] + k, num_channels_up[i], filter_size_up[i],
-                                    need_up = need1x1_up, need_bias=need_bias, act_fun=act_fun, pad=pad))
+                                    need_up=need1x1_up, need_bias=need_bias, act_fun=act_fun, pad=pad))
 
             n_input = num_channels_down[i]
 

@@ -53,6 +53,7 @@ Set14 dataset： [https://github.com/jbhuang0604/SelfExSR/tree/master/data](http
   - PaddlePaddle >= 2.0.0
   - matplotlib = 3.4
   - sikt-image = 0.18
+  - opencv-python = 4.5.3
 
 ## 5 Quick start
 
@@ -107,7 +108,7 @@ For other information about the model, refer to the following table：
 
 | information | directions |
 | --- | --- |
-| publisher | [KunStats](https://github.com/KunStats)、[S-HuaBomb](https://github.com/S-HuaBomb)、|
+| publisher | [KunStats](https://github.com/KunStats)、李芯瑶、[S-HuaBomb](https://github.com/S-HuaBomb)、|
 | time | 2021.08 |
 | Framework version | >= Paddle 2.1.2|
 | Application scenario | image reconstruction  |
