@@ -26,6 +26,8 @@ This project is based on the paddlepaddle framework to reproduce Deep image prio
 
 **Reference project：** [https://github.com/DmitryUlyanov/deep-image-prior](https://github.com/DmitryUlyanov/deep-image-prior)
 
+**AI studio项目地址**：https://aistudio.baidu.com/aistudio/projectdetail/2251959
+
 ## 2 Accuracy
 
 > Test results of this column of indicators on set14 dataset
