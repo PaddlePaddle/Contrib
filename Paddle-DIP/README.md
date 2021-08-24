@@ -6,7 +6,7 @@
       * [一、简介](#一简介)
       * [二、复现精度](#二复现精度)
       * [三、数据集](#三数据集)
-      * [四、环境依赖](#四环境依赖)
+      * [四、环境依赖](#四安装环境依赖)
       * [五、快速开始](#五快速开始)
       * [六、代码结构与详细说明](#六代码结构与详细说明)
          * [6.1 代码结构](#61-代码结构)
@@ -25,6 +25,8 @@
 **验收标准**： 8 × super-resolution, avg psnr = 24.15%
 
 **参考项目：** [https://github.com/DmitryUlyanov/deep-image-prior](https://github.com/DmitryUlyanov/deep-image-prior)
+
+**项目aistudio地址**：https://aistudio.baidu.com/aistudio/projectdetail/2251959
 
 ## 二、复现精度
 
