@@ -1,0 +1,84 @@
+W0419 21:43:13.031980 25891 analysis_predictor.cc:795] The one-time configuration of analysis predictor failed, which may be due to native predictor called first and its configurations taken effect.
+[1m[35m--- Running analysis [ir_graph_build_pass][0m
+[1m[35m--- Running analysis [ir_graph_clean_pass][0m
+[1m[35m--- Running analysis [ir_analysis_pass][0m
+[32m--- Running IR pass [is_test_pass][0m
+[32m--- Running IR pass [simplify_with_basic_ops_pass][0m
+[32m--- Running IR pass [conv_affine_channel_fuse_pass][0m
+[32m--- Running IR pass [conv_eltwiseadd_affine_channel_fuse_pass][0m
+[32m--- Running IR pass [conv_bn_fuse_pass][0m
+[32m--- Running IR pass [conv_eltwiseadd_bn_fuse_pass][0m
+I0419 21:43:13.242869 25891 fuse_pass_base.cc:57] ---  detected 15 subgraphs
+[32m--- Running IR pass [embedding_eltwise_layernorm_fuse_pass][0m
+[32m--- Running IR pass [multihead_matmul_fuse_pass_v2][0m
+[32m--- Running IR pass [squeeze2_matmul_fuse_pass][0m
+[32m--- Running IR pass [reshape2_matmul_fuse_pass][0m
+[32m--- Running IR pass [flatten2_matmul_fuse_pass][0m
+[32m--- Running IR pass [map_matmul_v2_to_mul_pass][0m
+I0419 21:43:13.261380 25891 fuse_pass_base.cc:57] ---  detected 1 subgraphs
+[32m--- Running IR pass [map_matmul_v2_to_matmul_pass][0m
+I0419 21:43:13.270640 25891 fuse_pass_base.cc:57] ---  detected 60 subgraphs
+[32m--- Running IR pass [map_matmul_to_mul_pass][0m
+[32m--- Running IR pass [fc_fuse_pass][0m
+I0419 21:43:13.276825 25891 fuse_pass_base.cc:57] ---  detected 1 subgraphs
+[32m--- Running IR pass [fc_elementwise_layernorm_fuse_pass][0m
+[32m--- Running IR pass [conv_elementwise_add_act_fuse_pass][0m
+[32m--- Running IR pass [conv_elementwise_add2_act_fuse_pass][0m
+[32m--- Running IR pass [conv_elementwise_add_fuse_pass][0m
+[32m--- Running IR pass [transpose_flatten_concat_fuse_pass][0m
+[32m--- Running IR pass [runtime_context_cache_pass][0m
+[1m[35m--- Running analysis [ir_params_sync_among_devices_pass][0m
+I0419 21:43:13.412138 25891 ir_params_sync_among_devices_pass.cc:45] Sync params from CPU to GPU
+[1m[35m--- Running analysis [adjust_cudnn_workspace_size_pass][0m
+[1m[35m--- Running analysis [inference_op_replace_pass][0m
+[1m[35m--- Running analysis [memory_optimize_pass][0m
+I0419 21:43:13.446684 25891 memory_optimize_pass.cc:216] Cluster name : relu_7.tmp_0  size: 38400000
+I0419 21:43:13.446746 25891 memory_optimize_pass.cc:216] Cluster name : tmp_82  size: 76800000
+I0419 21:43:13.446789 25891 memory_optimize_pass.cc:216] Cluster name : conv2d_183.tmp_1  size: 76800000
+I0419 21:43:13.446830 25891 memory_optimize_pass.cc:216] Cluster name : tmp_49  size: 76800000
+I0419 21:43:13.446871 25891 memory_optimize_pass.cc:216] Cluster name : tmp_99  size: 7500
+I0419 21:43:13.446910 25891 memory_optimize_pass.cc:216] Cluster name : relu_3.tmp_0  size: 38400000
+I0419 21:43:13.446951 25891 memory_optimize_pass.cc:216] Cluster name : x  size: 1800000
+I0419 21:43:13.446992 25891 memory_optimize_pass.cc:216] Cluster name : relu_9.tmp_0  size: 38400000
+[1m[35m--- Running analysis [ir_graph_to_program_pass][0m
+I0419 21:43:13.594652 25891 analysis_predictor.cc:714] ======= optimize end =======
+I0419 21:43:13.602495 25891 naive_executor.cc:98] ---  skip [feed], feed -> x
+I0419 21:43:13.607818 25891 naive_executor.cc:98] ---  skip [linear_1.tmp_1], fetch -> fetch
+Inference model(2sAGCN)...
+W0419 21:43:13.639112 25891 device_context.cc:447] Please NOTE: device: 0, GPU Compute Capability: 6.1, Driver API Version: 10.2, Runtime API Version: 10.2
+W0419 21:43:13.642154 25891 device_context.cc:465] device: 0, cuDNN Version: 7.6.
+Batch action class Predict:  [10 10 10 10 10 10 10 10 10 10] Batch action class True:  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] Batch Accuracy:  0.0 Batch sample Name:  ['S001C001P003R001A001.skeleton', 'S001C001P003R001A002.skeleton', 'S001C001P003R001A003.skeleton', 'S001C001P003R001A004.skeleton', 'S001C001P003R001A005.skeleton', 'S001C001P003R001A006.skeleton', 'S001C001P003R001A007.skeleton', 'S001C001P003R001A008.skeleton', 'S001C001P003R001A009.skeleton', 'S001C001P003R001A010.skeleton']
+Batch action class Predict:  [10 10 10 10 10 10 10 10 10 10] Batch action class True:  [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] Batch Accuracy:  0.1 Batch sample Name:  ['S001C001P003R001A011.skeleton', 'S001C001P003R001A012.skeleton', 'S001C001P003R001A013.skeleton', 'S001C001P003R001A014.skeleton', 'S001C001P003R001A015.skeleton', 'S001C001P003R001A016.skeleton', 'S001C001P003R001A017.skeleton', 'S001C001P003R001A018.skeleton', 'S001C001P003R001A019.skeleton', 'S001C001P003R001A020.skeleton']
+Batch action class Predict:  [10 10 10 10 10 10 10 10 10 10] Batch action class True:  [20, 21, 22, 23, 24, 25, 26, 27, 28, 29] Batch Accuracy:  0.0 Batch sample Name:  ['S001C001P003R001A021.skeleton', 'S001C001P003R001A022.skeleton', 'S001C001P003R001A023.skeleton', 'S001C001P003R001A024.skeleton', 'S001C001P003R001A025.skeleton', 'S001C001P003R001A026.skeleton', 'S001C001P003R001A027.skeleton', 'S001C001P003R001A028.skeleton', 'S001C001P003R001A029.skeleton', 'S001C001P003R001A030.skeleton']
+Batch action class Predict:  [10 10 10 10 10 10 10 10 10 10] Batch action class True:  [30, 31, 32, 33, 34, 35, 36, 37, 38, 39] Batch Accuracy:  0.0 Batch sample Name:  ['S001C001P003R001A031.skeleton', 'S001C001P003R001A032.skeleton', 'S001C001P003R001A033.skeleton', 'S001C001P003R001A034.skeleton', 'S001C001P003R001A035.skeleton', 'S001C001P003R001A036.skeleton', 'S001C001P003R001A037.skeleton', 'S001C001P003R001A038.skeleton', 'S001C001P003R001A039.skeleton', 'S001C001P003R001A040.skeleton']
+Batch action class Predict:  [10 10 10 10 10 10 10 10 10 10] Batch action class True:  [40, 41, 42, 43, 44, 45, 46, 47, 48, 49] Batch Accuracy:  0.0 Batch sample Name:  ['S001C001P003R001A041.skeleton', 'S001C001P003R001A042.skeleton', 'S001C001P003R001A043.skeleton', 'S001C001P003R001A044.skeleton', 'S001C001P003R001A045.skeleton', 'S001C001P003R001A046.skeleton', 'S001C001P003R001A047.skeleton', 'S001C001P003R001A048.skeleton', 'S001C001P003R001A049.skeleton', 'S001C001P003R001A050.skeleton']
+Infer Mean Accuracy:  0.02
+[2022/04/19 21:43:15] root INFO: 
+
+[2022/04/19 21:43:15] root INFO: ---------------------- Env info ----------------------
+[2022/04/19 21:43:15] root INFO:  OS_version: Ubuntu 18.04
+[2022/04/19 21:43:15] root INFO:  CUDA_version: 9.1.85
+[2022/04/19 21:43:15] root INFO:  CUDNN_version: None.None.None
+[2022/04/19 21:43:15] root INFO:  drivier_version: 440.31
+[2022/04/19 21:43:15] root INFO: ---------------------- Paddle info ----------------------
+[2022/04/19 21:43:15] root INFO:  paddle_version: 2.2.2
+[2022/04/19 21:43:15] root INFO:  paddle_commit: b031c389938bfa15e15bb20494c76f86289d77b0
+[2022/04/19 21:43:15] root INFO:  log_api_version: 1.0
+[2022/04/19 21:43:15] root INFO: ----------------------- Conf info -----------------------
+[2022/04/19 21:43:15] root INFO:  runtime_device: gpu
+[2022/04/19 21:43:15] root INFO:  ir_optim: True
+[2022/04/19 21:43:15] root INFO:  enable_memory_optim: True
+[2022/04/19 21:43:15] root INFO:  enable_tensorrt: False
+[2022/04/19 21:43:15] root INFO:  enable_mkldnn: False
+[2022/04/19 21:43:15] root INFO:  cpu_math_library_num_threads: 1
+[2022/04/19 21:43:15] root INFO: ----------------------- Model info ----------------------
+[2022/04/19 21:43:15] root INFO:  model_name: 2sAGCN
+[2022/04/19 21:43:15] root INFO:  precision: fp32
+[2022/04/19 21:43:15] root INFO: ----------------------- Data info -----------------------
+[2022/04/19 21:43:15] root INFO:  batch_size: 10
+[2022/04/19 21:43:15] root INFO:  input_shape: dynamic
+[2022/04/19 21:43:15] root INFO:  data_num: 5
+[2022/04/19 21:43:15] root INFO: ----------------------- Perf info -----------------------
+[2022/04/19 21:43:15] root INFO:  cpu_rss(MB): 2008.168, gpu_rss(MB): 579.0, gpu_util: 14.0%
+[2022/04/19 21:43:15] root INFO:  total time spent(s): 1.3969
+[2022/04/19 21:43:15] root INFO:  preprocess_time(ms): 0.0284, inference_time(ms): 158.4568, postprocess_time(ms): 120.8979

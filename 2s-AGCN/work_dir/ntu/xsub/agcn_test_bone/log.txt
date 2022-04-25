@@ -1,0 +1,1 @@
+[ Mon Apr 18 09:05:40 2022 ] Load weights from ./runs/ntu_cs_agcn_bone-44-28170.pdparams.

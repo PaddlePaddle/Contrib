@@ -1,0 +1,5 @@
+[ Sun Apr 17 10:16:13 2022 ] Load weights from ./runs/ntu_cs_agcn_joint-49-31300.pdparams.
+[ Sun Apr 17 10:21:18 2022 ] Load weights from ./runs/ntu_cs_agcn_joint-47-31300.pdparams.
+[ Sun Apr 17 10:21:51 2022 ] Load weights from ./runs/ntu_cs_agcn_joint-47-30048.pdparams.
+[ Sun Apr 17 10:24:52 2022 ] Load weights from ./runs/ntu_cs_agcn_joint-43-27544.pdparams.
+[ Sun Apr 17 10:29:42 2022 ] Load weights from ./runs/ntu_cs_agcn_joint-45-28796.pdparams.

@@ -1,0 +1,29 @@
+[2022/04/19 21:43:50] root INFO: 
+
+[2022/04/19 21:43:50] root INFO: ---------------------- Env info ----------------------
+[2022/04/19 21:43:50] root INFO:  OS_version: Ubuntu 18.04
+[2022/04/19 21:43:50] root INFO:  CUDA_version: 9.1.85
+[2022/04/19 21:43:50] root INFO:  CUDNN_version: None.None.None
+[2022/04/19 21:43:50] root INFO:  drivier_version: 440.31
+[2022/04/19 21:43:50] root INFO: ---------------------- Paddle info ----------------------
+[2022/04/19 21:43:50] root INFO:  paddle_version: 2.2.2
+[2022/04/19 21:43:50] root INFO:  paddle_commit: b031c389938bfa15e15bb20494c76f86289d77b0
+[2022/04/19 21:43:50] root INFO:  log_api_version: 1.0
+[2022/04/19 21:43:50] root INFO: ----------------------- Conf info -----------------------
+[2022/04/19 21:43:50] root INFO:  runtime_device: cpu
+[2022/04/19 21:43:50] root INFO:  ir_optim: True
+[2022/04/19 21:43:50] root INFO:  enable_memory_optim: True
+[2022/04/19 21:43:50] root INFO:  enable_tensorrt: False
+[2022/04/19 21:43:50] root INFO:  enable_mkldnn: False
+[2022/04/19 21:43:50] root INFO:  cpu_math_library_num_threads: 1
+[2022/04/19 21:43:50] root INFO: ----------------------- Model info ----------------------
+[2022/04/19 21:43:50] root INFO:  model_name: 2sAGCN
+[2022/04/19 21:43:50] root INFO:  precision: fp32
+[2022/04/19 21:43:50] root INFO: ----------------------- Data info -----------------------
+[2022/04/19 21:43:50] root INFO:  batch_size: 10
+[2022/04/19 21:43:50] root INFO:  input_shape: dynamic
+[2022/04/19 21:43:50] root INFO:  data_num: 5
+[2022/04/19 21:43:50] root INFO: ----------------------- Perf info -----------------------
+[2022/04/19 21:43:50] root INFO:  cpu_rss(MB): 583.6211, gpu_rss(MB): None, gpu_util: None%
+[2022/04/19 21:43:50] root INFO:  total time spent(s): 32.8224
+[2022/04/19 21:43:50] root INFO:  preprocess_time(ms): 0.0278, inference_time(ms): 6564.1716, postprocess_time(ms): 0.282

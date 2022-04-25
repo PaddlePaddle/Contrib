@@ -1,0 +1,47 @@
+base_lr: 0.01
+batch_size: 256
+config: work/2s_AGCN/config/nturgbd-cross-view/test_joint.yaml
+device:
+- gpu:0
+eval_interval: 5
+feeder: feeders.feeder.Feeder
+ignore_weights: []
+log_interval: 100
+model: paddle_model.agcn.Model
+model_args:
+  graph: graph.ntu_rgb_d.Graph
+  graph_args:
+    labeling_mode: spatial
+  num_class: 60
+  num_person: 2
+  num_point: 25
+model_saved_name: ./runs/ntu_cv_agcn_test_joint
+nesterov: true
+num_epoch: 80
+num_worker: 32
+only_train_epoch: 0
+only_train_part: false
+optimizer: SGD
+phase: test
+print_log: true
+save_interval: 1
+save_score: true
+seed: 1
+show_topk:
+- 1
+- 5
+start_epoch: 0
+step:
+- 20
+- 40
+- 60
+test_batch_size: 256
+test_feeder_args:
+  data_path: xview/val_data_joint.npy
+  debug: false
+  label_path: xview/val_label.pkl
+train_feeder_args: {}
+warm_up_epoch: 0
+weight_decay: 0.0005
+weights: ./runs/ntu_cv_agcn_joint-38-22932.pdparams
+work_dir: ./work_dir/ntu/xview/agcn_test_joint
